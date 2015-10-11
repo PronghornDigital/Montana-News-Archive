@@ -16,6 +16,7 @@
   "license": "ISC",
   "scripts": {
     "watch": "watch 'npm run test' src/ # run this for real-time build and test",
+    "start": "node dist/api/app.js",
     "prepublish": "time npm run test --silent",
     "test": "npm run test:api --silent ; npm run test:browser --silent && echo 'All test suites pass!'",
     "test:api": "mocha $(node ./src/scripts/glob './dist/api/**/*.spec.js')",
@@ -43,7 +44,9 @@
     "clean": "rm -rf dist/",
     "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ts-rupert": "^0.4.1-beta2"
+  },
   "devDependencies": {
     "chai": "3.2.0",
     "clean-css": "3.4.5",

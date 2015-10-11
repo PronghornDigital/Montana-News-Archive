@@ -1,0 +1,21 @@
+{
+    "version": "next",
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "../dist/api",
+        "module": "commonjs",
+        "sourceMap": true,
+        "target": "ES5"
+    },
+    "filesGlob": [
+        "./**/*.ts"
+    ],
+    "files": [
+        "./app.ts",
+        "./temp.spec.ts"
+    ]
+}
