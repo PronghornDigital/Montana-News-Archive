@@ -1,0 +1,68 @@
+{
+  "name": "mtna",
+  "version": "0.0.0",
+  "description": "Montana / KTVQ2 Video Archive Management.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PronghornDigital/Montana-News-Archive.git"
+  },
+  "author": "David Souther <davidsouther@gmail.com>",
+  "contributors": [
+    {
+      "name": "Stan Parker",
+      "email": "stanparker@gmail.com"
+    }
+  ],
+  "license": "ISC",
+  "scripts": {
+    "watch": "watch 'npm run test' src/ # run this for real-time build and test",
+    "prepublish": "time npm run test --silent",
+    "test": "npm run test:api --silent ; npm run test:browser --silent && echo 'All test suites pass!'",
+    "test:api": "mocha $(node ./src/scripts/glob './dist/api/**/*.spec.js')",
+    "test:browser": "karma start ./karma.config.js --single-run",
+    "pretest": "time npm run build --silent",
+    "build": "npm run build:scripts && npm run build:styles && npm run build:markup && echo 'MTNA ready!'",
+    "build:scripts": "npm run build:tsc && npm run build:bundle && echo 'Scripts bundled!'",
+    "build:tsc": "echo 'Building Typscript... ' ; tsc -p ./src",
+    "build:bundle": "npm run build:bundle:dev && npm run build:bundle:tests && npm run build:bundle:prod",
+    "build:bundle:dev": "echo 'Bundling dev... ' ; webpack -d dist/client/index.js ./dist/bundle.js >/dev/null",
+    "build:bundle:prod": "echo 'Bundling prod... ' ; webpack -p dist/client/index.js ./dist/bundle.min.js >/dev/null",
+    "build:bundle:tests": "echo 'Bundling tests... ' ; webpack -d $(node ./src/scripts/glob 'dist/client/**/*.spec.js') ./dist/clientTest.js >/dev/null",
+    "build:markup": "npm run build:jade:templates && npm run build:markup:cache && npm run build:jade:index && echo 'Markup emitted!'",
+    "build:jade:templates": "echo 'Jading HTML... ' ; jade --out dist/client --hierarchy src/client >/dev/null",
+    "build:jade:index": "cp ./dist/client/index.html ./dist/index.html",
+    "build:markup:cache": "node ./src/scripts/templateCache.js -m mtna.templates -p ./dist/client $(node ./src/scripts/glob './dist/client/**/*.html') > ./dist/templates.js",
+    "build:styles": "npm run build:styles:scss && npm run build:styles:join && echo 'Styles joined!'",
+    "build:styles:scss": "echo 'Compiling CSS... ' ; node-sass --quiet --recursive --output dist/client src/client",
+    "build:styles:join": "echo 'Joining CSS... ' ; cleancss --output dist/styles.css $(node ./src/scripts/glob './dist/client/**/*.css')",
+    "prebuild": "npm run lint",
+    "lint": "npm run lint:tsc && npm run lint:sass && echo 'Local style guide enforced!'",
+    "lint:tsc": "echo 'Linting Typescript... ' ; tslint $(node ./src/scripts/glob './src/{client,server}/**/*.ts')",
+    "lint:sass": "echo 'Linting Sass... ' ; sass-lint --verbose --no-exit $(node ./src/scripts/glob './src/**/*.scss')",
+    "lint:jade": "echo 'Linting Jade... ' ; ",
+    "clean": "rm -rf dist/",
+    "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "3.2.0",
+    "clean-css": "3.4.5",
+    "commander": "^2.8.1",
+    "glob": "^5.0.15",
+    "jade": "^1.11.0",
+    "karma": "^0.13.10",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-cli": "^0.1.1",
+    "karma-mocha": "^0.2.0",
+    "mocha": "2.2.5",
+    "node-sass": "3.3.3",
+    "sass-lint": "^1.2.3",
+    "sinon": "^1.17.1",
+    "sinon-chai": "2.8.0",
+    "supertest": "1.1.0",
+    "tslint": "2.5.0-beta",
+    "typescript": "1.6.0-beta",
+    "watch": "0.16.0",
+    "webpack": "^1.12.2"
+  }
+}
