@@ -29,4 +29,3 @@ files
     var tplPath = file.replace(prefixFilter, '');
     outStream.write("angular.module('" + moduleName + "').run(['$templateCache', function(cache) { cache.put('" + tplPath + "', '" + content + "');}]);\n");
 });
-//# sourceMappingURL=templateCache.js.map

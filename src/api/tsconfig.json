@@ -1,0 +1,33 @@
+{
+    "version": "next",
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "../../dist/api",
+        "module": "commonjs",
+        "sourceMap": true,
+        "target": "ES5"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "../typings/chai/*",
+        "../typings/es6-collections/*",
+        "../typings/es6-promise/*",
+        "../typings/mocha/*",
+        "../typings/sinon/*",
+        "../typings/sinon-chai/*"
+    ],
+    "files": [
+        "./app.ts",
+        "./temp.spec.ts",
+        "../typings/chai/chai.d.ts",
+        "../typings/es6-collections/es6-collections.d.ts",
+        "../typings/es6-promise/es6-promise.d.ts",
+        "../typings/mocha/mocha.d.ts",
+        "../typings/sinon/sinon.d.ts",
+        "../typings/sinon-chai/sinon-chai.d.ts"
+    ]
+}
