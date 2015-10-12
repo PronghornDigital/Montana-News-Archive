@@ -1,0 +1,26 @@
+{
+    "version": "next",
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "./",
+        "module": "commonjs",
+        "target": "ES5"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "../typings/commander/*",
+        "../typings/glob/*",
+        "../typings/node/*"
+    ],
+    "files": [
+        "./glob.ts",
+        "./templateCache.ts",
+        "../typings/commander/commander.d.ts",
+        "../typings/glob/glob.d.ts",
+        "../typings/node/node.d.ts"
+    ]
+}

@@ -1,20 +1,5 @@
-import {
-  join,
-  normalize
-} from 'path';
-
-import {
-  // Inject,
-  Rupert,
-  // RupertPlugin,
-  // Config,
-  // ILogger,
-
-  // Route, Methods,
-  // Request, Response, Next,
-
-  Plugins
-} from 'ts-rupert';
+import { join, normalize } from 'path';
+import { Rupert, Plugins } from 'ts-rupert';
 
 const defaults: any = {
   log: {level: 'info'},
@@ -24,6 +9,7 @@ const defaults: any = {
     }
   }
 };
+
 export const server = Rupert.createApp(defaults, [
   Plugins.Healthz,
   Plugins.Static

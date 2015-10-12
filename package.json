@@ -24,7 +24,10 @@
     "pretest": "time npm run build --silent",
     "build": "npm run build:scripts && npm run build:styles && npm run build:markup && echo 'MTNA ready!'",
     "build:scripts": "npm run build:tsc && npm run build:bundle && echo 'Scripts bundled!'",
-    "build:tsc": "echo 'Building Typscript... ' ; tsc -p ./src",
+    "build:tsc": "echo 'Building Typscript... ' ; npm run build:tsc:scripts ; npm run build:tsc:client ; npm run build:tsc:api",
+    "build:tsc:scripts": "tsc -p ./src/scripts",
+    "build:tsc:client": "tsc -p ./src/client",
+    "build:tsc:api": "tsc -p ./src/api",
     "build:bundle": "npm run build:bundle:dev && npm run build:bundle:tests && npm run build:bundle:prod",
     "build:bundle:dev": "echo 'Bundling dev... ' ; webpack -d dist/client/index.js ./dist/bundle.js >/dev/null",
     "build:bundle:prod": "echo 'Bundling prod... ' ; webpack -p dist/client/index.js ./dist/bundle.min.js >/dev/null",
@@ -38,14 +41,14 @@
     "build:styles:join": "echo 'Joining CSS... ' ; cleancss --output dist/styles.css $(node ./src/scripts/glob './dist/client/**/*.css')",
     "prebuild": "npm run lint",
     "lint": "npm run lint:tsc && npm run lint:sass && echo 'Local style guide enforced!'",
-    "lint:tsc": "echo 'Linting Typescript... ' ; tslint $(node ./src/scripts/glob './src/{client,server}/**/*.ts')",
+    "lint:tsc": "echo 'Linting Typescript... ' ; tslint $(node ./src/scripts/glob './src/{api,client,scripts}/**/*.ts')",
     "lint:sass": "echo 'Linting Sass... ' ; sass-lint --verbose --no-exit $(node ./src/scripts/glob './src/**/*.scss')",
     "lint:jade": "echo 'Linting Jade... ' ; ",
-    "clean": "rm -rf dist/",
+    "clean": "rm -rf dist/ src/scripts/*.js",
     "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
   },
   "dependencies": {
-    "ts-rupert": "^0.4.1-beta2"
+    "ts-rupert": "0.4.1-beta2"
   },
   "devDependencies": {
     "chai": "3.2.0",
