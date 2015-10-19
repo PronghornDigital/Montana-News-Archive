@@ -12,19 +12,21 @@ describe('Record', function() {
     it('tests proto objects', function() {
       expect(Record.isProtoRecord({
         label: 'Tape 1',
-        category: 'Tapes'
+        family: 'Tapes',
+        medium: '3/4"'
       })).to.be.true;
 
       expect(Record.isProtoRecord({
         id: 'tape-1',
         label: 'Tape 1',
-        category: 'Tapes',
+        family: 'Tapes',
+        medium: '3/4"',
         deleted: false,
         stories: []
       })).to.be.true;
 
       expect(Record.isProtoRecord({
-        category: 'Tapes',
+        family: 'Tapes',
         deleted: false,
         stories: []
       })).to.be.false;
@@ -32,14 +34,15 @@ describe('Record', function() {
 
     it('has a factory', function() {
       let protoStory: any = {
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       };
       let protoRecord: any = {
         label: 'Tape 1',
-        category: 'Tapes',
+        family: 'Tapes',
+        medium: '3/4"',
         stories: [ protoStory ]
       };
 
@@ -61,7 +64,7 @@ describe('Record', function() {
 
   describe('Label to ID Normalization', function() {
     it('normalizes labels', function() {
-      let record = new Record('', 'Test');
+      let record = new Record('', 'Test', '3/4"');
       let labels = {
         'Tape 1': 'tape_1',
         'Tape/1': 'tape-1',
@@ -77,9 +80,9 @@ describe('Record', function() {
 
   describe('Date ranges', function() {
     it('manages ranges of story dates', function() {
-        let record = new Record('Tape 1', 'Test');
+        let record = new Record('Tape 1', 'Test', '3/4"');
         record.addStories([
-          new Story('Story 1', new Date('10/15/2015'), "3/4\"", "5:30")
+          new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
         ]);
         expect(record.first.toDateString())
             .to.equal(new Date('10/15/2015').toDateString());
@@ -87,7 +90,7 @@ describe('Record', function() {
             .to.equal(new Date('10/15/2015').toDateString());
 
         record.addStories([
-          new Story('Story 2', new Date('10/10/2015'), "3/4\"", "5:30")
+          new Story('Story 2', new Date('10/10/2015'), 'VO', '5:30')
         ]);
         expect(record.first.toDateString())
             .to.equal(new Date('10/10/2015').toDateString());
@@ -95,7 +98,7 @@ describe('Record', function() {
             .to.equal(new Date('10/15/2015').toDateString());
 
         record.addStories([
-          new Story('Story 3', new Date('10/16/2015'), "3/4\"", "5:30")
+          new Story('Story 3', new Date('10/16/2015'), 'VO', '5:30')
         ]);
         expect(record.first.toDateString())
             .to.equal(new Date('10/10/2015').toDateString());
@@ -109,31 +112,31 @@ describe('Story', function() {
   describe('factory', function() {
     it('tests proto objects', function() {
       expect(Story.isProtoStory({
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       })).to.be.true;
 
       expect(Story.isProtoStory({
-        slug: "Story 1",
+        slug: 'Story 1',
       })).to.be.false;
 
       expect(Story.isProtoStory({
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30",
-        extra: "property"
+        format: 'VO',
+        runtime: '5:30',
+        extra: 'property'
       })).to.be.true;
     });
 
     it('has a factory', function() {
       let protoStory: any = {
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       };
       let story = Story.fromObj(protoStory);
       Object.keys(protoStory).forEach((_: string) => {
@@ -144,85 +147,85 @@ describe('Story', function() {
   describe('operations', function() {
     it('compares', function() {
       expect(Story.fromObj({
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/10/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }).compareTo(Story.fromObj({
-        slug: "Story 2",
+        slug: 'Story 2',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }))).to.equal(-1);
 
       expect(Story.fromObj({
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }).compareTo(Story.fromObj({
-        slug: "Story 2",
+        slug: 'Story 2',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }))).to.equal(0);
 
       expect(Story.fromObj({
-        slug: "Story 1",
+        slug: 'Story 1',
         date: new Date('10/15/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }).compareTo(Story.fromObj({
-        slug: "Story 2",
+        slug: 'Story 2',
         date: new Date('10/10/2015'),
-        format: "3/4\"",
-        runtime: "5:30"
+        format: 'VO',
+        runtime: '5:30'
       }))).to.equal(1);
     });
 
     it('compares statically', function() {
       expect(Story.compare(
         Story.fromObj({
-          slug: "Story 1",
+          slug: 'Story 1',
           date: new Date('10/10/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         }),
         Story.fromObj({
-          slug: "Story 2",
+          slug: 'Story 2',
           date: new Date('10/15/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         })
       )).to.equal(-1);
 
       expect(Story.compare(
         Story.fromObj({
-          slug: "Story 1",
+          slug: 'Story 1',
           date: new Date('10/15/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         }),
         Story.fromObj({
-          slug: "Story 2",
+          slug: 'Story 2',
           date: new Date('10/15/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         })
       )).to.equal(0);
 
       expect(Story.compare(
         Story.fromObj({
-          slug: "Story 1",
+          slug: 'Story 1',
           date: new Date('10/15/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         }),
         Story.fromObj({
-          slug: "Story 2",
+          slug: 'Story 2',
           date: new Date('10/10/2015'),
-          format: "3/4\"",
-          runtime: "5:30"
+          format: 'VO',
+          runtime: '5:30'
         })
       )).to.equal(1);
     });

@@ -2,7 +2,8 @@ export class RecordDatabase extends Map<string, Record> {}
 
 export interface IRecord {
   label: string,
-  category: string,
+  family: string,
+  medium: string,
   notes?: string,
   stories?: IStory[],
   deleted?: boolean,
@@ -24,8 +25,9 @@ export class Record {
 
   constructor(
     label: string,
-    public category: string,
-    public notes: string = "",
+    public family: string,
+    public medium: string,
+    public notes: string = '',
     public deleted: boolean = false,
     stories: Story[] = []
   ) {
@@ -70,15 +72,16 @@ export class Record {
    */
   merge(other: Record): Record {
     this.label = other.label || this.label;
-    this.category = other.category || this.category;
+    this.family = other.family || this.family;
+    this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
     this.addStories(other.stories);
     return this;
   }
 
   static fromObj(obj: IRecord): Record {
-    let {label, category, notes, deleted} = obj;
-    let record = new Record(label, category, notes, deleted);
+    let {label, family, medium, notes, deleted} = obj;
+    let record = new Record(label, family, medium, notes, deleted);
     if ('stories' in obj && obj.stories instanceof Array) {
       record.addStories(
           obj.stories
@@ -90,7 +93,7 @@ export class Record {
 
   static isProtoRecord(obj: any): boolean {
     return 'label' in obj &&
-      'category' in obj;
+      'family' in obj;
   }
 }
 
