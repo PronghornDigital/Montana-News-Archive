@@ -12,8 +12,11 @@ export interface IRecord {
 export interface IStory {
   slug: string,
   date: string|Date,
-  format: string,
-  runtime: string
+  format?: string,
+  runtime?: string,
+  notes?: string,
+  reporter?: string,
+  photographer?: string
 }
 
 export class Record {
@@ -102,8 +105,11 @@ export class Story {
   constructor(
     public slug: string,
     date: string|Date,
-    public format: string,
-    public runtime: string
+    public format: string = 'Unknown',
+    public runtime: string = '0:00',
+    public notes: string = '',
+    public reporter: string = 'Unknown',
+    public photographer: string = 'Unknown'
   ) {
     this.setDate(date);
   }
@@ -122,6 +128,9 @@ export class Story {
     this.date = other.date || this.date;
     this.format = other.format || this.format;
     this.runtime = other.runtime || this.runtime;
+    this.notes = other.notes || this.notes;
+    this.reporter = other.reporter || this.reporter;
+    this.photographer = other.photographer || this.photographer;
     return this;
   }
 
@@ -147,7 +156,9 @@ export class Story {
   }
 
   static fromObj(obj: IStory): Story {
-    let {slug, date, format, runtime} = obj;
-    return new Story(slug, date, format, runtime);
+    let {slug, date, format, runtime, notes, reporter, photographer} = obj;
+    return new Story(
+      slug, date, format, runtime, notes, reporter, photographer
+    );
   }
 }
