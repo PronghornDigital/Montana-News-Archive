@@ -4,7 +4,7 @@
         "experimentalDecorators": true,
         "module": "commonjs",
         "noImplicitAny": true,
-        "outDir": "./",
+        "outDir": "../../dist/shared",
         "preserveConstEnums": true,
         "removeComments": true,
         "sourceMap": true,
@@ -13,15 +13,15 @@
     },
     "filesGlob": [
         "./**/*.ts",
-        "../typings/commander/*",
-        "../typings/glob/*",
-        "../typings/node/*"
+        "../typings/chai/chai.d.ts",
+        "../typings/es6-collections/es6-collections.d.ts",
+        "../typings/mocha/mocha.d.ts"
     ],
     "files": [
-        "./glob.ts",
-        "./templateCache.ts",
-        "../typings/commander/commander.d.ts",
-        "../typings/glob/glob.d.ts",
-        "../typings/node/node.d.ts"
+        "./record/record.spec.ts",
+        "./record/record.ts",
+        "../typings/chai/chai.d.ts",
+        "../typings/es6-collections/es6-collections.d.ts",
+        "../typings/mocha/mocha.d.ts"
     ]
 }

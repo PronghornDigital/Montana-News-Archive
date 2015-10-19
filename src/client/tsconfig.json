@@ -2,13 +2,13 @@
     "version": "next",
     "compilerOptions": {
         "experimentalDecorators": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "../../dist/client",
         "module": "commonjs",
+        "noImplicitAny": true,
+        "outDir": "../../dist/client",
+        "preserveConstEnums": true,
+        "removeComments": true,
         "sourceMap": true,
+        "suppressImplicitAnyIndexErrors": true,
         "target": "ES5"
     },
     "filesGlob": [

@@ -10,3 +10,4 @@ process.argv.slice(i).forEach(function (_) { return glob(_, printAll); });
 function printAll(err, files) {
     files.map(function (_) { return process.stdout.write(_ + ' '); });
 }
+//# sourceMappingURL=glob.js.map

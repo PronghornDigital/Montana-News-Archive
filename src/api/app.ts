@@ -1,6 +1,10 @@
 import { join, normalize } from 'path';
 import { Rupert, Plugins } from 'ts-rupert';
 
+import {
+  RecordHandler
+} from './record/record';
+
 const defaults: any = {
   log: {level: 'info'},
   static: {
@@ -12,7 +16,8 @@ const defaults: any = {
 
 export const server = Rupert.createApp(defaults, [
   Plugins.Healthz,
-  Plugins.Static
+  Plugins.Static,
+  RecordHandler
 ]);
 
 if (require.main === module) {
