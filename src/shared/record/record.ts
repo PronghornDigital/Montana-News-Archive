@@ -17,29 +17,47 @@ export interface IRecordClip {
 }
 
 export class Record {
+  private _id: string;
+  private _label: string;
   private _first: Date;
   private _last: Date;
-  private _clips: RecordClip[];
+  private _clips: RecordClip[] = [];
 
   constructor(
-    public id: string,
-    public label: string,
+    label: string,
     public category: string,
     public notes: string = "",
     public deleted: boolean = false,
     clips: RecordClip[] = []
   ) {
+    this.label = label;
     this.addClips(clips);
   }
 
+  get id(): string { return this._id; }
+  get label(): string { return this._label; }
+  set label(label: string) {
+    this._label = label;
+    this._id = label
+      // .replace(/[0x00-0x1f]/g, '') // Strip low bytes
+      // .replace(/[0x7f]/g, '') // Strip 127
+      // TODO strip > 127
+      .replace(/\s+/g, '_') // Whitespace to underscore
+      .replace(/[\/\\\+=]/g, '-') // Separators to hyphen
+      .replace(/[^a-zA-Z0-9_\-]/g, '') // Strip non-letters
+      .toLowerCase()
+      ;
+  }
   get first(): Date { return this._first; }
   get last(): Date { return this._last; }
   get clips(): RecordClip[] { return this._clips; }
 
   addClips(clips: RecordClip[]): Record {
-    this.clips = this.clips.concat(clips).sort(RecordClip.compare);
-    this._first = this.clips[0].date;
-    this._last = this.clips[this.clips.length - 1].date;
+    this._clips = this._clips.concat(clips).sort(RecordClip.compare);
+    if (this._clips.length > 0) {
+      this._first = this.clips[0].date;
+      this._last = this.clips[this.clips.length - 1].date;
+    }
     return this;
   }
 
@@ -52,7 +70,6 @@ export class Record {
    * appended. Record date ranges are expanded.
    */
   merge(other: Record): Record {
-    this.id = other.id || this.id;
     this.label = other.label || this.label;
     this.category = other.category || this.category;
     this.notes = other.notes || this.notes;
@@ -61,19 +78,19 @@ export class Record {
   }
 
   static fromObj(obj: any): Record {
-    let {id, label, category, notes, deleted = false} = obj;
-    let record = new Record(id, label, category, notes, deleted);
+    let {label, category, notes, deleted} = obj;
+    let record = new Record(label, category, notes, deleted);
     if ('clips' in obj && obj.clips instanceof Array) {
-      record.clips = obj.clips
+      record.addClips(
+          obj.clips
           .filter(RecordClip.isProtoRecordClip)
-          .map(RecordClip.fromObj);
+          .map(RecordClip.fromObj));
     }
     return record;
   }
 
   static isProtoRecord(obj: any): boolean {
-    return 'id' in obj &&
-      'label' in obj &&
+    return 'label' in obj &&
       'category' in obj;
   }
 }
