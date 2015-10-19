@@ -1,15 +1,14 @@
 export class RecordDatabase extends Map<string, Record> {}
 
 export interface IRecord {
-  id: string,
   label: string,
   category: string,
   notes?: string,
-  clips?: IRecordClip[],
+  stories?: IStory[],
   deleted?: boolean,
 }
 
-export interface IRecordClip {
+export interface IStory {
   slug: string,
   date: string|Date,
   format: string,
@@ -21,17 +20,17 @@ export class Record {
   private _label: string;
   private _first: Date;
   private _last: Date;
-  private _clips: RecordClip[] = [];
+  private _stories: Story[] = [];
 
   constructor(
     label: string,
     public category: string,
     public notes: string = "",
     public deleted: boolean = false,
-    clips: RecordClip[] = []
+    stories: Story[] = []
   ) {
     this.label = label;
-    this.addClips(clips);
+    this.addStories(stories);
   }
 
   get id(): string { return this._id; }
@@ -50,13 +49,13 @@ export class Record {
   }
   get first(): Date { return this._first; }
   get last(): Date { return this._last; }
-  get clips(): RecordClip[] { return this._clips; }
+  get stories(): Story[] { return this._stories; }
 
-  addClips(clips: RecordClip[]): Record {
-    this._clips = this._clips.concat(clips).sort(RecordClip.compare);
-    if (this._clips.length > 0) {
-      this._first = this.clips[0].date;
-      this._last = this.clips[this.clips.length - 1].date;
+  addStories(stories: Story[]): Record {
+    this._stories = this._stories.concat(stories).sort(Story.compare);
+    if (this._stories.length > 0) {
+      this._first = this.stories[0].date;
+      this._last = this.stories[this.stories.length - 1].date;
     }
     return this;
   }
@@ -66,25 +65,25 @@ export class Record {
    *
    * This method merges the contents of the specified Record into the current
    * Record. Fields that are set in the specified record overwrite
-   * the corresponding fields in the current record. RecordClips are
+   * the corresponding fields in the current record. Storys are
    * appended. Record date ranges are expanded.
    */
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.category = other.category || this.category;
     this.notes = other.notes || this.notes;
-    this.addClips(other.clips);
+    this.addStories(other.stories);
     return this;
   }
 
-  static fromObj(obj: any): Record {
+  static fromObj(obj: IRecord): Record {
     let {label, category, notes, deleted} = obj;
     let record = new Record(label, category, notes, deleted);
-    if ('clips' in obj && obj.clips instanceof Array) {
-      record.addClips(
-          obj.clips
-          .filter(RecordClip.isProtoRecordClip)
-          .map(RecordClip.fromObj));
+    if ('stories' in obj && obj.stories instanceof Array) {
+      record.addStories(
+          obj.stories
+          .filter(Story.isProtoStory)
+          .map(Story.fromObj));
     }
     return record;
   }
@@ -95,7 +94,7 @@ export class Record {
   }
 }
 
-export class RecordClip {
+export class Story {
   private _date: Date;
   constructor(
     public slug: string,
@@ -115,7 +114,7 @@ export class RecordClip {
     this.date = <Date>date;
   }
 
-  merge(other: RecordClip): RecordClip {
+  merge(other: Story): Story {
     this.slug = other.slug || this.slug;
     this.date = other.date || this.date;
     this.format = other.format || this.format;
@@ -123,7 +122,7 @@ export class RecordClip {
     return this;
   }
 
-  compareTo(other: RecordClip): number {
+  compareTo(other: Story): number {
     if (this.date > other.date) {
       return 1;
     } else if (this.date < other.date) {
@@ -133,19 +132,19 @@ export class RecordClip {
     }
   }
 
-  static compare(a: RecordClip, b: RecordClip): number {
+  static compare(a: Story, b: Story): number {
     return a.compareTo(b);
   }
 
-  static isProtoRecordClip(obj: any): boolean {
+  static isProtoStory(obj: any): boolean {
     return 'slug' in obj &&
       'date' in obj &&
       'format' in obj &&
       'runtime' in obj;
   }
 
-  static fromObj(obj: IRecordClip): RecordClip {
+  static fromObj(obj: IStory): Story {
     let {slug, date, format, runtime} = obj;
-    return new RecordClip(slug, date, format, runtime);
+    return new Story(slug, date, format, runtime);
   }
 }
