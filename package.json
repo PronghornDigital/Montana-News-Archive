@@ -17,7 +17,6 @@
   "scripts": {
     "watch": "watch 'npm run test --silent' src/ # run this for real-time build and test",
     "start": "node dist/api/app.js",
-    "prepublish": "npm run test --silent",
     "test": "npm run test:api --silent ; npm run test:browser --silent && echo 'All test suites pass!'",
     "test:api": "mocha $(node ./src/scripts/glob './dist/{api,shared}/**/*.spec.js')",
     "test:browser": "karma start ./karma.config.js --single-run",
