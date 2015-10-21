@@ -17,11 +17,11 @@
   "scripts": {
     "watch": "watch 'npm run test --silent' src/ # run this for real-time build and test",
     "start": "node dist/api/app.js",
-    "prepublish": "time npm run test --silent",
+    "prepublish": "npm run test --silent",
     "test": "npm run test:api --silent ; npm run test:browser --silent && echo 'All test suites pass!'",
     "test:api": "mocha $(node ./src/scripts/glob './dist/{api,shared}/**/*.spec.js')",
     "test:browser": "karma start ./karma.config.js --single-run",
-    "pretest": "time npm run build --silent",
+    "pretest": "npm run build --silent",
     "build": "npm run build:scripts && npm run build:styles && npm run build:markup && echo 'MTNA ready!'",
     "build:scripts": "npm run build:tsc && npm run build:bundle && echo 'Scripts bundled!'",
     "build:tsc": "echo 'Building Typscript... ' ; npm run build:tsc:shared ; npm run build:tsc:client ; npm run build:tsc:api",
