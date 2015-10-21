@@ -22,6 +22,7 @@
     ],
     "files": [
         "./app.ts",
+        "./record/record.spec.ts",
         "./record/record.ts",
         "./temp.spec.ts",
         "../typings/chai/chai.d.ts",

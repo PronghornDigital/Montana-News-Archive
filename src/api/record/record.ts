@@ -9,7 +9,8 @@ import {
   RupertPlugin,
   Route,
   Request,
-  Response
+  Response,
+  Methods
 } from 'ts-rupert';
 
 @Route.prefix('/api/records')
@@ -56,7 +57,7 @@ export class RecordHandler extends RupertPlugin {
   //
   // }
 
-  @Route.DELETE('/:id')
+  @Route('/:id', {methods: [Methods.DELETE]})
   delete(q: Request, s: Response): void {
     let id: string = q.params['id'];
     if (this.database.has(id)) {
