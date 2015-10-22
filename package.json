@@ -47,7 +47,7 @@
     "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
   },
   "dependencies": {
-    "ts-rupert": "^0.4.1-beta3"
+    "ts-rupert": "^0.4.1-beta4"
   },
   "devDependencies": {
     "chai": "3.2.0",
