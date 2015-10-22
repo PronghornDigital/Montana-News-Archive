@@ -47,7 +47,7 @@
     "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
   },
   "dependencies": {
-    "ts-rupert": "^0.4.1-beta4"
+    "ts-rupert": "0.4.1-beta5"
   },
   "devDependencies": {
     "chai": "3.2.0",
@@ -66,7 +66,7 @@
     "sinon-chai": "2.8.0",
     "supertest": "1.1.0",
     "tslint": "2.5.1",
-    "typescript": "1.6.0-beta",
+    "typescript": "1.6.2",
     "watch": "0.16.0",
     "webpack": "1.12.2"
   }
