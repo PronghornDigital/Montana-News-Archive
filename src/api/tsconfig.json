@@ -11,15 +11,6 @@
         "suppressImplicitAnyIndexErrors": true,
         "target": "ES5"
     },
-    "filesGlob": [
-        "./**/*.ts",
-        "../typings/chai/*",
-        "../typings/es6-collections/*",
-        "../typings/es6-promise/*",
-        "../typings/mocha/*",
-        "../typings/sinon/*",
-        "../typings/sinon-chai/*"
-    ],
     "files": [
         "./app.ts",
         "./record/record.spec.ts",
@@ -28,8 +19,14 @@
         "../typings/chai/chai.d.ts",
         "../typings/es6-collections/es6-collections.d.ts",
         "../typings/es6-promise/es6-promise.d.ts",
+        "../typings/node/node.d.ts",
         "../typings/mocha/mocha.d.ts",
         "../typings/sinon/sinon.d.ts",
+
+        "../typings/express/express.d.ts",
+"../typings/winston/winston.d.ts",
+"../typings/morgan/morgan.d.ts",
+
         "../typings/sinon-chai/sinon-chai.d.ts"
     ]
 }
