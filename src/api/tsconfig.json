@@ -24,9 +24,8 @@
         "../typings/sinon/sinon.d.ts",
 
         "../typings/express/express.d.ts",
-"../typings/winston/winston.d.ts",
-"../typings/morgan/morgan.d.ts",
-
+        "../typings/winston/winston.d.ts",
+        "../typings/morgan/morgan.d.ts",
         "../typings/sinon-chai/sinon-chai.d.ts"
     ]
 }
