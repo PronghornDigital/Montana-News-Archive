@@ -9,7 +9,7 @@ import {
 } from 'express';
 
 import {
-  Record,
+  // Record,
   RecordDatabase
 } from '../../shared/record/record';
 
@@ -22,7 +22,7 @@ describe('Record Handler', function() {
   let handler: RecordHandler;
 
   beforeEach(function() {
-    recordMap = new Map<string, Record>();
+    recordMap = {};
     handler = new RecordHandler(recordMap);
   });
 
@@ -53,8 +53,8 @@ describe('Record Handler', function() {
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s);
       expect(statusSpy).to.have.been.calledWithExactly(204);
-      expect(recordMap.has('tape_1')).to.be.true;
-      let record = recordMap.get('tape_1');
+      expect('tape_1' in recordMap).to.be.true;
+      let record = recordMap['tape_1'];
       expect(record.stories.length).to.equal(1);
     });
   });

@@ -4,7 +4,7 @@
         "experimentalDecorators": true,
         "module": "commonjs",
         "noImplicitAny": true,
-        "outDir": "../../dist/api",
+        "outDir": "../../dist",
         "preserveConstEnums": true,
         "removeComments": true,
         "sourceMap": true,
@@ -22,7 +22,6 @@
         "../typings/node/node.d.ts",
         "../typings/mocha/mocha.d.ts",
         "../typings/sinon/sinon.d.ts",
-
         "../typings/express/express.d.ts",
         "../typings/winston/winston.d.ts",
         "../typings/morgan/morgan.d.ts",

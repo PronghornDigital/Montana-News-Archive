@@ -1,4 +1,6 @@
-export class RecordDatabase extends Map<string, Record> {}
+export class RecordDatabase  {
+  [k: string]: Record
+}
 
 export interface IRecord {
   label: string,
@@ -82,6 +84,17 @@ export class Record {
     return this;
   }
 
+  toJSON(): IRecord {
+      return {
+        label: this.label,
+        family: this.family,
+        medium: this.medium,
+        notes: this.notes,
+        stories: this.stories,
+        deleted: this.deleted
+      };
+  }
+
   static fromObj(obj: IRecord): Record {
     let {label, family, medium, notes, deleted} = obj;
     let record = new Record(label, family, medium, notes, deleted);
@@ -146,6 +159,18 @@ export class Story {
 
   static compare(a: Story, b: Story): number {
     return a.compareTo(b);
+  }
+
+  toJSON(): IStory {
+      return {
+        slug: this.slug,
+        date: this.date.toJSON(),
+        format: this.format,
+        runtime: this.runtime,
+        notes: this.notes,
+        reporter: this.reporter,
+        photographer: this.photographer
+      };
   }
 
   static isProtoStory(obj: any): boolean {
