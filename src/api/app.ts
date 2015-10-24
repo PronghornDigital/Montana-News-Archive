@@ -9,7 +9,7 @@ const defaults: any = {
   log: {level: 'info'},
   static: {
     routes: {
-      '/': normalize(join(__dirname, '../')),
+      '/': normalize(join(__dirname, '../_static')),
     }
   }
 };
