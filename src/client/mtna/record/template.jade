@@ -1,0 +1,6 @@
+div(layout="row" layout-align="space-between end")
+  h3 {{ state.record.label }}
+  div {{ state.record.family }}
+  div {{ state.record.medium }}
+  md-chips
+    md-chip {{ state.record.stories.length }} {{ state.record.stories.length == 1 ? 'Story' : 'Stories' }}

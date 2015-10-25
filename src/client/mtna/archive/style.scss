@@ -1,5 +1,13 @@
 archive {
-  h1 {
-    background-color: 'red';
+  > section {
+    margin: 16px auto 32px auto;
+    max-width: 600px;
+    @media (min-width: 664) and (max-width: 1023) {
+      max-width: 864;
+      min-width: 600;
+    }
+    @media (min-width: 1024) {
+      min-width: 864;
+    }
   }
 }

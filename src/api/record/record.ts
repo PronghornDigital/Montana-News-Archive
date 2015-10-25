@@ -76,10 +76,12 @@ export class RecordHandler extends RupertPlugin {
     }
   }
 
-  // @Route.GET('')
-  // find(q: Request, s: Response): void {
-  //
-  // }
+  @Route.GET('')
+  find(q: Request, s: Response): void {
+    s.send(Object.keys(this.database).map((id: string) => {
+      return this.database[id];
+    }));
+  }
 
   @Route('/:id', {methods: [Methods.DELETE]})
   delete(q: Request, s: Response): void {

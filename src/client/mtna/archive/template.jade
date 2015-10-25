@@ -1,1 +1,12 @@
-h1 MT News Archive
+md-toolbar(md-scroll-shrink)
+  .md-toolbar-tools
+    h1 MT News Archive
+section.md-whiteframe-z1
+  md-content
+    md-list
+      md-list-item(ng-repeat="item in state.records")
+        record-viewer(record="item")
+        md-divider
+      md-list-item
+        h3
+          md-button New Tape
