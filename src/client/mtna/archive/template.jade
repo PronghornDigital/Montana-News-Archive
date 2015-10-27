@@ -4,9 +4,14 @@ md-toolbar(md-scroll-shrink)
 section.md-whiteframe-z1
   md-content
     md-list
-      md-list-item(ng-repeat="item in state.records")
-        record-viewer(record="item")
+      md-list-item(ng-repeat="item in state.records track by item.id")
+        record-viewer(
+          ng-dblclick="state.edit(item)"
+          record="item"
+          editing="item == state.editing"
+          done-editing="state.edit(null)"
+        )
         md-divider
       md-list-item
         h3
-          md-button New Tape
+          md-button(ng-click="state.addTape()") New Tape

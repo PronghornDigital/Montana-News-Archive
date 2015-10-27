@@ -31,7 +31,7 @@ export class Record {
   constructor(
     label: string,
     public family: string,
-    public medium: string,
+    public medium: string = '',
     public notes: string = '',
     public deleted: boolean = false,
     stories: Story[] = []
@@ -44,15 +44,7 @@ export class Record {
   get label(): string { return this._label; }
   set label(label: string) {
     this._label = label;
-    this._id = label
-      // .replace(/[0x00-0x1f]/g, '') // Strip low bytes
-      // .replace(/[0x7f]/g, '') // Strip 127
-      // TODO strip > 127
-      .replace(/\s+/g, '_') // Whitespace to underscore
-      .replace(/[\/\\\+=]/g, '-') // Separators to hyphen
-      .replace(/[^a-zA-Z0-9_\-]/g, '') // Strip non-letters
-      .toLowerCase()
-      ;
+    this._id = makeRecordId(label);
   }
   get first(): Date { return this._first; }
   get last(): Date { return this._last; }
@@ -186,4 +178,16 @@ export class Story {
       slug, date, format, runtime, notes, reporter, photographer
     );
   }
+}
+
+export function makeRecordId(label: string): string {
+  return label
+    // .replace(/[0x00-0x1f]/g, '') // Strip low bytes
+    // .replace(/[0x7f]/g, '') // Strip 127
+    // TODO strip > 127
+    .replace(/\s+/g, '_') // Whitespace to underscore
+    .replace(/[\/\\\+=]/g, '-') // Separators to hyphen
+    .replace(/[^a-zA-Z0-9_\-]/g, '') // Strip non-letters
+    .toLowerCase()
+    ;
 }

@@ -4,6 +4,8 @@ import {
 
 export class RecordViewer {
   public record: Record;
+  public editing: boolean;
+  public doneEditing: any;
   // constructor() {}
 
   static directive(): angular.IDirective {
@@ -12,7 +14,9 @@ export class RecordViewer {
       controllerAs: 'state',
       bindToController: true,
       scope: {
-        record: '='
+        record: '=',
+        editing: '=',
+        doneEditing: '&'
       },
       templateUrl: '/mtna/record/template.html'
     };
