@@ -17,9 +17,9 @@ export class Archive {
   public records: Record[];
   public editing: Record = null;
   constructor(
-    private recordResource: RecordResource
+    private RecordResource: RecordResource
   ) {
-    this.recordResource.query().$promise.then((__: Record[]) => {
+    this.RecordResource.query().$promise.then((__: Record[]) => {
       this.records = __.map((_: Record) => (_.id = makeRecordId(_.label), _));
     });
   }
@@ -42,7 +42,12 @@ export class Archive {
   }
 
   addTape(): void {
-    this.editing = new this.recordResource({id: '', label: '', family: ''});
+    this.editing = new this.RecordResource({
+      id: '',
+      label: '',
+      family: '',
+      stories: []
+    });
     this.records.push(this.editing);
   }
 

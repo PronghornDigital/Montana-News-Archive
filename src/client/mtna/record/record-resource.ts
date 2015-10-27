@@ -1,10 +1,14 @@
+import {
+  Story
+} from '../../../shared/record/record';
+
 export interface Record extends ng.resource.IResource<Record> {
   id?: string;
   label: string;
   family: string;
   medium: string;
   notes?: string;
-  // stories?: IStory[];
+  stories?: Story[];
   deleted?: boolean;
 }
 

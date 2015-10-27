@@ -1,4 +1,9 @@
 record-viewer {
   display: block;
+  user-select: none;
   width: 100%;
+
+  input {
+    user-select: none;
+  }
 }
