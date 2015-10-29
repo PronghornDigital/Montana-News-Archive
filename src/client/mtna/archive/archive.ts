@@ -14,7 +14,7 @@ import {
 
 export class Archive {
   public saving: boolean = false;
-  public records: Record[];
+  public records: Record[] = [];
   public editing: Record = null;
   constructor(
     private RecordResource: RecordResource
