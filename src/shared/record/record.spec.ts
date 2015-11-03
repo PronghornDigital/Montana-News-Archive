@@ -7,6 +7,8 @@ import {
   Story
 } from './record';
 
+import { MOCK_RECORD_1 } from './record.mock';
+
 describe('Record', function() {
   describe('factory', function() {
     it('tests proto objects', function() {

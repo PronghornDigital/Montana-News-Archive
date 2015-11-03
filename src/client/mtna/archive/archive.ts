@@ -16,7 +16,9 @@ export class Archive {
   public saving: boolean = false;
   public records: Record[] = [];
   public editing: Record = null;
+  public error: any = null;
   constructor(
+    private $q: ng.IQService,
     private RecordResource: RecordResource
   ) {
     this.RecordResource.query().$promise.then((__: Record[]) => {
@@ -25,30 +27,34 @@ export class Archive {
   }
 
   edit(record: Record): void {
-    if (record === null) {
-      let done = () => this.saving = false;
+    // debugger;
+    let success = () => this.editing = record;
+    let error = (err: any) => this.error = err;
+    let done = () => this.saving = false;
+    if (this.editing && record !== this.editing) {
       this.saving = true;
-      Promise.all(
+      this.$q.all(
         this.records.map((_: Record) => {
           _.id = makeRecordId(_.label);
           return _;
         }).map((_: Record) => _.$save())
       )
-      .then(() => this.editing = null)
+      .then(success, error)
       .then(done, done);
     } else {
-      this.editing = record;
+      success();
     }
   }
 
   addTape(): void {
-    this.editing = new this.RecordResource({
+    let record = new this.RecordResource({
       id: '',
       label: '',
       family: '',
       stories: []
     });
-    this.records.push(this.editing);
+    this.records.push(record);
+    this.edit(record);
   }
 
   static directive(): angular.IDirective {
@@ -61,7 +67,7 @@ export class Archive {
     };
   }
 
-  static $inject: string[] = ['RecordResource'];
+  static $inject: string[] = ['$q', 'RecordResource'];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
