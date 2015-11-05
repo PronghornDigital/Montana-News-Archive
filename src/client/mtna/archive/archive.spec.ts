@@ -72,8 +72,8 @@ describe('MTNA Archive', function() {
       expect(archive.editing).to.equal(record1);
       expect(archive.saving).to.be.false;
       archive.edit(<Record><any>record2);
-      // Stay on record1 until the save finishes. If the save errors, then the
-      // old data isn't erased.
+      // Stay on record1 until the save finishes.
+      // If the save errors, then the old data isn't erased.
       expect(archive.editing).to.equal(record1);
       expect(archive.saving).to.be.true;
       $rootScope.$apply();

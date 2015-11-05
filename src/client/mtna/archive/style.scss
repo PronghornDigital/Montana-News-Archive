@@ -1,13 +1,29 @@
-archive {
-  > section {
-    margin: 16px auto 32px auto;
-    max-width: 600px;
-    @media (min-width: 664) and (max-width: 1023) {
-      max-width: 864;
-      min-width: 600;
+$white: #fff;
+$gray: #eee;
+
+md-content.md-default-theme {
+  background-color: $gray;
+
+  > md-card {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+md-toolbar {
+  .md-button.md-default-theme {
+    border-radius: 99%; // round toolbar buttons
+  }
+
+  .md-toolbar-tools-bottom {
+    font-size: small;
+
+    & :last-child {
+      opacity: .8;
     }
-    @media (min-width: 1024) {
-      min-width: 864;
-    }
+  }
+
+  input.search {
+    color: $white;
   }
 }

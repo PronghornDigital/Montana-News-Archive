@@ -14,6 +14,8 @@ import {
 
 export class Archive {
   public saving: boolean = false;
+  public searching: boolean = false;
+  public search: string = '';
   public records: Record[] = [];
   public editing: Record = null;
   public error: any = null;
@@ -27,7 +29,6 @@ export class Archive {
   }
 
   edit(record: Record): void {
-    // debugger;
     let success = () => this.editing = record;
     let error = (err: any) => this.error = err;
     let done = () => this.saving = false;
