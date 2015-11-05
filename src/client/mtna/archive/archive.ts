@@ -12,6 +12,10 @@ import {
   RecordViewer
 } from '../record/record-viewer';
 
+import {
+  Searchbar
+} from './searchbar/searchbar-component';
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -72,6 +76,7 @@ export class Archive {
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
+    Searchbar.module.name,
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(

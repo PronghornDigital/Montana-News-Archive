@@ -13,8 +13,8 @@ md-content.md-default-theme {
 md-toolbar {
   .md-button {
     border-radius: 99%; // round toolbar buttons
-    width: 36px; // use ng-material variables?
-    min-width: 36px;
+    min-width: 36px; // use ng-material variables?
+    width: 36px;
   }
 
   .md-toolbar-tools-bottom {
