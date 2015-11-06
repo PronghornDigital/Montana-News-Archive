@@ -7,11 +7,11 @@ export class Searchbar {
       controllerAs: 'state',
       bindToController: true,
       scope: {},
-      templateUrl: '/mtna/archive/searchbar/searchbar-template.html'
+      templateUrl: '/mtna/searchbar/searchbar-template.html'
     };
   }
 
-  static selector: string = 'mtnaArchiveSearchbar';
+  static selector: string = 'mtnaSearchbar';
   static $inject: string[] = [];
   static $depends: string[] = [
     'ngMaterial'

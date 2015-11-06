@@ -1,6 +1,6 @@
 import {
   Archive
-} from './mtna/archive/archive';
+} from './mtna/archive-component';
 
 angular.module('mtna', [
   'mtna.templates',

@@ -6,7 +6,6 @@ export class RecordViewer {
   public record: Record;
   public editing: boolean;
   public doneEditing: any;
-  // constructor() {}
 
   static directive(): angular.IDirective {
     return {
@@ -18,7 +17,7 @@ export class RecordViewer {
         editing: '=',
         doneEditing: '&'
       },
-      templateUrl: '/mtna/record/template.html'
+      templateUrl: '/mtna/record/record-template.html'
     };
   }
 

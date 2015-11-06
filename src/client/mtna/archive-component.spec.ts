@@ -5,16 +5,16 @@ import {
 import {
   Record,
   RecordResource
-} from '../record/record-resource';
+} from './record/record-resource';
 
 import {
   MOCK_RECORD_1,
   MOCK_RECORD_2
-} from '../../../shared/record/record.mock';
+} from '../../shared/record/record.mock';
 
 import {
   Archive
-} from './archive';
+} from './archive-component';
 
 let $rootScope: ng.IScope = null;
 let $q: ng.IQService = null;

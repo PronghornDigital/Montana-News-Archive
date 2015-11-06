@@ -1,16 +1,16 @@
 import {
   makeRecordId
-} from '../../../shared/record/record';
+} from '../../shared/record/record';
 
 import {
   default as RecordModule,
   Record,
   RecordResource
-} from '../record/record-resource';
+} from './record/record-resource';
 
 import {
   RecordViewer
-} from '../record/record-viewer';
+} from './record/record-component';
 
 import {
   Searchbar
@@ -20,8 +20,15 @@ export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
   public search: string = '';
+
   public records: Record[] = [];
+  public pre: Record[] = [];
+  public current: Record = null;
+  public currentIndex: number = -1;
+  public post: Record[] = [];
+
   public editing: Record = null;
+
   public error: any = null;
   constructor(
     private $q: ng.IQService,
@@ -29,7 +36,22 @@ export class Archive {
   ) {
     this.RecordResource.query().$promise.then((__: Record[]) => {
       this.records = __.map((_: Record) => (_.id = makeRecordId(_.label), _));
+      this.select(null);
     });
+  }
+
+  select(record: Record): void {
+    this.currentIndex = this.records.indexOf(record);
+    if (this.currentIndex === -1) {
+      // Unsetting the current element
+      this.current = null;
+      this.pre = this.records;
+      this.post = [];
+    } else {
+      this.current = record;
+      this.pre = this.records.slice(0, this.currentIndex);
+      this.post = this.records.slice(this.currentIndex + 1);
+    }
   }
 
   edit(record: Record): void {
@@ -68,7 +90,7 @@ export class Archive {
       controllerAs: 'state',
       bindToController: true,
       scope: {},
-      templateUrl: '/mtna/archive/template.html'
+      templateUrl: '/mtna/archive-template.html'
     };
   }
 
