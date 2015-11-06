@@ -9,7 +9,8 @@ import {
 
 import {
   MOCK_RECORD_1,
-  MOCK_RECORD_2
+  MOCK_RECORD_2,
+  MOCK_RECORD_3
 } from '../../shared/record/record.mock';
 
 import {
@@ -81,4 +82,42 @@ describe('MTNA Archive', function() {
       expect(archive.saving).to.be.false;
     });
   });
+  describe('selection', function() {
+    it('changes pre/current/post lists', function() {
+      let archive = new Archive($q, <RecordResource><any>MockRecordResource);
+      let record1: Record = <Record><any> new MockRecordResource(MOCK_RECORD_1);
+      let record2: Record = <Record><any> new MockRecordResource(MOCK_RECORD_2);
+      let record3: Record = <Record><any> new MockRecordResource(MOCK_RECORD_3);
+      archive.records = [record1, record2, record3];
+      archive.select(null);
+      expect(archive.pre.length).to.equal(3);
+      expect(archive.current).to.equal(null);
+      expect(archive.post.length).to.equal(0);
+      archive.select(record1);
+      expect(archive.pre.length).to.equal(0);
+      expect(archive.current).to.equal(record1);
+      expect(archive.post.length).to.equal(2);
+      archive.select(null);
+      expect(archive.pre.length).to.equal(3);
+      expect(archive.current).to.equal(null);
+      expect(archive.post.length).to.equal(0);
+      archive.select(record2);
+      expect(archive.pre.length).to.equal(1);
+      expect(archive.current).to.equal(record2);
+      expect(archive.post.length).to.equal(1);
+      archive.select(null);
+      expect(archive.pre.length).to.equal(3);
+      expect(archive.current).to.equal(null);
+      expect(archive.post.length).to.equal(0);
+      archive.select(record3);
+      expect(archive.pre.length).to.equal(2);
+      expect(archive.current).to.equal(record3);
+      expect(archive.post.length).to.equal(0);
+      archive.select(null);
+      expect(archive.pre.length).to.equal(3);
+      expect(archive.current).to.equal(null);
+      expect(archive.post.length).to.equal(0);
+    });
+  });
 });
+
