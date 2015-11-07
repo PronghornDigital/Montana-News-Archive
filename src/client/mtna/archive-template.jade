@@ -1,6 +1,8 @@
 // Sidenav
 
-div.relative(layout="column" layout-fill role="main")
+div.relative(role="main"
+  layout="column" layout-fill 
+)
   md-button.md-fab.md-fab-bottom-right(ng-click="state.addTape()")
     md-icon library_add
 
@@ -25,8 +27,6 @@ div.relative(layout="column" layout-fill role="main")
           record-viewer(
             ng-click="state.select(item)"
             record="item"
-            editing="item == state.editing"
-            done-editing="state.edit(null)"
           )
           md-divider
 
@@ -35,6 +35,8 @@ div.relative(layout="column" layout-fill role="main")
     )
       record-viewer(
         record="state.current"
+        selected="true"
+        done-editing="state.save(state.current)"
       )
 
     md-card(
@@ -46,7 +48,5 @@ div.relative(layout="column" layout-fill role="main")
           record-viewer(
             ng-click="state.select(item)"
             record="item"
-            editing="item == state.editing"
-            done-editing="state.edit(null)"
           )
           md-divider

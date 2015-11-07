@@ -1,25 +1,71 @@
-div(
-  layout="row" layout-align="space-between end"
-  ng-if="!state.editing"
-)
-  h2 {{ state.record.label }}
-  div {{ state.record.family }}
-  div {{ state.record.medium }}
-  md-chips
-    md-chip {{ state.record.stories.length }} {{ state.record.stories.length == 1 ? 'Story' : 'Stories' }}
-form(name="recordEditor" ng-if="state.editing")
-  div(layout="row" layout-align="space-between end")
-    md-input-container(style = "width: 20em;")
-      label Label
-      input(type="text" ng-model="state.record.label" placeholder="Tape Label")
-    md-input-container(style = "width: 20em;")
-      label Family
-      input(type="text" ng-model="state.record.family" placeholder="Tape Family")
-    md-input-container(style = "width: 10em;")
-      label Medium
-      md-select(ng-model="state.record.medium")
-        md-option(value="1\" Tape") 1" Tape
-        md-option(value="3/4\" Tape") 3/4" Tape
-        md-option(value="Film") Film
-    md-button(ng-click="state.doneEditing()") Save
-        
+div(layout="column")
+  div(
+    layout="row" layout-align="space-between end"
+    ng-if="!state.selected"
+  )
+    h2 {{ state.record.label }}
+    div {{ state.record.family }}
+    div {{ state.record.medium }}
+    md-chips(ng-if="!state.selected")
+      md-chip {{ state.record.stories.length }} {{ state.record.stories.length == 1 ? 'Story' : 'Stories' }}
+  form(name="recordEditor" ng-if="state.selected")
+    div(layout="row" layout-align="space-between end")
+      md-input-container(style = "width: 20em;")
+        label Label
+        input(type="text" ng-model="state.record.label" placeholder="Tape Label")
+      md-input-container(style = "width: 20em;")
+        label Family
+        input(type="text" ng-model="state.record.family" placeholder="Tape Family")
+      md-input-container(style = "width: 10em;")
+        label Medium
+        md-select(ng-model="state.record.medium")
+          md-option(value="1\" Tape") 1" Tape
+          md-option(value="3/4\" Tape") 3/4" Tape
+          md-option(value="Film") Film
+      md-button(ng-click="state.doneEditing()") Save
+  table.mtna-table(ng-if="state.selected")
+    thead
+      tr
+        th Slug
+        th Date
+        th Format
+        th Runtime
+        th Reporter
+        th Photographer
+    tbody
+      tr(ng-repeat="story in state.record.stories")
+        td {{ story.slug }}
+        td {{ story.date | date:'fullDate' }} 
+        td {{ story.format || "Unknown" }}
+        td {{ story.runtime || "Unknown" }}
+        td {{ story.reporter || "Unknown" }}
+        td {{ story.photographer || "Unknown" }}
+    tfoot
+      tr
+        td
+          md-input-container
+            label Slug
+            input(ng-model="state.newStory.slug")
+        td
+          md-datepicker(ng-model="state.newStory.date" md-placeholder="Story date")
+        td
+          md-input-container
+            label Format
+            input(ng-model="state.newStory.format")
+        td
+          md-input-container
+            label Runtime 
+            input(ng-model="state.newStory.runtime")
+        td
+          md-input-container
+            label Reporter 
+            input(ng-model="state.newStory.reporter")
+        td
+          md-input-container
+            label Photographer
+            input(ng-model="state.newStory.photographer")
+      tr
+        td(colspan="5")
+        td
+          md-button(ng-click="state.addStory(state.newStory)")
+            md-icon add

@@ -1,12 +1,12 @@
 import {
-  makeRecordId
-} from '../../shared/record/record';
-
-import {
   default as RecordModule,
-  Record,
+  IRecordResource,
   RecordResource
 } from './record/record-resource';
+
+import {
+  Record
+} from '../../shared/record/record';
 
 import {
   RecordViewer
@@ -34,8 +34,8 @@ export class Archive {
     private $q: ng.IQService,
     private RecordResource: RecordResource
   ) {
-    this.RecordResource.query().$promise.then((__: Record[]) => {
-      this.records = __.map((_: Record) => (_.id = makeRecordId(_.label), _));
+    this.RecordResource.query().$promise.then((__: IRecordResource[]) => {
+      this.records = __.map(Record.fromObj);
       this.select(null);
     });
   }
@@ -54,6 +54,17 @@ export class Archive {
     }
   }
 
+  save(record: Record): void {
+    let success = angular.noop;
+    let error = (err: any) => this.error = err;
+    let done = () => this.saving = false;
+    this.saving = true;
+    this.$q.all(
+      this.records.map((_: Record) => this.RecordResource.update({id: _.id}, _))
+    )
+    .then(success, error)
+    .then(done, done);
+  }
   edit(record: Record): void {
     let success = () => this.editing = record;
     let error = (err: any) => this.error = err;
@@ -61,10 +72,7 @@ export class Archive {
     if (this.editing && record !== this.editing) {
       this.saving = true;
       this.$q.all(
-        this.records.map((_: Record) => {
-          _.id = makeRecordId(_.label);
-          return _;
-        }).map((_: Record) => _.$save())
+        this.records.map( (_: Record) => (new this.RecordResource(_)).$save())
       )
       .then(success, error)
       .then(done, done);
@@ -74,12 +82,7 @@ export class Archive {
   }
 
   addTape(): void {
-    let record = new this.RecordResource({
-      id: '',
-      label: '',
-      family: '',
-      stories: []
-    });
+    let record = new Record('', '');
     this.records.push(record);
     this.edit(record);
   }

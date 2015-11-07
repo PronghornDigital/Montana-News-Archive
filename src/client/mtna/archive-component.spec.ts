@@ -3,9 +3,12 @@ import {
 } from 'chai';
 
 import {
-  Record,
   RecordResource
 } from './record/record-resource';
+
+import {
+  Record
+} from '../../shared/record/record';
 
 import {
   MOCK_RECORD_1,
