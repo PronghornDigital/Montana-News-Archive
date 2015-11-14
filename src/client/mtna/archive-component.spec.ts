@@ -122,5 +122,37 @@ describe('MTNA Archive', function() {
       expect(archive.post.length).to.equal(0);
     });
   });
+
+  describe('collapse', function() {
+
+    let archive: Archive;
+    let record1: Record;
+    let record2: Record;
+    let record3: Record;
+
+    beforeEach(function() {
+      archive = new Archive($q, <RecordResource><any>MockRecordResource);
+      record1 = <Record><any> new MockRecordResource(MOCK_RECORD_1);
+      record2 = <Record><any> new MockRecordResource(MOCK_RECORD_2);
+      record3 = <Record><any> new MockRecordResource(MOCK_RECORD_3);
+      archive.records = [record1, record2, record3];
+      archive.select(record2);
+      archive.collapse();
+    });
+
+    it('should set current to null', function() {
+      expect(archive.current).to.equal(null);
+    });
+
+    it('should set pre to the whole record list', function() {
+      expect(archive.pre).to.equal(archive.records);
+    });
+
+    it('should set post to null', function() {
+      expect(archive.post).to.equal(null);
+    });
+
+  });
+
 });
 
