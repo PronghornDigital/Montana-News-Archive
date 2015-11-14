@@ -8,7 +8,7 @@ import {
   Request, Response
 } from 'express';
 
-import { getMockLogger } from '../../util/mockLogger.ts';
+import { getMockLogger } from '../../util/mockLogger';
 
 import {
   Record,
