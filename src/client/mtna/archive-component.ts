@@ -108,3 +108,4 @@ export class Archive {
     'mtna.archive', Archive.$depends
   ).directive('archive', Archive.directive);
 }
+

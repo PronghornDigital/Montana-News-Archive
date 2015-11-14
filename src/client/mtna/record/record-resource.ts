@@ -4,6 +4,7 @@ import {
 
 export interface IRecordResource
     extends ng.resource.IResource<IRecord>, IRecord {
+  baseId: number;
  }
 
 export interface RecordResource
@@ -15,7 +16,7 @@ function recordResourceFactory(
   $resource: ng.resource.IResourceService
 ): RecordResource {
   return <RecordResource> $resource('/api/records/:id', {id: '@id'}, {
-    'update': { method: 'PUT' }
+    'update': { method: 'PUT', params: { replaceId: '@baseId'  } }
   });
 }
 
@@ -23,3 +24,4 @@ export default angular
   .module('mtna.record', ['ngResource'])
   .factory('RecordResource', ['$resource', recordResourceFactory])
   ;
+

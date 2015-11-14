@@ -72,7 +72,9 @@ export class Record {
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
-    this.addStories(other.stories);
+    this.addStories(
+      other.stories.filter(_ => indexOfC(this.stories, _, Story.equals) > -1)
+    );
     return this;
   }
 
@@ -153,6 +155,20 @@ export class Story {
     return a.compareTo(b);
   }
 
+  equals(other: Story): boolean {
+    return this.slug === other.slug &&
+      this.date === other.date &&
+      this.format === other.format &&
+      this.runtime === other.runtime &&
+      this.notes === other.notes &&
+      this.reporter === other.reporter &&
+      this.photographer == other.photographer;
+  }
+
+  static equals(a: Story, b: Story): boolean {
+    return a.equals(b);
+  }
+
   toJSON(): IStory {
       return {
         slug: this.slug,
@@ -191,3 +207,16 @@ export function makeRecordId(label: string): string {
     .toLowerCase()
     ;
 }
+
+export function indexOfC<T>(
+    list: T[],
+    item: T,
+    comparator: (a: T, b: T)=> boolean
+): number {
+  return list.reduce((found: number, value: T, index: number) => {
+    if(found > -1) { return found; }
+    if(comparator(value, item)) { return index; }
+    return -1;
+  }, -1);
+}
+
