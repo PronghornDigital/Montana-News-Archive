@@ -96,6 +96,7 @@ export class Archive {
   collapse(): void {
     this.current = null;
     this.pre = this.records;
+    this.post = null;
   }
 
   static directive(): angular.IDirective {
