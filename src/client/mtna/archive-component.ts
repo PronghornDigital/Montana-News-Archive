@@ -86,9 +86,11 @@ export class Archive {
   }
 
   addTape(): void {
+    this.collapse();
     let record = new Record('', '');
     this.records.push(record);
     this.edit(record);
+    this.select(record);
   }
 
   collapse(): void {
