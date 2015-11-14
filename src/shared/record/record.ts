@@ -47,15 +47,30 @@ export class Record {
     this._id = makeRecordId(label);
   }
   get first(): Date { return this._first; }
+  set first(date: Date) { this.setFirst(date); }
   get last(): Date { return this._last; }
+  set last(date: Date) { this.setLast(date); }
+  get combinedDate(): string {
+    return this.first + " " + this.last;
+  }
   get stories(): Story[] { return this._stories; }
 
+  setFirst(date: string|Date): void {
+    debugger;
+    if (typeof date === 'string') {
+      date = new Date(<string>date);
+    }
+    this._first = <Date>date;
+  }
+  setLast(date: string|Date): void {
+    debugger;
+    if (typeof date === 'string') {
+      date = new Date(<string>date);
+    }
+    this._last = <Date>date;
+  }
   addStories(stories: Story[]): Record {
     this._stories = this._stories.concat(stories).sort(Story.compare);
-    if (this._stories.length > 0) {
-      this._first = this.stories[0].date;
-      this._last = this.stories[this.stories.length - 1].date;
-    }
     return this;
   }
 
@@ -70,6 +85,8 @@ export class Record {
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
+    this.start = other.start || this.start;
+    this.end = other.end || this.end;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
     this.addStories(
@@ -83,6 +100,8 @@ export class Record {
         label: this.label,
         family: this.family,
         medium: this.medium,
+        start: this.start,
+        end: this.end,
         notes: this.notes,
         stories: this.stories,
         deleted: this.deleted
