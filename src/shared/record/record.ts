@@ -55,23 +55,30 @@ export class Record {
   get first(): Date { return this._first; }
   set first(date: Date) { this.setFirst(date); }
   get last(): Date { return this._last; }
-  set last(date: Date) { this.setLast(date); }
+  set last(date: Date) { this.setLast(date); 
+  }
   get combinedDate(): string {
     return this.first + " " + this.last;
   }
   get stories(): Story[] { return this._stories; }
 
   setFirst(date: string|Date): void {
-    debugger;
     if (typeof date === 'string') {
-      date = new Date(<string>date);
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
     }
     this._first = <Date>date;
   }
   setLast(date: string|Date): void {
-    debugger;
     if (typeof date === 'string') {
-      date = new Date(<string>date);
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
     }
     this._last = <Date>date;
   }
@@ -91,8 +98,6 @@ export class Record {
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
-    this.start = other.start || this.start;
-    this.end = other.end || this.end;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
     this.addStories(
@@ -152,7 +157,11 @@ export class Story {
   set date(date: Date) { this._date = date; }
   setDate(date: string|Date): void {
     if (typeof date === 'string') {
-      date = new Date(<string>date);
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
     }
     this.date = <Date>date;
   }
