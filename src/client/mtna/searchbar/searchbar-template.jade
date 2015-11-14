@@ -11,6 +11,6 @@ md-toolbar.md-hue-2(ng-show="state.searching")
     h1(flex="10") Back
     md-input-container(md-theme="input" flex)
       label &nbsp;
-      input.search(ng-model="state.search" placeholder="enter search")
-    md-button(aria-label="search" ng-click="state.showSearch = !state.showSearch")
+      input.search(ng-model="state.searchString" placeholder="enter search")
+    md-button(aria-label="search" ng-click="state.search()")
       md-icon search
