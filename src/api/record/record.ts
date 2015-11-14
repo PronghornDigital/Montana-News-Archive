@@ -67,7 +67,7 @@ export class RecordHandler extends RupertPlugin {
     if (Record.isProtoRecord(protoRecord)) {
       let record = Record.fromObj(protoRecord);
       record.id = id;
-      if ( replaceId ) {
+      if ( replaceId  && replaceId in this.database ) {
         record = this.database[replaceId].merge(record);
         delete this.database[replaceId];
       }

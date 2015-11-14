@@ -90,5 +90,37 @@ describe('Record Handler', function() {
       expect(statusSpy).to.have.been.calledWithExactly(204);
       expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
     });
+
+    it('replaces missing tapes', function() {
+      let q: Request = <Request><any>{
+        params: {
+          id: 'tape-1'
+        },
+        query: {
+          replaceId: 'klip_1'
+        },
+        body: {
+          label: 'Tape 1',
+          family: 'Tapes',
+          medium: '3/4"',
+          stories: [ {
+            slug: 'Story 1',
+            date: new Date('10/15/2015'),
+            format: 'VO',
+            runtime: '5:30'
+          } ]
+        }
+      };
+      let s: Response = <Response><any>{
+        status: function(status: number): Response {
+          return this;
+        },
+        end: sinon.spy()
+      };
+      let statusSpy = sinon.spy(s, 'status');
+      handler.save(q, s);
+      expect(statusSpy).to.have.been.calledWithExactly(204);
+      expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+    });
   });
 });
