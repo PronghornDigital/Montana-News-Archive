@@ -8,6 +8,8 @@ import {
   Request, Response
 } from 'express';
 
+import { getMockLogger } from '../../util/mockLogger.ts';
+
 import {
   Record,
   RecordDatabase
@@ -23,7 +25,7 @@ describe('Record Handler', function() {
 
   beforeEach(function() {
     recordMap = {};
-    handler = new RecordHandler(recordMap);
+    handler = new RecordHandler(getMockLogger(), recordMap);
   });
 
   describe('Saving', function() {

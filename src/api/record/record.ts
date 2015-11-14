@@ -3,7 +3,6 @@ import { join } from 'path';
 
 import {
   Record,
-  // RecordClip,
   RecordDatabase
 } from '../../shared/record/record';
 
@@ -14,7 +13,8 @@ import {
   Route,
   Request,
   Response,
-  Methods
+  Methods,
+  ILogger
 } from 'ts-rupert';
 
 @Route.prefix('/api/records')
@@ -23,14 +23,17 @@ export class RecordHandler extends RupertPlugin {
   private cancelWrite: NodeJS.Timer;
 
   constructor(
+    @Inject(ILogger) logger: ILogger,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
   ) {
     super();
-    this.cancelWrite = setInterval(() => this.write(), 1 * 1000);
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
-      if ( err !== null ) { return; }
+      if ( err ) {
+        logger.info(`No database found, creating a new one at ${this.dbPath}`);
+        return;
+      }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
         if (typeof k === 'string' ) {
@@ -39,6 +42,7 @@ export class RecordHandler extends RupertPlugin {
           }
         }
       });
+      this.cancelWrite = setInterval(() => this.write(), 1 * 1000);
     });
   }
 

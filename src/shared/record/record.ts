@@ -91,6 +91,8 @@ export class Record {
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
+    this.start = other.start || this.start;
+    this.end = other.end || this.end;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
     this.addStories(
