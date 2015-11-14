@@ -59,7 +59,7 @@ export class Archive {
     let error = (err: any) => this.error = err;
     let done = () => {
       this.saving = false;
-    }
+    };
     this.saving = true;
     this.$q.all(
       this.records.map((_: Record) => this.RecordResource.update({id: _.id}, _))
