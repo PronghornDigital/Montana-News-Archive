@@ -17,8 +17,8 @@ export class Searchbar {
   search() {
     const searchQuery: ISearchQuery = {
       query: this.searchString,
-      before: null,
-      after: null
+      before: this.before,
+      after: this.after
     };
     this._searchService.search(searchQuery).then(this._$log.info);
   }
