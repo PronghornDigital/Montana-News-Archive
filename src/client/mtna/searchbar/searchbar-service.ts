@@ -4,13 +4,13 @@ export interface ISearchQuery {
   after: Date;
 }
 
-export interface ISearchParams {
+interface ISearchParams {
   query: string;
   before: string;
   after: string;
 }
 
-export class SearchQuery implements ISearchQuery {
+class SearchQuery implements ISearchQuery {
   public query: string = '';
   public before: Date = null;
   public after: Date = null;
