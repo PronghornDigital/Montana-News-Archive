@@ -3,7 +3,6 @@ import { join } from 'path';
 
 import {
   Record,
-  // RecordClip,
   RecordDatabase
 } from '../../shared/record/record';
 
@@ -28,9 +27,8 @@ export class RecordHandler extends RupertPlugin {
     private database: RecordDatabase = {}
   ) {
     super();
-    this.cancelWrite = setInterval(() => this.write(), 1 * 1000);
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
-      if ( err !== null ) { return; }
+      if ( err ) { return; }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
         if (typeof k === 'string' ) {
@@ -39,6 +37,7 @@ export class RecordHandler extends RupertPlugin {
           }
         }
       });
+      this.cancelWrite = setInterval(() => this.write(), 1 * 1000);
     });
   }
 
