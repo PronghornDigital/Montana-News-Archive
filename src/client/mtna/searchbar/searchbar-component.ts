@@ -1,5 +1,23 @@
+import {
+  SearchService, ISearchQuery
+} from './searchbar-service';
+
 export class Searchbar {
   public searching: boolean = false;
+  public searchString: string = '';
+
+  constructor(
+      private _searchService: SearchService,
+      private _$log: ng.ILogService
+  ) {
+  }
+
+  search() {
+    const searchQuery: ISearchQuery = {
+      query: this.searchString
+    };
+    this._searchService.search(searchQuery).then(this._$log.info);
+  }
 
   static directive(): angular.IDirective {
     return {
@@ -12,9 +30,10 @@ export class Searchbar {
   }
 
   static selector: string = 'mtnaSearchbar';
-  static $inject: string[] = [];
+  static $inject: string[] = [SearchService.serviceName, '$log'];
   static $depends: string[] = [
-    'ngMaterial'
+    'ngMaterial',
+    SearchService.module.name
   ];
   static module: angular.IModule = angular.module(
     'mtna.archive.searchbar', Searchbar.$depends
