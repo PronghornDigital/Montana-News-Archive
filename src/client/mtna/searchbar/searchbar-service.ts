@@ -37,7 +37,6 @@ export class SearchService {
   }
 
   search(sq: ISearchQuery): angular.IPromise<any> {
-
     const searchQuery = new SearchQuery(sq);
 
     return this._http({
