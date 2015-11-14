@@ -62,13 +62,15 @@ export class RecordHandler extends RupertPlugin {
   @Route.PUT('/:id')
   save(q: Request, s: Response): void {
     let id: string = q.params['id'];
+    let replaceId: string = q.query && q.query['replaceId'] || null;
     let protoRecord: any = q.body;
     if (Record.isProtoRecord(protoRecord)) {
       let record = Record.fromObj(protoRecord);
-      if (record.id in this.database) {
-        record.merge(this.database[record.id]);
-      }
       record.id = id;
+      if ( replaceId ) {
+        record = this.database[replaceId].merge(record);
+        delete this.database[replaceId];
+      }
       this.database[record.id] = record;
       return s.status(204).end();
     } else {
