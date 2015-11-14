@@ -1,5 +1,3 @@
-/// <reference path="../typings/sinon/sinon.d.ts" />
-
 import {
   spy, stub
 } from 'sinon';
