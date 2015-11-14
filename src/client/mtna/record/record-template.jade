@@ -69,3 +69,14 @@ div(layout="column")
         td
           md-button(ng-click="state.addStory(state.newStory)")
             md-icon add
+  div(layout="row" ng-if="state.selected")
+    div(layout="column" layout-align="start center")
+      div(ng-repeat="video in state.record.videos")
+        video(controls)
+          source(ng-src="{{ video.url }}" type="video/mp4")
+      md-input-container(style = "width: 20em;")
+        label Notes
+        textarea(ng-model="state.record.notes" placeholder="Notes")
+    div(layout="column" layout-align="space-between center")
+      div(ng-repeat="image in state.record.images" flex)
+        img(ng-src="{{ image.url }}")

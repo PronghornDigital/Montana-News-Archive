@@ -8,6 +8,8 @@ export interface IRecord {
   medium: string,
   notes?: string,
   stories?: IStory[],
+  images?: Image[],
+  videos?: Video[],
   deleted?: boolean,
 }
 
@@ -21,12 +23,22 @@ export interface IStory {
   photographer?: string
 }
 
+export interface IImage { //<-- lol
+  url: string
+}
+
+export interface IVideo { //<-- lol
+  url: string
+}
+
 export class Record {
   private _id: string;
   private _label: string;
   private _first: Date;
   private _last: Date;
   private _stories: Story[] = [];
+  private _images: Image[] = [];
+  private _videos: Video[] = [];
 
   constructor(
     label: string,
@@ -34,10 +46,14 @@ export class Record {
     public medium: string = '',
     public notes: string = '',
     public deleted: boolean = false,
-    stories: Story[] = []
+    stories: Story[] = [],
+    images: Image[] = [],
+    videos: Video[] = []
   ) {
     this.label = label;
     this.addStories(stories);
+    this.addImages(images);
+    this.addVideos(videos);
   }
 
   get id(): string { return this._id; }
@@ -49,6 +65,8 @@ export class Record {
   get first(): Date { return this._first; }
   get last(): Date { return this._last; }
   get stories(): Story[] { return this._stories; }
+  get images(): Image[] { return this._images; }
+  get videos(): Video[] { return this._videos; }
 
   addStories(stories: Story[]): Record {
     this._stories = this._stories.concat(stories).sort(Story.compare);
@@ -56,6 +74,16 @@ export class Record {
       this._first = this.stories[0].date;
       this._last = this.stories[this.stories.length - 1].date;
     }
+    return this;
+  }
+
+  addImages(images: Image[]): Record {
+    this._images = this._images.concat(images);
+    return this;
+  }
+
+  addVideos(videos: Video[]): Record {
+    this._videos = this._videos.concat(videos);
     return this;
   }
 
@@ -75,6 +103,9 @@ export class Record {
     this.addStories(
       other.stories.filter(_ => indexOfC(this.stories, _, Story.equals) > -1)
     );
+
+    this.addImages(other.images);
+    this.addVideos(other.videos);
     return this;
   }
 
@@ -85,6 +116,8 @@ export class Record {
         medium: this.medium,
         notes: this.notes,
         stories: this.stories,
+        images: this.images,
+        videos: this.videos,
         deleted: this.deleted
       };
   }
@@ -98,12 +131,72 @@ export class Record {
           .filter(Story.isProtoStory)
           .map(Story.fromObj));
     }
+    if ('images' in obj && obj.images instanceof Array) {
+      record.addImages(
+          obj.images
+          .filter(Image.isProtoImage)
+          .map(Image.fromObj));
+    }
+    if ('videos' in obj && obj.videos instanceof Array) {
+      record.addVideos(
+          obj.videos
+          .filter(Video.isProtoVideo)
+          .map(Video.fromObj));
+    }
     return record;
   }
 
   static isProtoRecord(obj: any): boolean {
     return 'label' in obj &&
       'family' in obj;
+  }
+}
+
+export class Image {
+  constructor(
+    public url: string
+  ) {
+    console.log('Yo dawg, nice image.');
+  }
+
+  toJSON(): IImage {
+    return {
+      url: this.url
+    };
+  }
+
+  static fromObj(obj: IImage): Image {
+    let {url} = obj;
+    return new Image(url);
+  }
+
+  static isProtoImage(obj: any): boolean {
+    // We can't have an image without a URL.
+    return 'url' in obj;
+  }
+}
+
+export class Video {
+  constructor(
+    public url: string
+  ) {
+    console.log('Yo dawg, nice video.');
+  }
+
+  toJSON(): IVideo {
+    return {
+      url: this.url
+    };
+  }
+
+  static fromObj(obj: IVideo): Video {
+    let {url} = obj;
+    return new Video(url);
+  }
+
+  static isProtoVideo(obj: any): boolean {
+    // We can't have an image without a URL.
+    return 'url' in obj;
   }
 }
 
@@ -219,4 +312,3 @@ export function indexOfC<T>(
     return -1;
   }, -1);
 }
-
