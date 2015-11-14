@@ -5,6 +5,8 @@ import {
 export class Searchbar {
   public searching: boolean = false;
   public searchString: string = '';
+  public after: Date;
+  public before: Date;
 
   constructor(
       private _searchService: SearchService,
@@ -14,7 +16,9 @@ export class Searchbar {
 
   search() {
     const searchQuery: ISearchQuery = {
-      query: this.searchString
+      query: this.searchString,
+      before: null,
+      after: null
     };
     this._searchService.search(searchQuery).then(this._$log.info);
   }

@@ -1,8 +1,8 @@
-md-toolbar(ng-show="!state.searching")
+md-toolbar(ng-show="!state.searching" ng-click="state.searching = !state.searching")
   .md-toolbar-tools
     h1 MT News Archive
     span(flex)
-    md-button(aria-label="search" ng-click="state.searching = !state.searching")
+    md-button(aria-label="search")
       md-icon search
 md-toolbar.md-hue-2(ng-show="state.searching")
   .md-toolbar-tools
@@ -12,5 +12,7 @@ md-toolbar.md-hue-2(ng-show="state.searching")
     md-input-container(md-theme="input" flex)
       label &nbsp;
       input.search(ng-model="state.searchString" placeholder="enter search")
+    md-datepicker(ng-model="state.after" md-placeholder="After")
+    md-datepicker(ng-model="state.before" md-placeholder="Before")
     md-button(aria-label="search" ng-click="state.search()")
       md-icon search
