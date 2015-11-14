@@ -57,7 +57,9 @@ export class Archive {
   save(record: Record): void {
     let success = angular.noop;
     let error = (err: any) => this.error = err;
-    let done = () => this.saving = false;
+    let done = () => {
+      this.saving = false;
+    }
     this.saving = true;
     this.$q.all(
       this.records.map((_: Record) => this.RecordResource.update({id: _.id}, _))
