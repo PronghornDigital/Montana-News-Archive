@@ -3,14 +3,14 @@ export class RecordDatabase  {
 }
 
 export interface IRecord {
-  label: string,
-  family: string,
-  medium: string,
-  notes?: string,
-  stories?: IStory[],
-  images?: Image[],
-  videos?: Video[],
-  deleted?: boolean,
+  label: string;
+  family: string;
+  medium: string;
+  notes?: string;
+  stories?: IStory[];
+  images?: Image[];
+  videos?: Video[];
+  deleted?: boolean;
 }
 
 export interface IStory {
@@ -23,12 +23,12 @@ export interface IStory {
   photographer?: string;
 }
 
-export interface IImage { //<-- lol
-  url: string
+export interface IImage {
+  url: string;
 }
 
-export interface IVideo { //<-- lol
-  url: string
+export interface IVideo {
+  url: string;
 }
 
 export class Record {
