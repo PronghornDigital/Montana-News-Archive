@@ -6,6 +6,8 @@ export interface IRecord {
   label: string,
   family: string,
   medium: string,
+  first: Date,
+  last: Date,
   notes?: string,
   stories?: IStory[],
   deleted?: boolean,
@@ -33,11 +35,15 @@ export class Record {
     public family: string,
     public medium: string = '',
     public notes: string = '',
+    first: string|Date = '',
+    last: string|Date = '',
     public deleted: boolean = false,
     stories: Story[] = []
   ) {
     this.label = label;
     this.addStories(stories);
+    this.setFirst(first);
+    this.setLast(last);
   }
 
   get id(): string { return this._id; }
@@ -47,15 +53,37 @@ export class Record {
     this._id = makeRecordId(label);
   }
   get first(): Date { return this._first; }
+  set first(date: Date) { this.setFirst(date); }
   get last(): Date { return this._last; }
+  set last(date: Date) { this.setLast(date); 
+  }
+  get combinedDate(): string {
+    return this.first + " " + this.last;
+  }
   get stories(): Story[] { return this._stories; }
 
+  setFirst(date: string|Date): void {
+    if (typeof date === 'string') {
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
+    }
+    this._first = <Date>date;
+  }
+  setLast(date: string|Date): void {
+    if (typeof date === 'string') {
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
+    }
+    this._last = <Date>date;
+  }
   addStories(stories: Story[]): Record {
     this._stories = this._stories.concat(stories).sort(Story.compare);
-    if (this._stories.length > 0) {
-      this._first = this.stories[0].date;
-      this._last = this.stories[this.stories.length - 1].date;
-    }
     return this;
   }
 
@@ -75,6 +103,8 @@ export class Record {
     this.addStories(
       other.stories.filter(_ => indexOfC(this.stories, _, Story.equals) > -1)
     );
+    this.first = other.first || this.first;
+    this.last = other.last || this.last;
     return this;
   }
 
@@ -83,6 +113,8 @@ export class Record {
         label: this.label,
         family: this.family,
         medium: this.medium,
+        first: this.first,
+        last: this.last,
         notes: this.notes,
         stories: this.stories,
         deleted: this.deleted
@@ -90,8 +122,8 @@ export class Record {
   }
 
   static fromObj(obj: IRecord): Record {
-    let {label, family, medium, notes, deleted} = obj;
-    let record = new Record(label, family, medium, notes, deleted);
+    let {label, family, medium, notes, deleted, first, last} = obj;
+    let record = new Record(label, family, medium, notes, first, last, deleted);
     if ('stories' in obj && obj.stories instanceof Array) {
       record.addStories(
           obj.stories
@@ -125,7 +157,11 @@ export class Story {
   set date(date: Date) { this._date = date; }
   setDate(date: string|Date): void {
     if (typeof date === 'string') {
-      date = new Date(<string>date);
+      if (date === '') {
+        date = new Date();
+      } else {
+        date = new Date(<string>date);
+      }
     }
     this.date = <Date>date;
   }

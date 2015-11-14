@@ -3,26 +3,48 @@ div(layout="column")
     layout="row" layout-align="space-between end"
     ng-if="!state.selected"
   )
-    h2 {{ state.record.label }}
-    div {{ state.record.family }}
-    div {{ state.record.medium }}
-    md-chips(ng-if="!state.selected")
-      md-chip {{ state.record.stories.length }} {{ state.record.stories.length == 1 ? 'Story' : 'Stories' }}
+    div(layout="column" flex) 
+      .super {{ state.record.family }}
+      h2 {{ state.record.label }}
+    .column(layout="column" flex="30") 
+      span(ng-if='state.record.first')
+        {{ state.record.first | date : 'mediumDate' }}
+      span(ng-if='state.record.last')
+        span="-"
+        {{ state.record.last | date: 'mediumDate' }}
+    .column(layout="align-right" flex="15" ng-if="!state.selected")
+      span(ng-if="state.record.stories.length")
+        md-icon list
+      span(ng-if="state.record.photos.length")
+        md-icon photo
+      span(ng-if="state.record.note")
+        md-icon description
+      span(ng-if="state.record.videos.length")
+        md-icon ondemand_video
   form(name="recordEditor" ng-if="state.selected")
     div(layout="row" layout-align="space-between end")
-      md-input-container(style = "width: 20em;")
-        label Label
-        input(type="text" ng-model="state.record.label" placeholder="Tape Label")
-      md-input-container(style = "width: 20em;")
-        label Family
-        input(type="text" ng-model="state.record.family" placeholder="Tape Family")
-      md-input-container(style = "width: 10em;")
-        label Medium
-        md-select(ng-model="state.record.medium")
-          md-option(value="1\" Tape") 1" Tape
-          md-option(value="3/4\" Tape") 3/4" Tape
-          md-option(value="Film") Film
-      md-button(ng-click="state.doneEditing()") Save
+      div(layout="column" flex)
+        md-input-container
+          label Label
+          input(type="text" ng-model="state.record.label" placeholder="Tape Label")
+      div(layout="column" flex="25" style="height: 100%")
+        md-input-container
+          label Family
+          input(type="text" ng-model="state.record.family" placeholder="Tape Family")
+      div(layout="column" flex="25")
+        md-input-container
+          label Medium
+          md-select(ng-model="state.record.medium")
+            md-option(value="1\" Tape") 1" Tape
+            md-option(value="3/4\" Tape") 3/4" Tape
+            md-option(value="Film") Film
+      div(layout="column" flex="20")
+        md-button(ng-click="state.doneEditing()") Save
+    div(layout="row" layout-align="space-between end")
+      div(layout="column" flex="25")
+        md-datepicker(ng-model="state.record.first" md-placeholder="Start Date")
+      div(layout="column" flex)
+        md-datepicker(ng-model="state.record.last" md-placeholder="End Date")
   table.mtna-table(ng-if="state.selected")
     thead
       tr
