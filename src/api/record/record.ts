@@ -13,7 +13,8 @@ import {
   Route,
   Request,
   Response,
-  Methods
+  Methods,
+  ILogger
 } from 'ts-rupert';
 
 @Route.prefix('/api/records')
@@ -22,13 +23,17 @@ export class RecordHandler extends RupertPlugin {
   private cancelWrite: NodeJS.Timer;
 
   constructor(
+    @Inject(ILogger) logger: ILogger,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
   ) {
     super();
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
-      if ( err ) { return; }
+      if ( err ) {
+        logger.info(`No database found, creating a new one at ${this.dbPath}`);
+        return;
+      }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
         if (typeof k === 'string' ) {
