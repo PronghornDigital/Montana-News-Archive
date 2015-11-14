@@ -82,30 +82,45 @@ describe('Record', function() {
 
   describe('Date ranges', function() {
     it('manages ranges of story dates', function() {
-        let record = new Record('Tape 1', 'Test', '3/4"');
-        record.addStories([
-          new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
-        ]);
-        expect(record.first.toDateString())
-            .to.equal(new Date('10/15/2015').toDateString());
-        expect(record.last.toDateString())
-            .to.equal(new Date('10/15/2015').toDateString());
+      let record = new Record('Tape 1', 'Test', '3/4"');
+      record.addStories([
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
+      ]);
+      expect(record.first.toDateString())
+          .to.equal(new Date('10/15/2015').toDateString());
+      expect(record.last.toDateString())
+          .to.equal(new Date('10/15/2015').toDateString());
 
-        record.addStories([
-          new Story('Story 2', new Date('10/10/2015'), 'VO', '5:30')
-        ]);
-        expect(record.first.toDateString())
-            .to.equal(new Date('10/10/2015').toDateString());
-        expect(record.last.toDateString())
-            .to.equal(new Date('10/15/2015').toDateString());
+      record.addStories([
+        new Story('Story 2', new Date('10/10/2015'), 'VO', '5:30')
+      ]);
+      expect(record.first.toDateString())
+          .to.equal(new Date('10/10/2015').toDateString());
+      expect(record.last.toDateString())
+          .to.equal(new Date('10/15/2015').toDateString());
 
-        record.addStories([
-          new Story('Story 3', new Date('10/16/2015'), 'VO', '5:30')
-        ]);
-        expect(record.first.toDateString())
-            .to.equal(new Date('10/10/2015').toDateString());
-        expect(record.last.toDateString())
-            .to.equal(new Date('10/16/2015').toDateString());
+      record.addStories([
+        new Story('Story 3', new Date('10/16/2015'), 'VO', '5:30')
+      ]);
+      expect(record.first.toDateString())
+          .to.equal(new Date('10/10/2015').toDateString());
+      expect(record.last.toDateString())
+          .to.equal(new Date('10/16/2015').toDateString());
+    });
+  });
+
+  describe('Merging', function() {
+    it('merges records sanely', function() {
+      let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.addStories([
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
+      ]);
+      let record2 = new Record('Tape 1', 'Test', '3/4"');
+      record2.addStories([
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
+      ]);
+      record1.merge(record2);
+      expect(record1.stories.length).to.equal(1);
     });
   });
 });
