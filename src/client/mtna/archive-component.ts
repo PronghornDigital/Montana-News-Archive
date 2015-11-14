@@ -16,6 +16,10 @@ import {
   Searchbar
 } from './searchbar/searchbar-component';
 
+import {
+  ElemClick
+} from './elem-click/elem-click-directive';
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -87,6 +91,11 @@ export class Archive {
     this.edit(record);
   }
 
+  collapse(): void {
+    this.current = null;
+    this.pre = this.records;
+  }
+
   static directive(): angular.IDirective {
     return {
       controller: Archive,
@@ -102,6 +111,7 @@ export class Archive {
     RecordModule.name,
     RecordViewer.module.name,
     Searchbar.module.name,
+    ElemClick.module.name,
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(
