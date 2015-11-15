@@ -78,5 +78,6 @@ div(layout="column")
               md-button(ng-click="state.addStory(state.newStory)")
                 md-icon add
       div(layout="column" layout-align="space-between start")
+        mtna-uploader
         div(ng-repeat="image in state.record.images" flex)
           img(ng-src="{{ image.url }}")

@@ -45,6 +45,7 @@
     "list": "echo $(node ./src/scripts/glob './src/**/*.scss')"
   },
   "dependencies": {
+    "busboy": "^0.2.11",
     "ts-rupert": "0.4.1-beta6"
   },
   "devDependencies": {
