@@ -24,6 +24,10 @@ import {
   ToastService
 } from './toast/toast-service';
 
+import {
+  Uploader
+} from './uploader/uploader-component';
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -125,11 +129,14 @@ export class Archive {
     RecordViewer.module.name,
     Searchbar.module.name,
     ElemClick.module.name,
+<<<<<<< HEAD
     ToastService.module.name,
+=======
+    Uploader.module.name,
+>>>>>>> b00f9ed... Add file upload UI and API route
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(
     'mtna.archive', Archive.$depends
   ).directive('archive', Archive.directive);
 }
-

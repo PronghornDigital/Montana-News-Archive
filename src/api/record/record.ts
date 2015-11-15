@@ -1,5 +1,6 @@
 import { writeFile, readFile } from 'fs';
 import { join } from 'path';
+import * as Busboy from 'busboy';
 
 import {
   Record,
@@ -100,5 +101,40 @@ export class RecordHandler extends RupertPlugin {
       return;
     }
     s.status(404).send(`Record not found: ${id}`);
+  }
+
+  @Route.POST('/upload')
+  upload(q: Request, s: Response): void {
+    let busboy = new Busboy({ headers: q.headers });
+    busboy.on('file', (
+      fieldname: any,
+      file: any,
+      filename: any,
+      encoding: any,
+      mimetype: any
+    ) => {
+      console.log('File [' + fieldname + ']: filename: ' + filename);
+      console.log('encoding: ' + encoding + ', mimetype: ' + mimetype);
+      file.on('data', (data: any) => {
+        console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
+      });
+      file.on('end', () => {
+        console.log('File [' + fieldname + '] Finished');
+      });
+    });
+    busboy.on('field', (
+      fieldname: any,
+      val: any,
+      fieldnameTruncated: any,
+      valTruncated: any
+    ) => {
+      console.log('Field [' + fieldname + ']: value: ' + val);
+    });
+    busboy.on('finish', () => {
+      console.log('Done parsing form!');
+      s.writeHead(303, { Connection: 'close', Location: '/' });
+      s.end();
+    });
+    q.pipe(busboy);
   }
 }
