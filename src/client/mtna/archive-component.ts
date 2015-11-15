@@ -16,6 +16,11 @@ import {
   Searchbar
 } from './searchbar/searchbar-component';
 
+import {
+  Uploader
+} from './uploader/uploader-component';
+
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -102,10 +107,10 @@ export class Archive {
     RecordModule.name,
     RecordViewer.module.name,
     Searchbar.module.name,
+    Uploader.module.name,
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(
     'mtna.archive', Archive.$depends
   ).directive('archive', Archive.directive);
 }
-
