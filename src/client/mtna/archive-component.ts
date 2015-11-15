@@ -20,6 +20,11 @@ import {
   ElemClick
 } from './elem-click/elem-click-directive';
 
+import {
+  Uploader
+} from './uploader/uploader-component';
+
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -117,10 +122,10 @@ export class Archive {
     RecordViewer.module.name,
     Searchbar.module.name,
     ElemClick.module.name,
+    Uploader.module.name,
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(
     'mtna.archive', Archive.$depends
   ).directive('archive', Archive.directive);
 }
-
