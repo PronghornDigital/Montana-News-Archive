@@ -8,10 +8,10 @@ div(layout="column")
       h2 {{ state.record.label }}
     .column(layout="column" flex="30") 
       span(ng-if='state.record.first')
-        {{ state.record.first | date : 'mediumDate' }}
+        | {{ state.record.first | date : 'mediumDate' }}
       span(ng-if='state.record.last')
         span="-"
-        {{ state.record.last | date: 'mediumDate' }}
+        | {{ state.record.last | date: 'mediumDate' }}
     .column(layout="align-right" flex="15" ng-if="!state.selected")
       span(ng-if="state.record.stories.length")
         md-icon list

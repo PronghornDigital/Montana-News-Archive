@@ -7,8 +7,6 @@ import {
   Story
 } from './record';
 
-import { MOCK_RECORD_1 } from './record.mock';
-
 describe('Record', function() {
   describe('factory', function() {
     it('tests proto objects', function() {
@@ -52,7 +50,7 @@ describe('Record', function() {
       expect(record.id).to.equal('tape_1');
       expect(record.stories.length).to.equal(1);
       Object.keys(protoRecord)
-          .filter(_ => _ != 'stories')
+          .filter(_ => _ !== 'stories')
           .forEach(_ => {
             expect(record).to.have.property(_).that.equals(protoRecord[_]);
           });
@@ -81,7 +79,8 @@ describe('Record', function() {
   });
 
   describe('Date ranges', function() {
-    it('manages ranges of story dates', function() {
+    // This functionality is deprecated while we edit the record date directly.
+    it.skip('manages ranges of story dates', function() {
         let record = new Record('Tape 1', 'Test', '3/4"');
         record.addStories([
           new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')

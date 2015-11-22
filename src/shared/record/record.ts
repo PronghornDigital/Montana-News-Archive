@@ -3,24 +3,24 @@ export class RecordDatabase  {
 }
 
 export interface IRecord {
-  label: string,
-  family: string,
-  medium: string,
-  first: Date,
-  last: Date,
-  notes?: string,
-  stories?: IStory[],
-  deleted?: boolean,
+  label: string;
+  family: string;
+  medium: string;
+  first: Date;
+  last: Date;
+  notes?: string;
+  stories?: IStory[];
+  deleted?: boolean;
 }
 
 export interface IStory {
-  slug: string,
-  date: string|Date,
-  format?: string,
-  runtime?: string,
-  notes?: string,
-  reporter?: string,
-  photographer?: string
+  slug: string;
+  date: string|Date;
+  format?: string;
+  runtime?: string;
+  notes?: string;
+  reporter?: string;
+  photographer?: string;
 }
 
 export class Record {
@@ -55,11 +55,8 @@ export class Record {
   get first(): Date { return this._first; }
   set first(date: Date) { this.setFirst(date); }
   get last(): Date { return this._last; }
-  set last(date: Date) { this.setLast(date); 
-  }
-  get combinedDate(): string {
-    return this.first + " " + this.last;
-  }
+  set last(date: Date) { this.setLast(date); }
+  get combinedDate(): string { return this.first + ' ' + this.last; }
   get stories(): Story[] { return this._stories; }
 
   setFirst(date: string|Date): void {
@@ -198,7 +195,7 @@ export class Story {
       this.runtime === other.runtime &&
       this.notes === other.notes &&
       this.reporter === other.reporter &&
-      this.photographer == other.photographer;
+      this.photographer === other.photographer;
   }
 
   static equals(a: Story, b: Story): boolean {
@@ -247,12 +244,13 @@ export function makeRecordId(label: string): string {
 export function indexOfC<T>(
     list: T[],
     item: T,
-    comparator: (a: T, b: T)=> boolean
+    comparator: (a: T, b: T) => boolean
 ): number {
-  return list.reduce((found: number, value: T, index: number) => {
-    if(found > -1) { return found; }
-    if(comparator(value, item)) { return index; }
-    return -1;
-  }, -1);
+  return list.reduce(indexOfComparator, -1);
+  function indexOfComparator(found: number, value: T, index: number): number {
+      if (found > -1) { return found; }
+      if (comparator(value, item)) { return index; }
+      return -1;
+    }
 }
 
