@@ -16,7 +16,7 @@ const TEMPLATES = CLIENT_ROOT + '/**/*.jade';
 const STYLES = CLIENT_ROOT + '/**/*.scss';
 const STATIC = 'dist/_static';
 
-const DEFAULT_TASKS = ['build', 'test', 'lint'];
+const DEFAULT_TASKS = ['build', 'lint'];
 
 
 
@@ -83,28 +83,12 @@ gulp.task('lint:tslint', function() {
 });
 
 /**
- * Mocha tests *.spec.js in dist.
- */
-let mochaconfig = require('./mochaconfig.json');
-let mocha = require('gulp-mocha')(mochaconfig);
-gulp.task('test:mocha', ['build'], function() {
-  return gulp.src(COMPILED_TEST_SOURCES).pipe(mocha);
-});
-
-let Server = require('karma').Server;
-let karmaConfig = require('./karma.config.json');
-gulp.task('test:karma', ['test:mocha'], function(done) {
-  new Server(karmaConfig, done).start();
-});
-
-/**
  * Some default tasks.
  */
 const DEFAULT = ['default'];
 gulp.task('default', DEFAULT_TASKS);
 gulp.task('build', ['build:tsc', 'bundle:client', 'templates', 'styles', 'index']);
 gulp.task('lint', ['lint:tslint']);
-gulp.task('test', ['test:mocha', 'test:karma']);
 gulp.task('watch', DEFAULT, function() { gulp.watch([SOURCES], DEFAULT); });
 
 if (require.main === module) {
