@@ -9,7 +9,7 @@ export interface IRecordResource
 
 export interface RecordResource
   extends ng.resource.IResourceClass<IRecordResource> {
-    update(params: any, record: IRecord): ng.IPromise<any>;
+    update(params: any, record: IRecord): {$promise: ng.IPromise<any>};
 }
 
 function recordResourceFactory(
