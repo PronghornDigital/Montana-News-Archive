@@ -12,8 +12,8 @@ module.exports = function(config) {
       "./dist/client/**/*.spec.js": ["webpack", "sourcemap"]
     },
 
-    "webpack": {
-      "chunks": false
+    "webpackMiddleware": {
+      "noInfo": true
     },
 
     "reporters": ["progress"],

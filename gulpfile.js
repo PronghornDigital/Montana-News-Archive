@@ -1,6 +1,8 @@
 'use strict';
 
 let gulp = require('gulp');
+let gutil = require('gulp-util');
+let path = require('path');
 
 const INDEX = 'src/client/index.jade';
 const SOURCES = 'src/**/*.ts';
@@ -34,12 +36,22 @@ gulp.task('build:tsc', function() {
 /**
  * Bundle client app.
  */
-let webpack = require('webpack-stream');
-gulp.task('bundle:client', ['build:tsc'], function() {
-  let STATIC_DEST = gulp.dest(STATIC);
-  const INDEX_ROOT = 'dist/client/index.js';
+let webpack = require('webpack');
+gulp.task('bundle:client', ['build:tsc'], function(done) {
+  const INDEX_ROOT = './dist/client/index.js';
   const WPOPTS = require('./webpack.config.js');
-  return gulp.src(INDEX_ROOT).pipe(webpack(WPOPTS)).pipe(STATIC_DEST);
+  WPOPTS.entry = INDEX_ROOT;
+  WPOPTS.output.path = path.resolve(STATIC);
+  webpack(WPOPTS, function(err, stats) {
+    if(err) {
+      throw new gutil.PluginError('webpack', err);
+    }
+    gutil.log('[webpack]', stats.toString({
+      colors: true,
+      chunks: false
+    }));
+    done();
+  });
 });
 
 /**
