@@ -20,6 +20,10 @@ import {
   ElemClick
 } from './elem-click/elem-click-directive';
 
+import {
+  ToastService
+} from './toast/toast-service';
+
 export class Archive {
   public saving: boolean = false;
   public searching: boolean = false;
@@ -36,7 +40,8 @@ export class Archive {
   public error: any = null;
   constructor(
     private $q: ng.IQService,
-    private RecordResource: RecordResource
+    private RecordResource: RecordResource,
+    private Toaster: ToastService
   ) {
     this.RecordResource.query().$promise.then((__: IRecordResource[]) => {
       this.records = __.map(Record.fromObj);
@@ -59,18 +64,18 @@ export class Archive {
   }
 
   save(record: Record): void {
-    let success = angular.noop;
-    let error = (err: any) => this.error = err;
-    let done = () => {
-      this.saving = false;
+    let success = () => this.Toaster.toast(`Saved ${record.label}`);
+    let error = (err: any) => {
+      this.error = err;
+      this.Toaster.toast(`Error saving ${record.label}: ${this.error}`, -1);
     };
+    let done = () => this.saving = false;
     this.saving = true;
-    this.$q.all(
-      this.records.map((_: Record) => this.RecordResource.update({id: _.id}, _))
-    )
+    this.RecordResource.update({id: record.id}, record).$promise
     .then(success, error)
     .then(done, done);
   }
+
   edit(record: Record): void {
     let success = () => this.editing = record;
     let error = (err: any) => this.error = err;
@@ -96,6 +101,9 @@ export class Archive {
   }
 
   collapse(): void {
+    if (this.current) {
+      this.save(this.current);
+    }
     this.current = null;
     this.pre = this.records;
     this.post = null;
@@ -111,12 +119,13 @@ export class Archive {
     };
   }
 
-  static $inject: string[] = ['$q', 'RecordResource'];
+  static $inject: string[] = ['$q', 'RecordResource', ToastService.name];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
     Searchbar.module.name,
     ElemClick.module.name,
+    ToastService.module.name,
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(
