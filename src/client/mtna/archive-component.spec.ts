@@ -26,7 +26,22 @@ import {
 
 let $rootScope: ng.IScope = null;
 let $q: ng.IQService = null;
-let toast: ToastService;
+/* tslint:disable */
+let mockToastService = <angular.material.IToastService>{
+  simple: function() { return this; },
+  showSimple: function() { return this; },
+  build: function() { return this; },
+  content: function() { return this; },
+  updateContent: function() { return this; },
+  position: function() { return this; },
+  action: function() { return this; },
+  hideDelay: function() { return this ; },
+  show: function() { return this; },
+  hide: function() { return this; },
+  cancel: function() { return this; },
+};
+/* tslint:enable */
+let toast: ToastService = new ToastService(mockToastService);
 
 class MockRecordResource {
   [key: string]: any;
@@ -35,21 +50,23 @@ class MockRecordResource {
   }
 
   $save() { return $q.resolve(); }
+  update() { return $q.resolve(); }
 
   static query(): {$promise: Thenable<Record[]>} {
     return {$promise: $q.resolve([<Record><any>MOCK_RECORD_1])};
+  }
+  static update(r: Record): {$promise: Thenable<void>} {
+    return {$promise: $q.resolve()};
   }
 }
 
 describe('MTNA Archive', function() {
   beforeEach(inject(function(
     _$q_: ng.IQService,
-    _$rootScope_: ng.IScope,
-    _ToastService_: ToastService
+    _$rootScope_: ng.IScope
   ){
     $q = _$q_;
     $rootScope = _$rootScope_;
-    toast = _ToastService_;
   }));
 
   it('exposes a directive', function() {
