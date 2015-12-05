@@ -11,7 +11,6 @@ angular.module('mtna', [
     'self',
     // Allow loading from our video assets domain.
     // TODO: Put CDN domain here. These are just for dev.
-    'http://stanparker.net/**',
-    'http://www.w3schools.com/**'
+    'http://stanparker.net/**'
   ]);
 });

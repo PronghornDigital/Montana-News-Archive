@@ -6,6 +6,8 @@ export interface IRecord {
   label: string;
   family: string;
   medium: string;
+  first?: Date;
+  last?: Date;
   notes?: string;
   stories?: IStory[];
   images?: Image[];
@@ -177,9 +179,7 @@ export class Record {
 export class Image {
   constructor(
     public url: string
-  ) {
-    console.log('Yo dawg, nice image.');
-  }
+  ) { }
 
   toJSON(): IImage {
     return {
@@ -201,9 +201,7 @@ export class Image {
 export class Video {
   constructor(
     public url: string
-  ) {
-    console.log('Yo dawg, nice video.');
-  }
+  ) { }
 
   toJSON(): IVideo {
     return {
