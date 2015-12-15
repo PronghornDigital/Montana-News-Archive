@@ -4,29 +4,11 @@ import {
   RecordResource
 } from './record/record-resource';
 
-import {
-  Record
-} from '../../shared/record/record';
-
-import {
-  RecordViewer
-} from './record/record-component';
-
-import {
-  Searchbar
-} from './searchbar/searchbar-component';
-
-import {
-  ElemClick
-} from './elem-click/elem-click-directive';
-
-import {
-  ToastService
-} from './toast/toast-service';
-
-import {
-  Uploader
-} from './uploader/uploader-component';
+import { Record } from '../../shared/record/record';
+import { RecordViewer } from './record/record-component';
+import { Searchbar } from './searchbar/searchbar-component';
+import { ElemClick } from './elem-click/elem-click-directive';
+import { ToastService } from './toast/toast-service';
 
 export class Archive {
   public saving: boolean = false;
@@ -45,7 +27,8 @@ export class Archive {
   constructor(
     private $q: ng.IQService,
     private RecordResource: RecordResource,
-    private Toaster: ToastService
+    private Toaster: ToastService,
+    private _http: ng.IHttpService
   ) {
     this.RecordResource.query().$promise.then((__: IRecordResource[]) => {
       this.records = __.map(Record.fromObj);
@@ -76,6 +59,16 @@ export class Archive {
     let done = () => this.saving = false;
     this.saving = true;
     this.RecordResource.update({id: record.id}, record).$promise
+    .then(() => {
+      if (!record.rawImage) { return; }
+      this._http.post(`/api/record/#{record.id}/upload`, {
+        filename: record.rawImage.name,
+        image: record.rawImage
+      });
+    })
+    .catch(function(err: any){
+      this.errors = err;
+    })
     .then(success, error)
     .then(done, done);
   }
@@ -123,17 +116,18 @@ export class Archive {
     };
   }
 
-  static $inject: string[] = ['$q', 'RecordResource', ToastService.name];
+  static $inject: string[] = [
+    '$q',
+    'RecordResource',
+    ToastService.name,
+    '$http'
+  ];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
     Searchbar.module.name,
     ElemClick.module.name,
-<<<<<<< HEAD
     ToastService.module.name,
-=======
-    Uploader.module.name,
->>>>>>> b00f9ed... Add file upload UI and API route
     'ngMaterial'
   ];
   static module: angular.IModule = angular.module(

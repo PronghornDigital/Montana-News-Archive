@@ -1,6 +1,5 @@
 import { writeFile, readFile } from 'fs';
 import { join } from 'path';
-import * as Busboy from 'busboy';
 
 import {
   Record,
@@ -20,11 +19,12 @@ import {
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
-  public dbPath: string = join(process.cwd(), '.db.json');
+  public basePath: string = process.cwd();
+  public dbPath: string = join(this.basePath, '.db.json');
   private cancelWrite: NodeJS.Timer;
 
   constructor(
-    @Inject(ILogger) logger: ILogger,
+    @Inject(ILogger) public logger: ILogger,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
@@ -32,7 +32,9 @@ export class RecordHandler extends RupertPlugin {
     super();
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
       if ( err ) {
-        logger.info(`No database found, creating a new one at ${this.dbPath}`);
+        this.logger.info(
+            `No database found, creating a new one at ${this.dbPath}`
+        );
         return;
       }
       let db = JSON.parse(persisted);
@@ -83,6 +85,26 @@ export class RecordHandler extends RupertPlugin {
     }
   }
 
+  static b64image: RegExp = /data:(image)\/([^;]+);base64,(.*)/;
+
+  @Route.POST('/:id/upload')
+  upload(q: Request, s: Response, n: Function): void {
+    let id: string = q.params['id'];
+    let  [_, type, subtype, b64] = RecordHandler.b64image.exec(q.body.image);
+    if (_ === null || type !== 'image' ) {
+        return n(new Error('Need an image.'));
+    }
+    let path = join(this.basePath, id) + '.' + subtype;
+    this.logger.debug('Creating ' + path);
+    let buffer = new Buffer(b64, 'base64');
+    this.logger.debug('Writing ' + buffer.length + ' bytes');
+    writeFile(path, buffer, (err: any) => {
+      if (err !== null) { return n(err); }
+      this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
+      s.status(200).send({path});
+    });
+  }
+
   @Route.GET('')
   find(q: Request, s: Response): void {
     s.send(Object.keys(this.database).map((id: string) => {
@@ -101,40 +123,5 @@ export class RecordHandler extends RupertPlugin {
       return;
     }
     s.status(404).send(`Record not found: ${id}`);
-  }
-
-  @Route.POST('/upload')
-  upload(q: Request, s: Response): void {
-    let busboy = new Busboy({ headers: q.headers });
-    busboy.on('file', (
-      fieldname: any,
-      file: any,
-      filename: any,
-      encoding: any,
-      mimetype: any
-    ) => {
-      console.log('File [' + fieldname + ']: filename: ' + filename);
-      console.log('encoding: ' + encoding + ', mimetype: ' + mimetype);
-      file.on('data', (data: any) => {
-        console.log('File [' + fieldname + '] got ' + data.length + ' bytes');
-      });
-      file.on('end', () => {
-        console.log('File [' + fieldname + '] Finished');
-      });
-    });
-    busboy.on('field', (
-      fieldname: any,
-      val: any,
-      fieldnameTruncated: any,
-      valTruncated: any
-    ) => {
-      console.log('Field [' + fieldname + ']: value: ' + val);
-    });
-    busboy.on('finish', () => {
-      console.log('Done parsing form!');
-      s.writeHead(303, { Connection: 'close', Location: '/' });
-      s.end();
-    });
-    q.pipe(busboy);
   }
 }

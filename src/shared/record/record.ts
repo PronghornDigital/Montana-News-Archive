@@ -13,6 +13,7 @@ export interface IRecord {
   images?: Image[];
   videos?: Video[];
   deleted?: boolean;
+  rawImage?: any;
 }
 
 export interface IStory {
@@ -26,14 +27,16 @@ export interface IStory {
 }
 
 export interface IImage {
-  url: string;
+  path: string;
 }
 
 export interface IVideo {
-  url: string;
+  path: string;
 }
 
-export class Record {
+export class Record implements IRecord {
+  public rawImage: any = null;
+
   private _id: string;
   private _label: string;
   private _first: Date;
@@ -178,45 +181,45 @@ export class Record {
 
 export class Image {
   constructor(
-    public url: string
+    public path: string
   ) { }
 
   toJSON(): IImage {
     return {
-      url: this.url
+      path: this.path
     };
   }
 
   static fromObj(obj: IImage): Image {
-    let {url} = obj;
-    return new Image(url);
+    let {path} = obj;
+    return new Image(path);
   }
 
   static isProtoImage(obj: any): boolean {
     // We can't have an image without a URL.
-    return 'url' in obj;
+    return 'path' in obj;
   }
 }
 
 export class Video {
   constructor(
-    public url: string
+    public path: string
   ) { }
 
   toJSON(): IVideo {
     return {
-      url: this.url
+      path: this.path
     };
   }
 
   static fromObj(obj: IVideo): Video {
-    let {url} = obj;
-    return new Video(url);
+    let {path} = obj;
+    return new Video(path);
   }
 
   static isProtoVideo(obj: any): boolean {
     // We can't have an image without a URL.
-    return 'url' in obj;
+    return 'path' in obj;
   }
 }
 
