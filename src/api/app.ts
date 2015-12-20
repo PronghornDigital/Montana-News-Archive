@@ -7,9 +7,11 @@ import {
 
 const defaults: any = {
   log: {level: 'info'},
+  uploads: { size: '15Mb' },
   static: {
     routes: {
       '/': normalize(join(__dirname, '../_static')),
+      '/images/': normalize(join(process.cwd(), 'data'))
     }
   }
 };

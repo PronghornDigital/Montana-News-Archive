@@ -6,11 +6,14 @@ export interface IRecord {
   label: string;
   family: string;
   medium: string;
-  first: Date;
-  last: Date;
+  first?: Date;
+  last?: Date;
   notes?: string;
   stories?: IStory[];
+  images?: Image[];
+  videos?: Video[];
   deleted?: boolean;
+  rawImage?: any;
 }
 
 export interface IStory {
@@ -23,12 +26,24 @@ export interface IStory {
   photographer?: string;
 }
 
-export class Record {
+export interface IImage {
+  path: string;
+}
+
+export interface IVideo {
+  path: string;
+}
+
+export class Record implements IRecord {
+  public rawImage: any = null;
+
   private _id: string;
   private _label: string;
   private _first: Date;
   private _last: Date;
   private _stories: Story[] = [];
+  private _images: Image[] = [];
+  private _videos: Video[] = [];
 
   constructor(
     label: string,
@@ -38,12 +53,14 @@ export class Record {
     first: string|Date = '',
     last: string|Date = '',
     public deleted: boolean = false,
-    stories: Story[] = []
+    stories: Story[] = [],
+    images: Image[] = [],
+    videos: Video[] = []
   ) {
     this.label = label;
     this.addStories(stories);
-    this.setFirst(first);
-    this.setLast(last);
+    this.addImages(images);
+    this.addVideos(videos);
   }
 
   get id(): string { return this._id; }
@@ -58,6 +75,8 @@ export class Record {
   set last(date: Date) { this.setLast(date); }
   get combinedDate(): string { return this.first + ' ' + this.last; }
   get stories(): Story[] { return this._stories; }
+  get images(): Image[] { return this._images; }
+  get videos(): Video[] { return this._videos; }
 
   setFirst(date: string|Date): void {
     if (typeof date === 'string') {
@@ -84,6 +103,16 @@ export class Record {
     return this;
   }
 
+  addImages(images: Image[]): Record {
+    this._images = this._images.concat(images);
+    return this;
+  }
+
+  addVideos(videos: Video[]): Record {
+    this._videos = this._videos.concat(videos);
+    return this;
+  }
+
   /**
    * Merges the contents of the specified Record into current Record.
    *
@@ -100,8 +129,8 @@ export class Record {
     this.addStories(
       other.stories.filter(_ => indexOfC(this.stories, _, Story.equals) > -1)
     );
-    this.first = other.first || this.first;
-    this.last = other.last || this.last;
+    this.addImages(other.images);
+    this.addVideos(other.videos);
     return this;
   }
 
@@ -114,6 +143,8 @@ export class Record {
         last: this.last,
         notes: this.notes,
         stories: this.stories,
+        images: this.images,
+        videos: this.videos,
         deleted: this.deleted
       };
   }
@@ -127,12 +158,68 @@ export class Record {
           .filter(Story.isProtoStory)
           .map(Story.fromObj));
     }
+    if ('images' in obj && obj.images instanceof Array) {
+      record.addImages(
+          obj.images
+          .filter(Image.isProtoImage)
+          .map(Image.fromObj));
+    }
+    if ('videos' in obj && obj.videos instanceof Array) {
+      record.addVideos(
+          obj.videos
+          .filter(Video.isProtoVideo)
+          .map(Video.fromObj));
+    }
     return record;
   }
 
   static isProtoRecord(obj: any): boolean {
     return 'label' in obj &&
       'family' in obj;
+  }
+}
+
+export class Image {
+  constructor(
+    public path: string
+  ) { }
+
+  toJSON(): IImage {
+    return {
+      path: this.path
+    };
+  }
+
+  static fromObj(obj: IImage): Image {
+    let {path} = obj;
+    return new Image(path);
+  }
+
+  static isProtoImage(obj: any): boolean {
+    // We can't have an image without a URL.
+    return 'path' in obj;
+  }
+}
+
+export class Video {
+  constructor(
+    public path: string
+  ) { }
+
+  toJSON(): IVideo {
+    return {
+      path: this.path
+    };
+  }
+
+  static fromObj(obj: IVideo): Video {
+    let {path} = obj;
+    return new Video(path);
+  }
+
+  static isProtoVideo(obj: any): boolean {
+    // We can't have an image without a URL.
+    return 'path' in obj;
   }
 }
 
@@ -253,4 +340,3 @@ export function indexOfC<T>(
       return -1;
     }
 }
-

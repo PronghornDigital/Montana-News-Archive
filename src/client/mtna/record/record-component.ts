@@ -1,6 +1,9 @@
 import {
-  Record, Story
+  Record, Story, Image
 } from '../../../shared/record/record';
+
+import { FileReaderService } from '../../util/fileinput/fileinput-service';
+import { FileInput } from '../../util/fileinput/fileinput-directive';
 
 export class RecordViewer {
   public record: Record;
@@ -9,8 +12,14 @@ export class RecordViewer {
   public doneEditing: any;
 
   public newStory: Story = null;
+  public image: File = null;
 
-  constructor() {
+  static $inject: string[] = [FileReaderService.name, '$http', '$scope'];
+  constructor(
+      private _fileReader: FileReaderService,
+      private _http: ng.IHttpService,
+      private _scope: ng.IScope
+  ) {
     this.resetStory();
   }
 
@@ -21,6 +30,22 @@ export class RecordViewer {
 
   private resetStory(): void {
     this.newStory = new Story('', new Date);
+  }
+
+  loadImage() {
+    this._fileReader.readAsDataURL(this.image, this._scope)
+    .then((result: string) => {
+        this.saveImage(result);
+    });
+  }
+
+  saveImage(image: string) {
+    this._http.post(`/api/records/${this.record.id}/upload`, {
+      image
+    }).then((result: any) => {
+     this.image = null;
+     this.record.images.push(Image.fromObj(result.data));
+    });
   }
 
   static directive(): angular.IDirective {
@@ -37,9 +62,12 @@ export class RecordViewer {
     };
   }
 
-  static $inject: string[] = [];
-  static $depends: string[] = [];
+  static $depends: string[] = [
+    FileReaderService.module.name,
+    FileInput.module.name,
+  ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends
   ).directive('recordViewer', RecordViewer.directive);
 }
+

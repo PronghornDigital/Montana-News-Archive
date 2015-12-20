@@ -1,5 +1,6 @@
 import { writeFile, readFile } from 'fs';
 import { join } from 'path';
+import * as mkdirp from 'mkdirp';
 
 import {
   Record,
@@ -19,11 +20,12 @@ import {
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
-  public dbPath: string = join(process.cwd(), '.db.json');
+  public basePath: string = join(process.cwd(), 'data');
+  public dbPath: string = join(this.basePath, '.db.json');
   private cancelWrite: NodeJS.Timer;
 
   constructor(
-    @Inject(ILogger) logger: ILogger,
+    @Inject(ILogger) public logger: ILogger,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
@@ -31,8 +33,9 @@ export class RecordHandler extends RupertPlugin {
     super();
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
       if ( err ) {
-        logger.info(`No database found, creating a new one at ${this.dbPath}`);
-        return;
+        this.logger.info(
+            `No database found, creating a new one at ${this.dbPath}`
+        );
       }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
@@ -47,6 +50,7 @@ export class RecordHandler extends RupertPlugin {
   }
 
   write(): void {
+    this.logger.verbose(`Writing full database at ${this.dbPath}`);
     writeFile(this.dbPath, JSON.stringify(this.database));
   }
 
@@ -80,6 +84,31 @@ export class RecordHandler extends RupertPlugin {
     } else {
       return s.status(400).end();
     }
+  }
+
+  static b64image: RegExp = /data:(image)\/([^;]+);base64,(.*)/;
+
+  @Route.POST('/:id/upload')
+  upload(q: Request, s: Response, n: Function): void {
+    let id: string = q.params['id'];
+    let  [_, type, subtype, b64] = RecordHandler.b64image.exec(q.body.image);
+    if (_ === null || type !== 'image' ) {
+        return n(new Error('Need an image.'));
+    }
+    let root = join(this.basePath, id);
+    mkdirp(root, (mkdirperr: any) => {
+      if (mkdirperr !== null) { return n(mkdirperr); }
+      let name = id + '_' + ('' + Math.random()).substr(2);
+      let path = join(id, name) + '.' + subtype;
+      this.logger.debug('Creating ' + path);
+      let buffer = new Buffer(b64, 'base64');
+      this.logger.debug('Writing ' + buffer.length + ' bytes');
+      writeFile(join(this.basePath, path), buffer, (writeerr: any) => {
+        if (writeerr !== null) { return n(writeerr); }
+        this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
+        s.status(200).send({path});
+      });
+    });
   }
 
   @Route.GET('')
