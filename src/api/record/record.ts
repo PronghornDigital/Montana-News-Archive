@@ -98,7 +98,7 @@ export class RecordHandler extends RupertPlugin {
     let root = join(this.basePath, id);
     mkdirp(root, (mkdirperr: any) => {
       if (mkdirperr !== null) { return n(mkdirperr); }
-      let name = ('' + Math.random()).substr(2);
+      let name = id + '_' + ('' + Math.random()).substr(2);
       let path = join(id, name) + '.' + subtype;
       this.logger.debug('Creating ' + path);
       let buffer = new Buffer(b64, 'base64');
