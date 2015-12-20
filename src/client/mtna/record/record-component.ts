@@ -44,7 +44,7 @@ export class RecordViewer {
       image
     }).then((result: any) => {
      this.image = null;
-     this.record.images.push(Image.fromObj(result));
+     this.record.images.push(Image.fromObj(result.data));
     });
   }
 

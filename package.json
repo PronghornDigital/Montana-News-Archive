@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "busboy": "^0.2.11",
+    "mkdirp": "^0.5.1",
     "ts-rupert": "0.4.1-beta6"
   },
   "devDependencies": {

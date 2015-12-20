@@ -1,5 +1,6 @@
 import { writeFile, readFile } from 'fs';
 import { join } from 'path';
+import * as mkdirp from 'mkdirp';
 
 import {
   Record,
@@ -19,7 +20,7 @@ import {
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
-  public basePath: string = process.cwd();
+  public basePath: string = join(process.cwd(), 'data');
   public dbPath: string = join(this.basePath, '.db.json');
   private cancelWrite: NodeJS.Timer;
 
@@ -35,7 +36,6 @@ export class RecordHandler extends RupertPlugin {
         this.logger.info(
             `No database found, creating a new one at ${this.dbPath}`
         );
-        return;
       }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
@@ -50,6 +50,7 @@ export class RecordHandler extends RupertPlugin {
   }
 
   write(): void {
+    this.logger.verbose(`Writing full database at ${this.dbPath}`);
     writeFile(this.dbPath, JSON.stringify(this.database));
   }
 
@@ -94,14 +95,19 @@ export class RecordHandler extends RupertPlugin {
     if (_ === null || type !== 'image' ) {
         return n(new Error('Need an image.'));
     }
-    let path = join(this.basePath, id) + '.' + subtype;
-    this.logger.debug('Creating ' + path);
-    let buffer = new Buffer(b64, 'base64');
-    this.logger.debug('Writing ' + buffer.length + ' bytes');
-    writeFile(path, buffer, (err: any) => {
-      if (err !== null) { return n(err); }
-      this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
-      s.status(200).send({path});
+    let root = join(this.basePath, id);
+    mkdirp(root, (mkdirperr: any) => {
+      if (mkdirperr !== null) { return n(mkdirperr); }
+      let name = ('' + Math.random()).substr(2);
+      let path = join(id, name) + '.' + subtype;
+      this.logger.debug('Creating ' + path);
+      let buffer = new Buffer(b64, 'base64');
+      this.logger.debug('Writing ' + buffer.length + ' bytes');
+      writeFile(join(this.basePath, path), buffer, (writeerr: any) => {
+        if (writeerr !== null) { return n(writeerr); }
+        this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
+        s.status(200).send({path});
+      });
     });
   }
 

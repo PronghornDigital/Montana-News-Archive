@@ -11,6 +11,7 @@ const defaults: any = {
   static: {
     routes: {
       '/': normalize(join(__dirname, '../_static')),
+      '/images/': normalize(join(process.cwd(), 'data'))
     }
   }
 };
