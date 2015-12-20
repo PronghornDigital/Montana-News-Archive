@@ -36,6 +36,7 @@ export class RecordHandler extends RupertPlugin {
         this.logger.info(
             `No database found, creating a new one at ${this.dbPath}`
         );
+        persisted = '{}';
       }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
