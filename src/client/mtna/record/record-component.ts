@@ -48,7 +48,7 @@ export class RecordViewer {
     });
   }
 
-  static directive(): angular.IDirective {
+  static directive($timeout: ng.ITimeoutService): angular.IDirective {
     return {
       controller: RecordViewer,
       controllerAs: 'state',
@@ -58,7 +58,18 @@ export class RecordViewer {
         selected: '=',
         doneEditing: '&'
       },
-      templateUrl: '/mtna/record/record-template.html'
+      templateUrl: '/mtna/record/record-template.html',
+      link: {
+        post: function($scope: ng.IScope, $element: JQuery) {
+          if ($scope['state'].selected) {
+            $timeout(function() {
+              let input: HTMLInputElement = <HTMLInputElement>$element[0]
+                  .querySelector('[ng-model="state.record.label"]');
+              input.focus();
+            }); // two frames
+          }
+        }
+      }
     };
   }
 
@@ -68,6 +79,6 @@ export class RecordViewer {
   ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends
-  ).directive('recordViewer', RecordViewer.directive);
+  ).directive('recordViewer', ['$timeout', RecordViewer.directive]);
 }
 
