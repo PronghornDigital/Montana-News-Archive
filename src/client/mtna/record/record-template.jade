@@ -56,7 +56,7 @@ div(layout="column")
           label Notes
           textarea(ng-model="state.record.notes" placeholder="Notes")
         //- md-input-container
-        div
+        div(ng-show="state.record.label != ''")
           div(file-input="state.image" on-change="state.loadImage()")
       div(layout="column" layout-align="space-between start")
         table.mtna-table
