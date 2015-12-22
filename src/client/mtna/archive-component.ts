@@ -46,6 +46,9 @@ export class Archive {
       this.post = [];
     } else {
       this.current = record;
+      this.RecordResource.get({id: record.id}).$promise.then((_: Record) => {
+        this.current.merge(_);
+      });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
     }
