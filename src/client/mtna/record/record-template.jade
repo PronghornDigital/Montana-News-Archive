@@ -24,16 +24,6 @@ div(layout="column")
   div(ng-if="state.selected")
     form(name="recordEditor")
       div(layout="row" layout-align="space-between end")
-        //- this will look bad until they close
-        //- https://github.com/angular/material/issues/4233
-        //- //md-input-container(flex="20")
-        div(flex="20")
-          //- //label Start
-          md-datepicker(ng-model="state.record.first" md-placeholder="Start Date")
-        //- //md-input-container(flex="20")
-        div(flex="20")
-          //- //label End
-          md-datepicker(ng-model="state.record.last" md-placeholder="End Date")
         md-input-container(flex="15")
           label Label
           input(type="text" ng-model="state.record.label" placeholder="Tape Label")
@@ -46,6 +36,18 @@ div(layout="column")
             md-option(value="1\" Tape") 1" Tape
             md-option(value="3/4\" Tape") 3/4" Tape
             md-option(value="Film") Film
+        //- this will look bad until they close
+        //- https://github.com/angular/material/issues/4233
+        //div(flex="20")
+          //- md-datepicker(ng-model="state.record.first" md-placeholder="Start Date")
+        //- div(flex="20")
+          //- md-datepicker(ng-model="state.record.last" md-placeholder="End Date")
+        md-input-container(flex="20")
+          label Start Date
+          input(type="date" ng-model="state.record.first")
+        md-input-container(flex="20")
+          label End
+          input(type="date" ng-model="state.record.last")
         div(flex)
     div(layout="row" layout-align="space-between start")
       div(layout="column" layout-align="start center")
@@ -56,7 +58,7 @@ div(layout="column")
           label Notes
           textarea(ng-model="state.record.notes" placeholder="Notes")
         //- md-input-container
-        div
+        div(ng-show="state.record.label != ''")
           div(file-input="state.image" on-change="state.loadImage()")
       div(layout="column" layout-align="space-between start")
         table.mtna-table

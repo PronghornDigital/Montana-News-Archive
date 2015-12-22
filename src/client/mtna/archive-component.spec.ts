@@ -59,6 +59,10 @@ class MockRecordResource {
   static update(r: Record): {$promise: Thenable<void>} {
     return {$promise: $q.resolve()};
   }
+
+  static get(r: Record): {$promise: Thenable<Record>} {
+    return {$promise: $q.resolve(r)};
+  }
 }
 
 describe('MTNA Archive', function() {

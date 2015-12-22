@@ -57,6 +57,12 @@ export class Record implements IRecord {
     images: Image[] = [],
     videos: Video[] = []
   ) {
+    if (first !== '') {
+      this.setFirst(first);
+    }
+    if (last !== '') {
+      this.setLast(last);
+    }
     this.label = label;
     this.addStories(stories);
     this.addImages(images);
@@ -104,12 +110,34 @@ export class Record implements IRecord {
   }
 
   addImages(images: Image[]): Record {
-    this._images = this._images.concat(images);
+    this._images = this._images.concat(images).reduce(
+        (p: Image[], c: Image) => {
+          for (let i = 0; i < p.length; i++) {
+            if (p[i].path === c.path) {
+              return p;
+            }
+          }
+          p.push(c);
+          return p;
+        },
+        []
+    );
     return this;
   }
 
   addVideos(videos: Video[]): Record {
-    this._videos = this._videos.concat(videos);
+    this._videos = this._videos.concat(videos).reduce(
+        (p: Video[], c: Video) => {
+          for (let i = 0; i < p.length; i++) {
+            if (p[i].path === c.path) {
+              return p;
+            }
+          }
+          p.push(c);
+          return p;
+        },
+        []
+    );
     return this;
   }
 
@@ -135,18 +163,18 @@ export class Record implements IRecord {
   }
 
   toJSON(): IRecord {
-      return {
-        label: this.label,
-        family: this.family,
-        medium: this.medium,
-        first: this.first,
-        last: this.last,
-        notes: this.notes,
-        stories: this.stories,
-        images: this.images,
-        videos: this.videos,
-        deleted: this.deleted
-      };
+    return {
+      label: this.label,
+      family: this.family,
+      medium: this.medium,
+      first: this.first,
+      last: this.last,
+      notes: this.notes,
+      stories: this.stories,
+      images: this.images,
+      videos: this.videos,
+      deleted: this.deleted
+    };
   }
 
   static fromObj(obj: IRecord): Record {

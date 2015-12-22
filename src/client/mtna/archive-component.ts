@@ -18,6 +18,7 @@ export class Archive {
   public records: Record[] = [];
   public pre: Record[] = [];
   public current: Record = null;
+  public lastRecordSaved: Record = null;
   public currentIndex: number = -1;
   public post: Record[] = [];
 
@@ -45,13 +46,19 @@ export class Archive {
       this.post = [];
     } else {
       this.current = record;
+      this.RecordResource.get({id: record.id}).$promise.then((_: Record) => {
+        this.current.merge(_);
+      });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
     }
   }
 
   save(record: Record): void {
-    let success = () => this.Toaster.toast(`Saved ${record.label}`);
+    let success = () => {
+      this.Toaster.toast(`Saved ${record.label}`);
+      this.lastRecordSaved = record;
+    };
     let error = (err: any) => {
       this.error = err;
       this.Toaster.toast(`Error saving ${record.label}: ${this.error}`, -1);
@@ -92,6 +99,10 @@ export class Archive {
   addTape(): void {
     this.collapse();
     let record = new Record('', '');
+    if (this.lastRecordSaved) {
+      record.family = this.lastRecordSaved.family;
+      record.medium = this.lastRecordSaved.medium;
+    }
     this.records.push(record);
     this.edit(record);
     this.select(record);
