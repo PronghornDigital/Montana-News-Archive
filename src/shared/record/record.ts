@@ -57,6 +57,12 @@ export class Record implements IRecord {
     images: Image[] = [],
     videos: Video[] = []
   ) {
+    if (first !== '') {
+      this.setFirst(first);
+    }
+    if (last !== '') {
+      this.setLast(last);
+    }
     this.label = label;
     this.addStories(stories);
     this.addImages(images);
@@ -135,18 +141,18 @@ export class Record implements IRecord {
   }
 
   toJSON(): IRecord {
-      return {
-        label: this.label,
-        family: this.family,
-        medium: this.medium,
-        first: this.first,
-        last: this.last,
-        notes: this.notes,
-        stories: this.stories,
-        images: this.images,
-        videos: this.videos,
-        deleted: this.deleted
-      };
+    return {
+      label: this.label,
+      family: this.family,
+      medium: this.medium,
+      first: this.first,
+      last: this.last,
+      notes: this.notes,
+      stories: this.stories,
+      images: this.images,
+      videos: this.videos,
+      deleted: this.deleted
+    };
   }
 
   static fromObj(obj: IRecord): Record {
