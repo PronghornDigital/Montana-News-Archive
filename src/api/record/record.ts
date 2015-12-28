@@ -1,4 +1,4 @@
-import { writeFile, readFile } from 'fs';
+import { writeFile, readFile, stat, Stats, rename } from 'fs';
 import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
@@ -69,7 +69,7 @@ export class RecordHandler extends RupertPlugin {
   }
 
   @Route.PUT('/:id')
-  save(q: Request, s: Response): void {
+  save(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     let replaceId: string = q.query && q.query['replaceId'] || null;
     let protoRecord: any = q.body;
@@ -78,13 +78,39 @@ export class RecordHandler extends RupertPlugin {
       record.id = id;
       if ( replaceId  && replaceId in this.database ) {
         record = this.database[replaceId].merge(record);
-        delete this.database[replaceId];
+        this.moveFiles(replaceId, record.id, (err: any) => {
+          if (err !== null) { return n(err); }
+          delete this.database[replaceId];
+          this.database[record.id] = record;
+          return s.status(204).end();
+        });
+      } else {
+        this.database[record.id] = record;
+        return s.status(204).end();
       }
-      this.database[record.id] = record;
-      return s.status(204).end();
     } else {
       return s.status(400).end();
     }
+  }
+
+  moveFiles(oldId: string, newId: string, cb: (err: any) => void): void {
+    // Assert oldId is present
+    let oldPath = join(this.basePath, oldId);
+    stat(oldPath, (statErr: any, stats: Stats) => {
+      if (statErr !== null) {
+        // Probably doesn't exist.
+        return cb(null);
+      }
+      if (!stats.isDirectory()) {
+        return cb(null);
+      }
+      // Move from oldId to newId
+      let newPath = join(this.basePath, newId);
+      rename(oldPath, newPath, (renameErr: any) => {
+        // Return CB
+        cb(renameErr);
+      });
+    });
   }
 
   static b64image: RegExp = /data:(image)\/([^;]+);base64,(.*)/;

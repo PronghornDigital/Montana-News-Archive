@@ -53,7 +53,8 @@ describe('Record Handler', function() {
         end: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
-      handler.save(q, s);
+      let cb = sinon.spy();
+      handler.save(q, s, cb);
       expect(statusSpy).to.have.been.calledWithExactly(204);
       expect('tape_1' in recordMap).to.be.true;
       let record = recordMap['tape_1'];
@@ -88,9 +89,11 @@ describe('Record Handler', function() {
         end: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
-      handler.save(q, s);
-      expect(statusSpy).to.have.been.calledWithExactly(204);
-      expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+      handler.save(q, s, (err: any) => {
+        expect(err).to.be.null;
+        expect(statusSpy).to.have.been.calledWithExactly(204);
+        expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+      });
     });
 
     it('replaces missing tapes', function() {
@@ -120,9 +123,11 @@ describe('Record Handler', function() {
         end: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
-      handler.save(q, s);
-      expect(statusSpy).to.have.been.calledWithExactly(204);
-      expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+      handler.save(q, s, (err: any) => {
+        expect(err).to.be.null;
+        expect(statusSpy).to.have.been.calledWithExactly(204);
+        expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+      });
     });
   });
 });

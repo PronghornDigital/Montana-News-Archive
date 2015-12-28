@@ -4,7 +4,6 @@ import {
 
 export interface IRecordResource
     extends ng.resource.IResource<IRecord>, IRecord {
-  baseId: number;
  }
 
 export interface RecordResource
