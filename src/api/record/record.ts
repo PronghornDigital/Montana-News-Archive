@@ -142,7 +142,7 @@ export class RecordHandler extends RupertPlugin {
   find(q: Request, s: Response): void {
     s.send(Object.keys(this.database).map((id: string) => {
       return this.database[id];
-    }));
+    }).sort((a: Record, b: Record) => a.label.localeCompare(b.label) ));
   }
 
   @Route('/:id', {methods: [Methods.DELETE]})
