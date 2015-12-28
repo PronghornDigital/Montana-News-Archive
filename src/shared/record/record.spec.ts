@@ -122,6 +122,14 @@ describe('Record', function() {
       expect(record1.stories.length).to.equal(1);
     });
   });
+
+  describe('Other functionality', function() {
+    it('keeps track of basic modified state', function() {
+      let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.label = 'David 1';
+      expect(record1.modified).to.be.true;
+    });
+  });
 });
 
 describe('Story', function() {

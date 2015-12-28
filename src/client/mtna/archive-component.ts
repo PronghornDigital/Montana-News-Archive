@@ -65,7 +65,14 @@ export class Archive {
     };
     let done = () => this.saving = false;
     this.saving = true;
-    this.RecordResource.update({id: record.id}, record).$promise
+    let params = {
+      id: record.id,
+      replaceId: record.baseId
+    };
+    if (!record.modified) {
+      delete params.replaceId;
+    }
+    this.RecordResource.update(params, record).$promise
     .then(() => {
       if (!record.rawImage) { return; }
       this._http.post(`/api/record/#{record.id}/upload`, {

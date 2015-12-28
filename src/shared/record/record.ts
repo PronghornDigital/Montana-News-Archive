@@ -14,6 +14,7 @@ export interface IRecord {
   videos?: Video[];
   deleted?: boolean;
   rawImage?: any;
+  baseId?: string;
 }
 
 export interface IStory {
@@ -44,6 +45,7 @@ export class Record implements IRecord {
   private _stories: Story[] = [];
   private _images: Image[] = [];
   private _videos: Video[] = [];
+  public baseId: string = '';
 
   constructor(
     label: string,
@@ -64,6 +66,7 @@ export class Record implements IRecord {
       this.setLast(last);
     }
     this.label = label;
+    this.baseId = this.id;
     this.addStories(stories);
     this.addImages(images);
     this.addVideos(videos);
@@ -83,6 +86,7 @@ export class Record implements IRecord {
   get stories(): Story[] { return this._stories; }
   get images(): Image[] { return this._images; }
   get videos(): Video[] { return this._videos; }
+  get modified(): boolean { return this.id !== this.baseId; }
 
   setFirst(date: string|Date): void {
     if (typeof date === 'string') {
