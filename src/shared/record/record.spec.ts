@@ -116,10 +116,11 @@ describe('Record', function() {
       ]);
       let record2 = new Record('Tape 1', 'Test', '3/4"');
       record2.addStories([
-        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30'),
+        new Story('Story 2', new Date('10/15/2015'), 'VO', '5:30')
       ]);
       record1.merge(record2);
-      expect(record1.stories.length).to.equal(1);
+      expect(record1.stories.length).to.equal(2);
     });
   });
 
