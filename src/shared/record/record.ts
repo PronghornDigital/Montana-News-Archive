@@ -109,7 +109,18 @@ export class Record implements IRecord {
     this._last = <Date>date;
   }
   addStories(stories: Story[]): Record {
-    this._stories = this._stories.concat(stories).sort(Story.compare);
+    this._stories = this._stories.concat(stories).reduce(
+        (p: Story[], c: Story) => {
+          for (let i = 0; i < p.length; i++) {
+            if (p[i].slug === c.slug) {
+              return p;
+            }
+          }
+          p.push(c);
+          return p;
+        },
+        [])
+        .sort(Story.compare);
     return this;
   }
 
@@ -158,9 +169,7 @@ export class Record implements IRecord {
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
-    this.addStories(
-      other.stories.filter(_ => indexOfC(this.stories, _, Story.equals) > -1)
-    );
+    this.addStories( other.stories);
     this.addImages(other.images);
     this.addVideos(other.videos);
     return this;
