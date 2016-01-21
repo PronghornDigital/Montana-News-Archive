@@ -13,13 +13,13 @@ const COMPILED_TEST_SOURCES = [
   'dist/**/*.spec.js',
   '!dist/client/**/*.spec.js'
 ];
+const STATIC_FILES = 'src/static/**/*.css';
 const CLIENT_ROOT = 'src/client';
 const TEMPLATES = CLIENT_ROOT + '/**/*.jade';
 const STYLES = CLIENT_ROOT + '/**/*.scss';
 const STATIC = 'dist/_static';
 
 const DEFAULT_TASKS = ['build', 'lint'];
-
 
 
 /**
@@ -34,10 +34,18 @@ gulp.task('build:tsc', function() {
 });
 
 /**
+ * Copy static files
+ */
+gulp.task('build:copy:static', function() {
+  let destination = gulp.dest(STATIC);
+  return gulp.src([STATIC_FILES]).pipe(destination);
+});
+
+/**
  * Bundle client app.
  */
 let webpack = require('webpack');
-gulp.task('bundle:client', ['build:tsc'], function(done) {
+gulp.task('bundle:client', ['build:tsc', 'build:copy:static'], function(done) {
   const INDEX_ROOT = './dist/client/index.js';
   const WPOPTS = require('./webpack.config.js');
   WPOPTS.entry = INDEX_ROOT;

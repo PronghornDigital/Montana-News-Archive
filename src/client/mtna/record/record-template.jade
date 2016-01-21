@@ -61,7 +61,7 @@ div(layout="column")
         div(ng-show="state.record.label != ''")
           div(file-input="state.image" on-change="state.loadImage()")
       div(layout="column" layout-align="space-between start")
-        table.mtna-table
+        table.table.table-striped.table-bordered
           thead
             tr
               th Slug
@@ -81,7 +81,9 @@ div(layout="column")
                   label Slug
                   input(ng-model="state.newStory.slug")
               td
-                md-datepicker(ng-model="state.newStory.date" md-placeholder="Story date")
+                md-input-container
+                  label Story date
+                  input(type="date" ng-model="state.newStory.date")
               td
                 md-input-container
                   label Format
@@ -91,9 +93,11 @@ div(layout="column")
                   label Runtime 
                   input(ng-model="state.newStory.runtime")
             tr
-              td(colspan="5")
+              td(colspan="3")
               td
                 md-button(ng-click="state.addStory(state.newStory)")
                   md-icon add
         div(ng-repeat="image in state.record.images" flex)
-          img(ng-src="/images/{{ image.path }}")
+          img.img-responsive.img-rounded.center-block(
+            ng-src="/images/{{ image.path }}"
+          )
