@@ -22,7 +22,7 @@ div(layout="column")
         md-icon ondemand_video
   div(ng-if="state.selected")
     form(name="recordEditor")
-      div(layout="row" layout-align="space-between end")
+      div(layout="row" layout-align="space-between end" ng-if="state.editing")
         md-input-container(flex="15")
           label Label
           input(type="text" ng-model="state.record.label" placeholder="Tape Label")
@@ -35,12 +35,6 @@ div(layout="column")
             md-option(value="1\" Tape") 1" Tape
             md-option(value="3/4\" Tape") 3/4" Tape
             md-option(value="Film") Film
-        //- this will look bad until they close
-        //- https://github.com/angular/material/issues/4233
-        //div(flex="20")
-          //- md-datepicker(ng-model="state.record.first" md-placeholder="Start Date")
-        //- div(flex="20")
-          //- md-datepicker(ng-model="state.record.last" md-placeholder="End Date")
         md-input-container(flex="20")
           label Start Date
           input(type="date" ng-model="state.record.first")
@@ -48,6 +42,17 @@ div(layout="column")
           label End
           input(type="date" ng-model="state.record.last")
         div(flex)
+        md-input-container
+          md-button(ng-click="state.editing = false") Done
+      div(layout="row" layout-align="space-between start" ng-if="!state.editing")
+        h2(flex="15") {{ state.record.label }}
+        h2(flex="15") {{ state.record.family }}
+        h3(flex="10") {{ state.record.medium }}
+        h3(flex="20") {{ state.record.first | date:'mediumDate' }}
+        h3(flex="20") {{ state.record.last | date:'mediumDate' }}
+        div(flex)
+        md-input-container
+          md-button(ng-click="state.editing = true") Edit
     div(layout="row" layout-align="space-between start")
       div(layout="column" layout-align="start center")
         div(ng-repeat="video in state.record.videos")

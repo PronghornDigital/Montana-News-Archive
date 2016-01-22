@@ -7,9 +7,13 @@ record-viewer {
     user-select: none;
   }
 
-  h2 {
+  h2, h3 {
     font-weight: 400;
     margin: 0;
+  }
+
+  h3 {
+    padding-top: 8px;
   }
 
   .super {
