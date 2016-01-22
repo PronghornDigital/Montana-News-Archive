@@ -21,7 +21,7 @@ div.relative(role="main"
       flex-gt-sm="90" flex-gt-md="80"
     )
       md-list
-        md-subheader(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
+        md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
           h2 {{ key }}
         md-list-item(ng-repeat="item in value track by item.id")
             record-viewer(
@@ -44,7 +44,7 @@ div.relative(role="main"
       flex-gt-sm="90" flex-gt-md="80"
     )
       md-list
-        md-subheader(ng-repeat-start="(key,value) in state.post | groupBy: 'family' ")
+        md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.post | groupBy: 'family' ")
           h2 {{ key }}
         md-list-item(ng-repeat="item in value track by item.id")
             record-viewer(
