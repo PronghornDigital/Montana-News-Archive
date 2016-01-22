@@ -5,13 +5,13 @@ div(layout="column")
   )
     div(layout="column" flex)
       h2 {{ state.record.label }}
-    .column(layout="column" flex="30")
+    .column(layout="column" flex)
       span(ng-if='state.record.first')
         | {{ state.record.first | date : 'mediumDate' }}
       span(ng-if='state.record.last')
         span="-"
         | {{ state.record.last | date: 'mediumDate' }}
-    .column(layout="align-right" flex="15" ng-if="!state.selected")
+    .column(layout="align-right" ng-if="!state.selected")
       span(ng-if="state.record.stories.length")
         md-icon list
       span(ng-if="state.record.photos.length")
@@ -48,7 +48,7 @@ div(layout="column")
           label End
           input(type="date" ng-model="state.record.last")
         div(flex)
-    div(layout="row" layout-md="column" layout-align="space-between start")
+    div(layout="row" layout-align="space-between start")
       div(layout="column" layout-align="start center")
         div(ng-repeat="video in state.record.videos")
           video(controls)
