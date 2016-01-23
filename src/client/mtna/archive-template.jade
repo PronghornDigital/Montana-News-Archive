@@ -23,7 +23,7 @@ div.relative(role="main"
       md-list
         md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
           h3 {{ key }}
-        md-list-item(ng-repeat="item in value track by item.id")
+        md-list-item(ng-repeat="item in value | orderBy: 'first' track by item.id")
             record-viewer(
               ng-click="state.select(item)"
               record="item"
