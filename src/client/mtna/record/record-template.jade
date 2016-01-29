@@ -3,8 +3,8 @@ div(layout="column")
     layout="row" layout-align="space-between end"
     ng-if="!state.selected"
   )
-    div(layout="column" flex)
-      p {{ state.record.label }}
+    div(layout="column" flex style="overflow:hidden;")
+      p(style="width:1000px; margin-right:5px;") {{ state.record.label }}
     div(layout="column" flex)
       p(ng-if='state.record.first')
         | {{ state.record.first | date : 'mediumDate' }}
