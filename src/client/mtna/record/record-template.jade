@@ -3,24 +3,24 @@ div(layout="column")
     layout="row" layout-align="space-between end"
     ng-if="!state.selected"
   )
-    div(layout="column" flex) 
-      .super {{ state.record.family }}
-      h2 {{ state.record.label }}
-    .column(layout="column" flex="30") 
-      span(ng-if='state.record.first')
+    div(layout="column" flex style="overflow:hidden;")
+      p(style="width:1000px; margin-right:5px;") {{ state.record.label }}
+    div(layout="column" flex)
+      p(ng-if='state.record.first')
         | {{ state.record.first | date : 'mediumDate' }}
-      span(ng-if='state.record.last')
-        span="-"
+    div(layout="column" flex)
+      p(ng-if='state.record.last')
         | {{ state.record.last | date: 'mediumDate' }}
-    .column(layout="align-right" flex="15" ng-if="!state.selected")
-      span(ng-if="state.record.stories.length")
-        md-icon list
-      span(ng-if="state.record.photos.length")
-        md-icon photo
-      span(ng-if="state.record.note")
-        md-icon description
-      span(ng-if="state.record.videos.length")
-        md-icon ondemand_video
+    .column(layout="row" flex ng-if="!state.selected")
+      p
+        span(ng-if="state.record.stories.length")
+            md-icon list
+        span(ng-if="state.record.images.length")
+          md-icon photo
+        span(ng-if="state.record.notes")
+          md-icon description
+        span(ng-if="state.record.videos.length")
+          md-icon ondemand_video
   div(ng-if="state.selected")
     form(name="recordEditor")
       div(layout="row" layout-align="space-between end")
@@ -71,7 +71,7 @@ div(layout="column")
           tbody
             tr(ng-repeat="story in state.record.stories")
               td {{ story.slug }}
-              td {{ story.date | date:'fullDate' }} 
+              td {{ story.date | date:'fullDate' }}
               td {{ story.format || "Unknown" }}
               td {{ story.runtime || "Unknown" }}
           tfoot
@@ -90,7 +90,7 @@ div(layout="column")
                   input(ng-model="state.newStory.format")
               td
                 md-input-container
-                  label Runtime 
+                  label Runtime
                   input(ng-model="state.newStory.runtime")
             tr
               td(colspan="3")

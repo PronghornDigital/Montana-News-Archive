@@ -1,7 +1,5 @@
-// Sidenav
-
 div.relative(role="main"
-  layout="column" layout-fill 
+  layout="column" layout-fill
 )
   md-button.md-fab.md-fab-bottom-right(ng-click="state.addTape()")
     md-icon library_add
@@ -17,18 +15,20 @@ div.relative(role="main"
 
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )
     // main content
-    
+
     md-card(
       ng-if="state.pre.length > 0"
       flex-gt-sm="90" flex-gt-md="80"
     )
       md-list
-        md-list-item(ng-repeat="item in state.pre track by item.id")
-          record-viewer(
-            ng-click="state.select(item)"
-            record="item"
-          )
-          md-divider
+        md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
+          h3 {{ key }}
+        md-list-item(ng-repeat="item in value | orderBy: 'first' track by item.id")
+            record-viewer(
+              ng-click="state.select(item)"
+              record="item"
+            )
+        md-divider(ng-repeat-end)
 
     md-card.md-padding(
       ng-if="state.current" flex-gt-sm="95" flex-gt-md="85"
@@ -44,9 +44,11 @@ div.relative(role="main"
       flex-gt-sm="90" flex-gt-md="80"
     )
       md-list
-        md-list-item(ng-repeat="item in state.post track by item.id")
-          record-viewer(
-            ng-click="state.select(item)"
-            record="item"
-          )
-          md-divider
+        md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.post | groupBy: 'family' ")
+          h2 {{ key }}
+        md-list-item(ng-repeat="item in value | orderBy: 'first' track by item.id")
+            record-viewer(
+              ng-click="state.select(item)"
+              record="item"
+            )
+        md-divider(ng-repeat-end)
