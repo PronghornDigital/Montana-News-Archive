@@ -1,6 +1,7 @@
 import {
   Record, Story, Image
 } from '../../../shared/record/record';
+import { Associate  } from './associate/associate-component';
 
 import { FileReaderService } from '../../util/fileinput/fileinput-service';
 import { FileInput } from '../../util/fileinput/fileinput-directive';
@@ -76,6 +77,7 @@ export class RecordViewer {
   static $depends: string[] = [
     FileReaderService.module.name,
     FileInput.module.name,
+    Associate.module.name,
   ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends
