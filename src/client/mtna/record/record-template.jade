@@ -53,18 +53,18 @@ div(layout="column")
         div(flex)
         md-input-container
           md-button(ng-click="state.editing = true") Edit
-    div(layout="row" layout-align="space-between start")
-      div(layout="column" layout-align="start center")
+    div(layout="column" layout-gt-lg="row")
+      div(flex=25 layout="column")
         div(ng-repeat="video in state.record.videos")
           video(controls)
             source(ng-src="{{ video.url }}" type="video/mp4")
-        md-input-container(style = "width: 20em;")
+        md-input-container(style = "width: 15em;")
           label Notes
           textarea(ng-model="state.record.notes" placeholder="Notes")
         //- md-input-container
         div(ng-show="state.record.label != ''")
           div(file-input="state.image" on-change="state.loadImage()")
-      div(layout="column" layout-align="space-between start")
+      div(flex=75 layout="column")
         table.table.table-striped.table-bordered
           thead
             tr
