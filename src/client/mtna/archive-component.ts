@@ -33,6 +33,7 @@ export class Archive {
   ) {
     this.RecordResource.query().$promise.then((__: IRecordResource[]) => {
       this.records = __.map(Record.fromObj);
+      this.records.sort((a: Record, b: Record) => a.family.localeCompare(b.family) );
       this.select(null);
     });
   }
@@ -146,7 +147,8 @@ export class Archive {
     Searchbar.module.name,
     ElemClick.module.name,
     ToastService.module.name,
-    'ngMaterial'
+    'ngMaterial',
+    'angular.filter'
   ];
   static module: angular.IModule = angular.module(
     'mtna.archive', Archive.$depends

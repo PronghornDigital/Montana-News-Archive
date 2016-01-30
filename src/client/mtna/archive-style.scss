@@ -7,6 +7,10 @@ md-content.md-default-theme {
   > md-card {
     margin-left: auto;
     margin-right: auto;
+
+    md-list-item:nth-child(odd) {
+      background-color: #fafafa;
+    }
   }
 }
 
@@ -24,6 +28,11 @@ md-toolbar {
       opacity: .8;
     }
   }
+
+md-list-item {
+  color:red;
+  height:5px;
+}
 
   input.search {
     color: $white;
