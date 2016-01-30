@@ -56,16 +56,17 @@ export class RecordHandler extends RupertPlugin {
   }
 
   @Route.GET('/:id')
-  get(q: Request, s: Response): void {
+  get(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     if (id in this.database) {
       let record: Record = this.database[id];
       if (!record.deleted) {
         s.status(200).send(record);
-        return;
       }
+    } else {
+      s.status(404).send(`Record not found: ${id}`);
     }
-    s.status(404).send(`Record not found: ${id}`);
+    n();
   }
 
   @Route.PUT('/:id')
@@ -82,15 +83,18 @@ export class RecordHandler extends RupertPlugin {
           if (err !== null) { return n(err); }
           delete this.database[replaceId];
           this.database[record.id] = record;
-          return s.status(204).end();
+          s.status(204).end();
+          n();
         });
+        return;
       } else {
         this.database[record.id] = record;
-        return s.status(204).end();
+        s.status(204).end();
       }
     } else {
-      return s.status(400).end();
+      s.status(400).end();
     }
+    n();
   }
 
   moveFiles(oldId: string, newId: string, cb: (err: any) => void): void {
@@ -134,27 +138,35 @@ export class RecordHandler extends RupertPlugin {
         if (writeerr !== null) { return n(writeerr); }
         this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
         s.status(200).send({path});
+        n();
       });
     });
   }
 
+  @Route.POST('/:id/associate')
+  associate(q: Request, s: Response, n: Function): void {
+    console.log(q.body);
+  }
+
   @Route.GET('')
-  find(q: Request, s: Response): void {
+  find(q: Request, s: Response, n: Function): void {
     s.send(Object.keys(this.database).map((id: string) => {
       return this.database[id];
     }).sort((a: Record, b: Record) => a.label.localeCompare(b.label) ));
+    n();
   }
 
   @Route('/:id', {methods: [Methods.DELETE]})
-  delete(q: Request, s: Response): void {
+  delete(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     if (id in this.database) {
       let record = this.database[id];
       record.deleted = true;
       this.database[record.id] = record;
       s.status(204).end();
-      return;
+    } else {
+      s.status(404).send(`Record not found: ${id}`);
     }
-    s.status(404).send(`Record not found: ${id}`);
+    n();
   }
 }
