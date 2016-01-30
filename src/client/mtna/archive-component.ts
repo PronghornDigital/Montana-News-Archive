@@ -83,6 +83,7 @@ export class Archive {
     })
     .catch(function(err: any){
       this.errors = err;
+      throw err;
     })
     .then(success, error)
     .then(done, done);
