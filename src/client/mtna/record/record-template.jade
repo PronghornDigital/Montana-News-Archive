@@ -46,7 +46,7 @@ div(layout="column")
           md-button(ng-click="state.editing = false") Done
       div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
         div(flex="30")
-          super
+          sup.md-subheader
             {{ state.record.family }}
           h2
             {{ state.record.label }}
