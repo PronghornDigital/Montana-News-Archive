@@ -4,22 +4,27 @@ div(layout="column")
     ng-if="!state.selected"
   )
     div(layout="column" flex)
-      h2 {{ state.record.label }}
-    .column(layout="column" flex)
-      span(ng-if='state.record.first')
+      p.label {{ state.record.label }}
+    div(layout="column" flex)
+      p(ng-if='state.record.first')
         | {{ state.record.first | date : 'mediumDate' }}
-      span(ng-if='state.record.last')
-        span="-"
+    div(layout="column" flex)
+      p(ng-if='state.record.last')
         | {{ state.record.last | date: 'mediumDate' }}
-    .column(layout="align-right" ng-if="!state.selected")
-      span(ng-if="state.record.stories.length")
-        md-icon list
-      span(ng-if="state.record.photos.length")
-        md-icon photo
-      span(ng-if="state.record.note")
-        md-icon description
-      span(ng-if="state.record.videos.length")
-        md-icon ondemand_video
+    .column(layout="row" flex ng-if="!state.selected")
+      p
+        span
+          md-icon(ng-if="state.record.stories.length") list
+          md-icon(ng-if="!state.record.stories.length") remove
+        span
+          md-icon(ng-if="state.record.images.length") photo
+          md-icon(ng-if="!state.record.images.length") remove
+        span
+          md-icon(ng-if="state.record.notes") mode_edit
+          md-icon(ng-if="!state.record.notes.length") remove
+        span
+          md-icon(ng-if="state.record.videos.length") ondemand_video
+          md-icon(ng-if="!state.record.videos.length") remove
   div(ng-if="state.selected")
     form(name="recordEditor")
       div(layout="row" layout-xs="column" layout-align="space-between end" ng-if="state.editing")
