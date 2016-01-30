@@ -16,7 +16,7 @@ div.relative(role="main"
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )
     // main content
 
-    md-card(
+    md-card.firefox-tweak(
       ng-if="state.pre.length > 0"
       flex-gt-sm="90" flex-gt-md="80"
     )
@@ -30,7 +30,7 @@ div.relative(role="main"
             )
         md-divider(ng-repeat-end)
 
-    md-card.md-padding(
+    md-card.md-padding.firefox-tweak(
       ng-if="state.current" flex-gt-sm="95" flex-gt-md="85"
     )
       record-viewer(
@@ -39,7 +39,7 @@ div.relative(role="main"
         done-editing="state.save(state.current)"
       )
 
-    md-card(
+    md-card.firefox-tweak(
       ng-if="state.post.length > 0"
       flex-gt-sm="90" flex-gt-md="80"
     )
