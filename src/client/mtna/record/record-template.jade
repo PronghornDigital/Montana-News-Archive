@@ -22,7 +22,7 @@ div(layout="column")
         md-icon ondemand_video
   div(ng-if="state.selected")
     form(name="recordEditor")
-      div(layout="row" layout-align="space-between end" ng-if="state.editing")
+      div(layout="row" layout-xs="column" layout-align="space-between end" ng-if="state.editing")
         md-input-container(flex="15")
           label Label
           input(type="text" ng-model="state.record.label" placeholder="Tape Label")
@@ -44,12 +44,17 @@ div(layout="column")
         div(flex)
         md-input-container
           md-button(ng-click="state.editing = false") Done
-      div(layout="row" layout-align="space-between start" ng-if="!state.editing")
-        h2(flex="15") {{ state.record.label }}
-        h2(flex="15") {{ state.record.family }}
+      div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
+        div(flex="30")
+          super
+            {{ state.record.family }}
+          h2
+            {{ state.record.label }}
+        h3(flex="20" hide-gt-xs show-xs) {{ state.record.first | date:'shortDate' }}
+        h3(flex="20" hide-gt-xs show-xs) {{ state.record.last | date: 'shortDate' }}
+        h3(flex="20" hide-xs) {{ state.record.first | date:'mediumDate' }}
+        h3(flex="20" hide-xs) {{ state.record.last | date:'mediumDate' }}
         h3(flex="10") {{ state.record.medium }}
-        h3(flex="20") {{ state.record.first | date:'mediumDate' }}
-        h3(flex="20") {{ state.record.last | date:'mediumDate' }}
         div(flex)
         md-input-container
           md-button(ng-click="state.editing = true") Edit
