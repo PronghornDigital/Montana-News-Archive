@@ -19,6 +19,7 @@ div.relative(role="main"
     md-card(
       ng-if="state.pre.length > 0"
       flex-gt-sm="90" flex-gt-md="80"
+      class="firefox-tweak"
     )
       md-list
         md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
@@ -31,7 +32,7 @@ div.relative(role="main"
         md-divider(ng-repeat-end)
 
     md-card.md-padding(
-      ng-if="state.current" flex-gt-sm="95" flex-gt-md="85"
+      ng-if="state.current" flex-gt-sm="95" flex-gt-md="85" class="firefox-tweak"
     )
       record-viewer(
         record="state.current"
