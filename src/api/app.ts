@@ -13,6 +13,9 @@ const defaults: any = {
       '/': normalize(join(__dirname, '../_static')),
       '/images/': normalize(join(process.cwd(), 'data'))
     }
+  },
+  archive: {
+    incoming: '/var/incoming/'
   }
 };
 
