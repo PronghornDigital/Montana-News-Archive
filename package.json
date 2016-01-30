@@ -48,6 +48,7 @@
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.4",
+    "mock-fs": "^3.6.0",
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "source-map-loader": "^0.1.5",

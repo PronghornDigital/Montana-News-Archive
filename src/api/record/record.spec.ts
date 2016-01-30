@@ -56,6 +56,7 @@ describe('Record Handler', function() {
       let cb = sinon.spy();
       handler.save(q, s, cb);
       expect(statusSpy).to.have.been.calledWithExactly(204);
+      expect(cb).to.have.not.been.called;
       expect('tape_1' in recordMap).to.be.true;
       let record = recordMap['tape_1'];
       expect(record.stories.length).to.equal(1);
