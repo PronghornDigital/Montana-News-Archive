@@ -1,12 +1,17 @@
 import { expect, use as chaiUse } from 'chai';
 import * as sinon from 'sinon';
+
+import { MOCK_RECORD_1 } from '../../shared/record/record.mock';
+
 /* tslint:disable */
 chaiUse(require('sinon-chai'));
+let mockfs = require('mock-fs');
+let fs = require('fs')
 /* tslint:enable */
 
 import {
-  Request, Response
-} from 'express';
+  Request, Response, Config
+} from 'ts-rupert';
 
 import { getMockLogger } from '../../util/mockLogger';
 
@@ -25,7 +30,12 @@ describe('Record Handler', function() {
 
   beforeEach(function() {
     recordMap = {};
-    handler = new RecordHandler(getMockLogger(), recordMap);
+    handler = new RecordHandler(getMockLogger(), new Config(), recordMap);
+    mockfs({ './data/.db.json': '{}' });
+  });
+
+  afterEach(function() {
+    mockfs.restore();
   });
 
   describe('Saving', function() {
@@ -54,12 +64,16 @@ describe('Record Handler', function() {
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s,  (err: any) => {
-        expect(err).to.not.exist;
-        expect(statusSpy).to.have.been.calledWithExactly(204);
-        expect('tape_1' in recordMap).to.be.true;
-        let record = recordMap['tape_1'];
-        expect(record.stories.length).to.equal(1);
-        done();
+        try {
+          expect(err).to.not.exist;
+          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect('tape_1' in recordMap).to.be.true;
+          let record = recordMap['tape_1'];
+          expect(record.stories.length).to.equal(1);
+          done();
+        } catch (e) {
+          done(e);
+        }
       });
     });
 
@@ -92,10 +106,14 @@ describe('Record Handler', function() {
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s, (err: any) => {
-        expect(err).to.not.exist;
-        expect(statusSpy).to.have.been.calledWithExactly(204);
-        expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
-        done();
+        try {
+          expect(err).to.not.exist;
+          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+          done();
+        } catch (e) {
+          done(e);
+        }
       });
     });
 
@@ -127,28 +145,53 @@ describe('Record Handler', function() {
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s, (err: any) => {
-        expect(err).to.not.exist;
-        expect(statusSpy).to.have.been.calledWithExactly(204);
-        expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
-        done();
+        try {
+          expect(err).to.not.exist;
+          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
+          done();
+        } catch (e) {
+          done(e);
+        }
       });
     });
   });
 
   describe('Associate', function() {
+    beforeEach(function() {
+      recordMap['tape-1'] = Record.fromObj(MOCK_RECORD_1);
+      let associateFs = {
+        '/var/incoming': {'path1': 'Video 1', 'path2': 'Video 2'},
+        './data/.db.json': '{}'
+      };
+      associateFs[handler.basePath + '/tape-1'] = {};
+      mockfs(associateFs);
+    });
     it('associates videos with records', function(done: Function) {
-      // TODO THINK ABOUT THIS
+      let renameSpy = sinon.spy(fs, 'rename');
       let q: Request = <Request><any>{
+        params: { id: 'tape-1' },
         body: ['path1', 'path2']
       };
       let s: Response = <Response><any>{
+        status: function(status: number): Response {
+          return this;
+        },
+        send: sinon.spy()
       };
+      let statusSpy = sinon.spy(s, 'status');
       handler.associate(q, s, (err: any) => {
-      // rename incoming/path1 record/path1
-      // rename incoming/path2 record/path2
-      // record[recordid].videos.append([record/path1, record/path2].map(Video))
-        expect(err).to.not.exist;
-        done();
+        try {
+          expect(err).to.not.exist;
+          expect(renameSpy).to.have.been.calledTwice;
+          let videoPaths = recordMap['tape-1'].videos.map((_) => _.path);
+          expect(videoPaths).to.deep.equal(['tape-1/path1', 'tape-1/path2']);
+          expect(statusSpy).to.have.been.calledWith(200);
+          // expect(s.send).to.have.been.called.with(MOCK_RECORD_1);
+          done();
+        } catch (e) {
+          done(e);
+        }
       });
     });
   });

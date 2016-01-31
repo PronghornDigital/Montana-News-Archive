@@ -3,6 +3,7 @@ import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
 import {
+  Video,
   Record,
   RecordDatabase
 } from '../../shared/record/record';
@@ -15,17 +16,24 @@ import {
   Request,
   Response,
   Methods,
-  ILogger
+  ILogger,
+  Config
 } from 'ts-rupert';
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
   public basePath: string = join(process.cwd(), 'data');
   public dbPath: string = join(this.basePath, '.db.json');
+  public incomingPath: string = this.config.find<string>(
+    'archive.incoming',
+    'ARCHIVE_INCOMING',
+    '/var/incoming/'
+  );
   private cancelWrite: NodeJS.Timer;
 
   constructor(
     @Inject(ILogger) public logger: ILogger,
+    @Inject(Config) public config: Config,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
@@ -145,7 +153,32 @@ export class RecordHandler extends RupertPlugin {
 
   @Route.POST('/:id/associate')
   associate(q: Request, s: Response, n: Function): void {
-    console.log(q.body);
+    let id: string = q.params.id;
+    if (!(id in this.database)) {
+      s.status(404).send(`Record ${id} not in database.`);
+      n();
+    } else {
+      this.moveIncoming(q.body, id).then(() => {
+        this.database[id].addVideos(
+          q.body.map((_: string) => join(id, _))
+              .map((_: string) => Video.fromObj({path: _}))
+        );
+        s.status(200).send(this.database[id]);
+        n();
+      }).catch((err: any) => n(err));
+    }
+  }
+
+  private moveIncoming(paths: string[], id: string): Promise<void[]> {
+    let movePath = (path: string) => new Promise<void>((s, j) => {
+      let oldPath = join(this.incomingPath, path);
+      let newPath = join(this.basePath, id, path);
+      rename(oldPath, newPath, (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+    return Promise.all(paths.map(movePath));
   }
 
   @Route.GET('')
