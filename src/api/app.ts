@@ -5,6 +5,10 @@ import {
   RecordHandler
 } from './record/record';
 
+import{
+  VideoHandler
+} from './videos/video';
+
 const defaults: any = {
   log: {level: 'info'},
   uploads: { size: '15Mb' },
@@ -22,7 +26,8 @@ const defaults: any = {
 export const server = Rupert.createApp(defaults, [
   Plugins.Healthz,
   Plugins.Static,
-  RecordHandler
+  RecordHandler,
+  VideoHandler
 ]);
 
 if (require.main === module) {

@@ -24,11 +24,10 @@ export class VideoHandler extends RupertPlugin {
       'ARCHIVE_INCOMING',
       '/var/incoming/'
     );
-    console.log(`Looking in ${incoming}`);
     readdir(incoming, (err: any, files: string[]) => {
       if ( err ) { return n(err); }
-      console.log(`Found ${files}`);
       s.status(200).send(files);
+      n();
     });
   }
 }

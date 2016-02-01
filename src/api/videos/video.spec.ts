@@ -24,7 +24,7 @@ describe('VideoHandler', function() {
     config = new Config({archive: { incoming: '/var/incoming/' }});
     let files = {};
     mockIncoming.forEach((_) => files[_] = `Video ${_}`);
-    mock({'/var/incoming/': files});
+    mock({'/var/incoming/': files, './data/.db.json': '{}'});
     logger = getMockLogger();
     handler = new VideoHandler(logger, config);
   });
@@ -43,17 +43,13 @@ describe('VideoHandler', function() {
         send: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
-      let cb = sinon.spy();
 
-      handler.incoming(q, s, cb);
-
-      let assertions = () => {
+      handler.incoming(q, s, (err: any) => {
+        expect(err).to.not.exist;
         expect(statusSpy).to.have.been.calledWith(200);
-        expect(cb).to.have.not.been.called;
         expect(s.send).to.have.been.calledWith(mockIncoming);
         done();
-      };
-      setTimeout(assertions, 32);
+      });
     });
   });
 });

@@ -3,6 +3,7 @@ import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
 import {
+  Video,
   Record,
   RecordDatabase
 } from '../../shared/record/record';
@@ -15,17 +16,24 @@ import {
   Request,
   Response,
   Methods,
-  ILogger
+  ILogger,
+  Config
 } from 'ts-rupert';
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
   public basePath: string = join(process.cwd(), 'data');
   public dbPath: string = join(this.basePath, '.db.json');
+  public incomingPath: string = this.config.find<string>(
+    'archive.incoming',
+    'ARCHIVE_INCOMING',
+    '/var/incoming/'
+  );
   private cancelWrite: NodeJS.Timer;
 
   constructor(
     @Inject(ILogger) public logger: ILogger,
+    @Inject(Config) public config: Config,
     @Optional()
     @Inject(RecordDatabase)
     private database: RecordDatabase = {}
@@ -56,16 +64,17 @@ export class RecordHandler extends RupertPlugin {
   }
 
   @Route.GET('/:id')
-  get(q: Request, s: Response): void {
+  get(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     if (id in this.database) {
       let record: Record = this.database[id];
       if (!record.deleted) {
         s.status(200).send(record);
-        return;
       }
+    } else {
+      s.status(404).send(`Record not found: ${id}`);
     }
-    s.status(404).send(`Record not found: ${id}`);
+    n();
   }
 
   @Route.PUT('/:id')
@@ -82,15 +91,18 @@ export class RecordHandler extends RupertPlugin {
           if (err !== null) { return n(err); }
           delete this.database[replaceId];
           this.database[record.id] = record;
-          return s.status(204).end();
+          s.status(204).end();
+          n();
         });
+        return;
       } else {
         this.database[record.id] = record;
-        return s.status(204).end();
+        s.status(204).end();
       }
     } else {
-      return s.status(400).end();
+      s.status(400).end();
     }
+    n();
   }
 
   moveFiles(oldId: string, newId: string, cb: (err: any) => void): void {
@@ -134,27 +146,60 @@ export class RecordHandler extends RupertPlugin {
         if (writeerr !== null) { return n(writeerr); }
         this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
         s.status(200).send({path});
+        n();
       });
     });
   }
 
+  @Route.POST('/:id/associate')
+  associate(q: Request, s: Response, n: Function): void {
+    let id: string = q.params.id;
+    if (!(id in this.database)) {
+      s.status(404).send(`Record ${id} not in database.`);
+      n();
+    } else {
+      this.moveIncoming(q.body, id).then(() => {
+        this.database[id].addVideos(
+          q.body.map((_: string) => join(id, _))
+              .map((_: string) => Video.fromObj({path: _}))
+        );
+        s.status(200).send(this.database[id]);
+        n();
+      }).catch((err: any) => n(err));
+    }
+  }
+
+  private moveIncoming(paths: string[], id: string): Promise<void[]> {
+    let movePath = (path: string) => new Promise<void>((s, j) => {
+      let oldPath = join(this.incomingPath, path);
+      let newPath = join(this.basePath, id, path);
+      rename(oldPath, newPath, (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+    return Promise.all(paths.map(movePath));
+  }
+
   @Route.GET('')
-  find(q: Request, s: Response): void {
+  find(q: Request, s: Response, n: Function): void {
     s.send(Object.keys(this.database).map((id: string) => {
       return this.database[id];
     }).sort((a: Record, b: Record) => a.label.localeCompare(b.label) ));
+    n();
   }
 
   @Route('/:id', {methods: [Methods.DELETE]})
-  delete(q: Request, s: Response): void {
+  delete(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     if (id in this.database) {
       let record = this.database[id];
       record.deleted = true;
       this.database[record.id] = record;
       s.status(204).end();
-      return;
+    } else {
+      s.status(404).send(`Record not found: ${id}`);
     }
-    s.status(404).send(`Record not found: ${id}`);
+    n();
   }
 }
