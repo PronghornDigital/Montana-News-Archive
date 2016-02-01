@@ -19,7 +19,7 @@ const defaults: any = {
     }
   },
   archive: {
-    incoming: '/var/incoming/'
+    incoming: normalize(join(process.cwd(), '/incoming/'))
   }
 };
 

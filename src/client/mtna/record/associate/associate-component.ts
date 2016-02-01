@@ -1,60 +1,81 @@
 import { IncomingService } from './incoming-service';
+import { AssociateService } from './associate-service';
+
+type IVideo = {
+  name: string,
+  selected: boolean
+}
 
 class AssociateModalController {
   static $inject: string[] = ['$mdDialog'];
+  public isAllSelected: boolean = false;
+  public videoNames: string[];
+  public videos: IVideo[];
   constructor(
     private _$mdDialog: angular.material.IDialogService
-  ) {}
+  ) {
+    this.videos = this.videoNames.map(name => {
+      return {
+        name,
+        selected: false
+      };
+    });
+  }
 
   public cancel() {
     this._$mdDialog.cancel();
   }
 
   public associateSelection() {
-    console.log('Finish me');
+    const selectedVideos = this.videos.filter(video => video.selected)
+                                      .map(video => video.name);
+    this._$mdDialog.hide(selectedVideos);
   }
 
   public selectAll() {
-    console.log('Finish me');
+    this.videos = this.videos.map((video) => {
+      return {
+        name: video.name,
+        selected: this.isAllSelected
+      };
+    });
   }
 }
 
 export class Associate {
+  public recordId: string;
 
-  static $inject: string[] = ['$mdDialog', 'incomingService'];
+  static $inject: string[] = ['$mdDialog', 'incomingService', 'associateService'];
   constructor(
     private _$mdDialog: ng.material.IDialogService,
-    private _incomingService: IncomingService
+    private _incomingService: IncomingService,
+    private _associateService: AssociateService
   ) {}
 
   openVideoList() {
-    this._incomingService.getIncoming().then((incoming: string[]) => {
+    this._incomingService.getIncoming().then((videoNames: string[]) => {
       this._$mdDialog.show({
         controller: AssociateModalController,
         controllerAs: 'state',
         bindToController: true,
-        locals: {incoming},
-        template: `
-          <md-dialog flex="50">
-            <md-toolbar>
-              <h3>Associate film</h3>
-            </md-toolbar>
-            <md-dialog-content class="md-dialog-content">
-              <md-list>
-                <md-list-item>
-                  <p>Select all</p>
-                  <md-checkbox></md-checkbox>
-                </md-list-item>
-              </md-list>
-            </md-dialog-content>
-            <md-dialog-actions>
-              <md-button ng-click="state.cancel()">Cancel</md-button>
-              <md-button class="md-primary"
-                         ng-click="state.associateSelection()">Associate</md-button>
-            </md-dialog-actions>
-          </md-dialog>
-        `
-      });
+        locals: {videoNames},
+        templateUrl: '/mtna/record/associate/incoming-template.html'
+      })
+      .then(this.associateVideos.bind(this));
+    });
+  }
+
+  onUpdateRecord(record: any) {
+    throw new Error('Abstract method onUpdateRecord called with no overload.');
+  }
+
+  associateVideos(videoNames: string[]) {
+    if (!videoNames.length) {
+      return;
+    }
+    this._associateService.associateVideos(this.recordId, videoNames)
+    .then((updatedRecordData) => {
+      this.onUpdateRecord({updatedRecordData});
     });
   }
 
@@ -64,10 +85,17 @@ export class Associate {
       scope: {},
       controller: Associate,
       controllerAs: 'state',
-      bindToController: {}
+      bindToController: {
+        recordId: '@',
+        onUpdateRecord: '&'
+      }
     };
   }
-  static $depends: string[] = ['ngMaterial', IncomingService.module.name];
+  static $depends: string[] = [
+    'ngMaterial',
+    IncomingService.module.name,
+    AssociateService.module.name
+  ];
   static module: angular.IModule = angular.module(
     'mtna.record.associate', Associate.$depends
   )
