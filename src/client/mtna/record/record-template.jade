@@ -52,9 +52,9 @@ div(layout="column")
       div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
         div(flex="30")
           sup.md-subheader
-            {{ state.record.family }}
+            | {{ state.record.family }}
           h2
-            {{ state.record.label }}
+            | {{ state.record.label }}
         h3(flex="20" hide-gt-xs show-xs) {{ state.record.first | date:'shortDate' }}
         h3(flex="20" hide-gt-xs show-xs) {{ state.record.last | date: 'shortDate' }}
         h3(flex="20" hide-xs) {{ state.record.first | date:'mediumDate' }}
@@ -63,7 +63,7 @@ div(layout="column")
         div(flex)
         md-input-container
           md-button(ng-click="state.editing = true") Edit
-          associate
+          associate(record-id="{{state.record.id}}" on-update-record="state.updateRecord({updatedRecordData: updatedRecordData})")
           div.md-button.md-ink-ripple(file-input="state.image" on-change="state.loadImage()")
     div(layout="row" layout-md="column" layout-sm="column" layout-xs="column")
       div(flex-gt-md=25 layout="column" layout-md="row" layout-sm="row")

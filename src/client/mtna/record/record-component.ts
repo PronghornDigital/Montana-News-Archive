@@ -24,6 +24,10 @@ export class RecordViewer {
     this.resetStory();
   }
 
+  public updateRecord(updatedRecordData: any) {
+    this.record.merge(updatedRecordData);
+  }
+
   public addStory(story: Story): void {
     this.record.addStories([story]);
     this.resetStory();
