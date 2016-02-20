@@ -95,9 +95,7 @@ export class Archive {
     let done = () => this.saving = false;
     if (this.editing && record !== this.editing) {
       this.saving = true;
-      this.$q.all(
-        this.records.map( (_: Record) => (new this.RecordResource(_)).$save())
-      )
+      (new this.RecordResource(this.editing)).$save()
       .then(success, error)
       .then(done, done);
     } else {
@@ -108,6 +106,7 @@ export class Archive {
   addTape(): void {
     this.collapse();
     let record = new Record('', '');
+    record.isNewTape = true;
     if (this.lastRecordSaved) {
       record.family = this.lastRecordSaved.family;
       record.medium = this.lastRecordSaved.medium;

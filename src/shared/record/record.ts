@@ -36,6 +36,7 @@ export interface IVideo {
 }
 
 export class Record implements IRecord {
+  public isNewTape: boolean = false;
   public rawImage: any = null;
 
   private _id: string;
