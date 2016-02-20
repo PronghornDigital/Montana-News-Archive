@@ -24,6 +24,26 @@ record-viewer {
     box-shadow: none;
   }
 
+  .recordImage {
+    /* This kills the layout. */
+    /* position: absolute; */
+    /* */
+
+    .md-button {
+      display: none;
+      position: relative;
+      bottom: 0;
+      right: 0;
+      background: rgba(255, 255, 255, .2);
+    }
+
+    &:hover {
+      .md-button {
+        display: block;
+      }
+    }
+  }
+
   video {
     display: -webkit-flex;
     display: -ms-flexbox;
