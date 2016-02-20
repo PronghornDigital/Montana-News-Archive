@@ -66,6 +66,10 @@ export class RecordViewer {
       templateUrl: '/mtna/record/record-template.html',
       link: {
         post: function($scope: ng.IScope, $element: JQuery) {
+          if ($scope['state'].record.isNewTape === true) {
+            $scope['state'].record.isNewTape = false;
+            $scope['state'].editing = true;
+          }
           if ($scope['state'].selected) {
             $timeout(function() {
               let input: HTMLInputElement = <HTMLInputElement>$element[0]
