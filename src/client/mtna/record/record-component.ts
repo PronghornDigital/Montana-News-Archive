@@ -74,7 +74,9 @@ export class RecordViewer {
             $timeout(function() {
               let input: HTMLInputElement = <HTMLInputElement>$element[0]
                   .querySelector('[ng-model="state.record.label"]');
-              input.focus();
+              if (input) {
+                input.focus();
+              }
             }); // two frames
           }
         }
