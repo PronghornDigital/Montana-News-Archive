@@ -89,6 +89,11 @@ export class Record implements IRecord {
   get videos(): Video[] { return this._videos; }
   get modified(): boolean { return this.id !== this.baseId; }
 
+  forceId(id: string): void {
+    // Here be dragons.
+    this._id = id;
+  }
+
   setFirst(date: string|Date): void {
     if (typeof date === 'string') {
       if (date === '') {
