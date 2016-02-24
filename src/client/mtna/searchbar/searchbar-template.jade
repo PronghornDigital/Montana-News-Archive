@@ -9,10 +9,14 @@ md-toolbar.md-hue-2(ng-show="state.searching")
     md-button(ng-click="state.searching = !state.searching" aria-label="Back")
       md-icon arrow_back
     h1(flex="10") Back
-    md-input-container(md-theme="input" flex)
-      label &nbsp;
-      input.search(ng-model="state.searchString" placeholder="enter search")
-    md-datepicker(ng-model="state.after" md-placeholder="After")
-    md-datepicker(ng-model="state.before" md-placeholder="Before")
+    md-input-container.md-accent(flex)
+      label Search
+      input.search(ng-model="state.searchString")
+    md-input-container.md-accent
+      label After
+      input(ng-model="state.after" type="date")
+    md-input-container.md-accent
+      label Before
+      input(ng-model="state.before" type="date")
     md-button(aria-label="search" ng-click="state.search()")
       md-icon search
