@@ -112,8 +112,7 @@ div(layout="column")
               td
                 md-button(ng-click="state.addStory(state.newStory)")
                   md-icon add
-        div.recordImage(ng-repeat="image in state.record.images" flex)
+        div(ng-repeat="image in state.record.images" flex)
           img.img-responsive.img-rounded.center-block(
             ng-src="/images/{{ image.path }}"
           )
-          md-button(ng-click="removeImage(image)") Delete
