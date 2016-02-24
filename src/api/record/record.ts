@@ -183,35 +183,9 @@ export class RecordHandler extends RupertPlugin {
 
   @Route.GET('')
   find(q: Request, s: Response, n: Function): void {
-    let before = q.query['before'];
-    let after = q.query['after'];
-    let query = q.query['query'];
-
-    let records = Object.keys(this.database).map((id: string) => {
+    s.send(Object.keys(this.database).map((id: string) => {
       return this.database[id];
-    });
-    if (query) {
-      const searchString = query.toLowerCase();
-      records = records.filter((a: Record) => {
-        let found = false;
-        ['label', 'family', 'notes'].forEach((k) => {
-          const sourceString = (<any>a)[k].toLowerCase();
-          found = found || (sourceString.indexOf(searchString) > -1);
-        });
-        return found;
-      });
-    }
-    if (before) {
-      before = new Date(before);
-      records = records.filter((a: Record) => a.first <= before);
-    }
-    if (after) {
-      after = new Date(after);
-      records = records.filter((a: Record) => a.last >= after);
-    }
-    s.status(200).send(
-        records.sort((a: Record, b: Record) => a.label.localeCompare(b.label))
-    );
+    }).sort((a: Record, b: Record) => a.label.localeCompare(b.label) ));
     n();
   }
 

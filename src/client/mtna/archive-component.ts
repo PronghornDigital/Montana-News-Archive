@@ -4,15 +4,14 @@ import {
   RecordResource
 } from './record/record-resource';
 
-import {Record} from '../../shared/record/record';
-import {RecordViewer} from './record/record-component';
-import {Searchbar} from './searchbar/searchbar-component';
-import {ISearchQuery, SEARCH_EVENT} from './searchbar/searchbar-service';
-import {ElemClick} from './elem-click/elem-click-directive';
-import {ToastService} from './toast/toast-service';
+import { Record } from '../../shared/record/record';
+import { RecordViewer } from './record/record-component';
+import { Searchbar } from './searchbar/searchbar-component';
+import { ElemClick } from './elem-click/elem-click-directive';
+import { ToastService } from './toast/toast-service';
 
 export class Archive {
-  public inFlight: boolean = false;
+  public saving: boolean = false;
   public searching: boolean = false;
   public search: string = '';
 
@@ -26,18 +25,16 @@ export class Archive {
   public editing: Record = null;
 
   public error: any = null;
-  constructor(private $scope: ng.IScope, private $q: ng.IQService,
-              private RecordResource: RecordResource,
-              private Toaster: ToastService, private _http: ng.IHttpService) {
-    $scope.$on(SEARCH_EVENT, (event: any, query: ISearchQuery) => {
-      this.inFlight = true;
-      this.RecordResource.query(query)
-          .$promise.then((__: IRecordResource[]) => {
-                     this.inFlight = false;
-                     this.records = __.map(Record.fromObj);
-                     this.select(null);
-                   })
-          .catch(() => { this.inFlight = false; });
+  constructor(
+    private $q: ng.IQService,
+    private RecordResource: RecordResource,
+    private Toaster: ToastService,
+    private _http: ng.IHttpService
+  ) {
+    this.RecordResource.query().$promise.then((__: IRecordResource[]) => {
+      this.records = __.map(Record.fromObj);
+      this.records.sort((a: Record, b: Record) => a.family.localeCompare(b.family) );
+      this.select(null);
     });
   }
 
@@ -50,8 +47,9 @@ export class Archive {
       this.post = [];
     } else {
       this.current = record;
-      this.RecordResource.get({id : record.id})
-          .$promise.then((_: Record) => { this.current.merge(_); });
+      this.RecordResource.get({id: record.id}).$promise.then((_: Record) => {
+        this.current.merge(_);
+      });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
     }
@@ -64,42 +62,42 @@ export class Archive {
     };
     let error = (err: any) => {
       this.error = err;
-      this.Toaster.toast(`Error inFlight ${record.label}: ${this.error}`, -1);
+      this.Toaster.toast(`Error saving ${record.label}: ${this.error}`, -1);
     };
-    let done = () => this.inFlight = false;
-    this.inFlight = true;
-    let params = {id : record.id, replaceId : record.baseId};
+    let done = () => this.saving = false;
+    this.saving = true;
+    let params = {
+      id: record.id,
+      replaceId: record.baseId
+    };
     if (!record.modified) {
       delete params.replaceId;
     }
-    this.RecordResource.update(params, record)
-        .$promise.then(() => {
-                   if (!record.rawImage) {
-                     return;
-                   }
-                   this._http.post(`/api/record/#{record.id}/upload`, {
-                     filename : record.rawImage.name,
-                     image : record.rawImage
-                   });
-                 })
-        .catch(function(err: any) {
-          this.errors = err;
-          throw err;
-        })
-        .then(success, error)
-        .then(done, done);
+    this.RecordResource.update(params, record).$promise
+    .then(() => {
+      if (!record.rawImage) { return; }
+      this._http.post(`/api/record/#{record.id}/upload`, {
+        filename: record.rawImage.name,
+        image: record.rawImage
+      });
+    })
+    .catch(function(err: any){
+      this.errors = err;
+      throw err;
+    })
+    .then(success, error)
+    .then(done, done);
   }
 
   edit(record: Record): void {
     let success = () => this.editing = record;
     let error = (err: any) => this.error = err;
-    let done = () => this.inFlight = false;
+    let done = () => this.saving = false;
     if (this.editing && record !== this.editing) {
-      this.inFlight = true;
-      (new this.RecordResource(this.editing))
-          .$save()
-          .then(success, error)
-          .then(done, done);
+      this.saving = true;
+      (new this.RecordResource(this.editing)).$save()
+      .then(success, error)
+      .then(done, done);
     } else {
       success();
     }
@@ -129,16 +127,20 @@ export class Archive {
 
   static directive(): angular.IDirective {
     return {
-      controller : Archive,
-      controllerAs : 'state',
-      bindToController : true,
-      scope : {},
-      templateUrl : '/mtna/archive-template.html'
+      controller: Archive,
+      controllerAs: 'state',
+      bindToController: true,
+      scope: {},
+      templateUrl: '/mtna/archive-template.html'
     };
   }
 
-  static $inject: string[] =
-      [ '$scope', '$q', 'RecordResource', ToastService.name, '$http' ];
+  static $inject: string[] = [
+    '$q',
+    'RecordResource',
+    ToastService.name,
+    '$http'
+  ];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
@@ -148,7 +150,7 @@ export class Archive {
     'ngMaterial',
     'angular.filter'
   ];
-  static module: angular.IModule =
-      angular.module('mtna.archive', Archive.$depends)
-          .directive('archive', Archive.directive);
+  static module: angular.IModule = angular.module(
+    'mtna.archive', Archive.$depends
+  ).directive('archive', Archive.directive);
 }
