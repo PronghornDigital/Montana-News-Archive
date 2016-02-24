@@ -8,6 +8,7 @@ export class Searchbar {
   public after: Date;
   public before: Date;
 
+  static $inject: string[] = [SearchService.serviceName, '$log'];
   constructor(
       private _searchService: SearchService,
       private _$log: ng.ILogService
@@ -20,7 +21,7 @@ export class Searchbar {
       before: this.before,
       after: this.after
     };
-    this._searchService.search(searchQuery).then(this._$log.info);
+    this._searchService.search(searchQuery);
   }
 
   static directive(): angular.IDirective {
@@ -34,7 +35,6 @@ export class Searchbar {
   }
 
   static selector: string = 'mtnaSearchbar';
-  static $inject: string[] = [SearchService.serviceName, '$log'];
   static $depends: string[] = [
     'ngMaterial',
     SearchService.module.name
