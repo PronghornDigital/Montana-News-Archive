@@ -69,8 +69,8 @@ describe('Record Handler', function() {
         try {
           expect(err).to.not.exist;
           expect(statusSpy).to.have.been.calledWithExactly(204);
-          expect('tape_1' in recordMap).to.be.true;
-          let record = recordMap['tape_1'];
+          expect('clip-1' in recordMap).to.be.true;
+          let record = recordMap['clip-1'];
           expect(record.stories.length).to.equal(1);
           done();
         } catch (e) {
@@ -122,7 +122,7 @@ describe('Record Handler', function() {
     it('replaces missing tapes', function(done: Function) {
       let q: Request = <Request><any>{
         params: {
-          id: 'tape-1'
+          id: 'tape_1'
         },
         query: {
           replaceId: 'klip_1'
@@ -269,4 +269,3 @@ describe('Record Handler', function() {
     });
   });
 });
-
