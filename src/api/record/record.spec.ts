@@ -122,7 +122,7 @@ describe('Record Handler', function() {
     it('replaces missing tapes', function(done: Function) {
       let q: Request = <Request><any>{
         params: {
-          id: 'tape-1'
+          id: 'tape_1'
         },
         query: {
           replaceId: 'klip_1'
@@ -269,4 +269,3 @@ describe('Record Handler', function() {
     });
   });
 });
-
