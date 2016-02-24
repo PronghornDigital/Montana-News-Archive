@@ -31,21 +31,24 @@ class SearchQuery implements ISearchQuery {
   }
 }
 
-export const SEARCH_EVENT = 'mtnaSearchService NewSearch';
-
 export class SearchService {
 
-  constructor(private _scope: angular.IScope) {
+  constructor(private _http: angular.IHttpService) {
   }
 
-  search(sq: ISearchQuery): void {
+  search(sq: ISearchQuery): angular.IPromise<any> {
     const searchQuery = new SearchQuery(sq);
-    this._scope.$broadcast(SEARCH_EVENT, searchQuery);
+
+    return this._http({
+      url: '/api/search',
+      method: 'GET',
+      params: searchQuery.toJSON()
+    });
   }
 
   static serviceName: string = 'mtnaSearchService';
 
-  static $inject: string[] = ['$rootScope'];
+  static $inject: string[] = ['$http'];
   static $depends: string[] = [];
 
   static module: angular.IModule = angular.module(

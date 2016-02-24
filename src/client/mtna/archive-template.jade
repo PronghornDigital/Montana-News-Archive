@@ -10,7 +10,7 @@ div.relative(role="main"
 
     // Page transitioning
     md-progress-linear(
-      md-mode="{{ state.inFlight ? 'indeterminate' : 'determinate' }}" value="100"
+      md-mode="{{ state.saving ? 'indeterminate' : 'determinate' }}" value="100"
     )
 
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )

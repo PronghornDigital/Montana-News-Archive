@@ -26,7 +26,7 @@ describe('SearchbarService', () => {
     expect(sut).to.exist;
   });
 
-  describe.skip('search', () => {
+  describe('search', () => {
 
     it('should call the correct url with the correct parameters', () => {
       $httpBackend.expectGET(`${apiUrl}?query=test-search`).respond(200);
@@ -40,7 +40,8 @@ describe('SearchbarService', () => {
         before: new Date(),
         after: null
       };
-      const beforeDateUTC = encodeURI(searchParams.before.toISOString());
+      const beforeDateUTC = encodeURI(searchParams.before.toUTCString())
+                              .replace(/%20/g, '+');
       $httpBackend.expectGET(
         `${apiUrl}?before=${beforeDateUTC}&query=test-search`
       ).respond(200);

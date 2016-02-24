@@ -1,9 +1,7 @@
 import { expect, use as chaiUse } from 'chai';
 import * as sinon from 'sinon';
 
-import {
-  MOCK_RECORD_1, MOCK_RECORD_2, MOCK_RECORD_3
-} from '../../shared/record/record.mock';
+import { MOCK_RECORD_1 } from '../../shared/record/record.mock';
 
 /* tslint:disable */
 chaiUse(require('sinon-chai'));
@@ -151,77 +149,6 @@ describe('Record Handler', function() {
           expect(err).to.not.exist;
           expect(statusSpy).to.have.been.calledWithExactly(204);
           expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
-          done();
-        } catch (e) {
-          done(e);
-        }
-      });
-    });
-  });
-
-  describe('Search', function() {
-    beforeEach(function() {
-      recordMap['tape-1'] = Record.fromObj(MOCK_RECORD_1);
-      recordMap['tape-2'] = Record.fromObj(MOCK_RECORD_2);
-      recordMap['tape-3'] = Record.fromObj(MOCK_RECORD_3);
-    });
-
-    it('finds records within labels, insensitive', function(done: Function) {
-      const q: Request = <Request><any>{
-        query: {
-          query: 'PE 1',
-        }
-      };
-      let found: any;
-      const s: Response = <Response><any>{
-        status: function(status: number): Response {
-          return this;
-        },
-        send: function(data: any): Response {
-          found = data;
-          return this;
-        }
-      };
-      const statusSpy = sinon.spy(s, 'status');
-      const sendSpy = sinon.spy(s, 'send');
-      handler.find(q, s, (err: any) => {
-        try {
-          expect(err).to.not.exist;
-          expect(sendSpy).to.have.been.calledOnce;
-          expect(statusSpy).to.have.been.calledWith(200);
-          expect(found.length).to.equal(1);
-          done();
-        } catch (e) {
-          done(e);
-        }
-      });
-    });
-
-    it('finds records within a date range, inclusive', function(done: Function) {
-      const q: Request = <Request><any>{
-        query: {
-          before: '2010-04-01T00:00:00.000Z',
-          after: '2010-02-01T00:00:00.000Z'
-        }
-      };
-      let found: any;
-      const s: Response = <Response><any>{
-        status: function(status: number): Response {
-          return this;
-        },
-        send: function(data: any): Response {
-          found = data;
-          return this;
-        }
-      };
-      const statusSpy = sinon.spy(s, 'status');
-      const sendSpy = sinon.spy(s, 'send');
-      handler.find(q, s, (err: any) => {
-        try {
-          expect(err).to.not.exist;
-          expect(sendSpy).to.have.been.calledOnce;
-          expect(statusSpy).to.have.been.calledWith(200);
-          expect(found.length).to.equal(2);
           done();
         } catch (e) {
           done(e);
