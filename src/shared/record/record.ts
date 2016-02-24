@@ -92,6 +92,7 @@ export class Record implements IRecord {
   forceId(id: string): void {
     // Here be dragons.
     this._id = id;
+    this.baseId = id;
   }
 
   setFirst(date: string|Date): void {
