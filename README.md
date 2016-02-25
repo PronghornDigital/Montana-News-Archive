@@ -4,7 +4,8 @@
 
 1. Install [NVM](https://github.com/creationix/nvm)
 1. Install Node.js 4+
-1. Create `./incoming` for uploaded videos, or configure `ARCHIVE_INCOMING`
+1. Create `./incoming` and `./data` for uploaded videos and psersistence, or
+   configure `ARCHIVE_DATA_ROOT`
 1. Install NPM dependencies
 1. Run test suite
 1. Start a webserver
