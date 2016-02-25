@@ -138,7 +138,7 @@ export class Archive {
   }
 
   static $inject: string[] =
-      [ '$scope', '$q', 'RecordResource', ToastService.name, '$http' ];
+      [ '$scope', '$q', 'RecordResource', ToastService.serviceName, '$http' ];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,

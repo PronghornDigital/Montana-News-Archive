@@ -15,7 +15,7 @@ export class RecordViewer {
   public newStory: Story = null;
   public image: File = null;
 
-  static $inject: string[] = [FileReaderService.name, '$http', '$scope'];
+  static $inject: string[] = [FileReaderService.serviceName, '$http', '$scope'];
   constructor(
       private _fileReader: FileReaderService,
       private _http: ng.IHttpService,
