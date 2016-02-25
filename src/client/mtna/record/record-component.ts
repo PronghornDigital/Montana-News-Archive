@@ -1,5 +1,5 @@
 import {
-  Record, Story, Image
+  Record, Story, Image, Video
 } from '../../../shared/record/record';
 import { Associate  } from './associate/associate-component';
 
@@ -51,6 +51,11 @@ export class RecordViewer {
      this.image = null;
      this.record.images.push(Image.fromObj(result.data));
     });
+  }
+
+  safeVideoUrl(video: Video): string {
+    console.log(`Looking for safe: ${video}`);
+    return video.path;
   }
 
   static directive($timeout: ng.ITimeoutService): angular.IDirective {

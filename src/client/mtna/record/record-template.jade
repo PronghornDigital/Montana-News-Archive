@@ -69,7 +69,8 @@ div(layout="column")
       div(flex-gt-md=25 layout="column" layout-md="row" layout-sm="row")
         div(flex-md=50 ng-repeat="video in state.record.videos")
           video(controls)
-            source(ng-src="{{ video.url }}" type="video/mp4")
+            source(ng-src="{{ state.safeVideoUrl(video) }}" type="video/mp4")
+            | Can't play video: {{ video | json }}
         //- md-input-container
         div(flex-md=50)
           md-input-container(style = "width: 15em;")
