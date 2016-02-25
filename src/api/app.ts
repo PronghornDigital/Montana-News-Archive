@@ -19,7 +19,7 @@ const defaults: any = {
     }
   },
   archive: {
-    incoming: normalize(join(process.cwd(), '/incoming/'))
+    data_root: normalize(process.cwd())
   }
 };
 
