@@ -38,7 +38,6 @@
     "no-require-imports": true,
     "no-string-literal": false,
     "no-switch-case-fall-through": false,
-    "no-trailing-comma": false,
     "no-trailing-whitespace": true,
     "no-unreachable": true,
     "no-unused-expression": true,

@@ -1,11 +1,11 @@
 export class FileReaderService {
-  static name: string = 'FileReader';
+  static serviceName: string = 'FileReader';
   static $inject: string[] = ['$q'];
   constructor(private _q: ng.IQService) {}
   static $depends: string[] = [];
   static module: angular.IModule = angular.module(
     'util.FileReaderService', FileReaderService.$depends
-  ).service(FileReaderService.name, ['$q', FileReaderService]);
+  ).service(FileReaderService.serviceName, ['$q', FileReaderService]);
 
   readAsText(file: Blob|File, scope: ng.IScope) {
     let deferred = this._q.defer();

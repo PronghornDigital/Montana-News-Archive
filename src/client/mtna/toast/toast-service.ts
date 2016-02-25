@@ -17,10 +17,10 @@ export class ToastService {
     this._mdToast.show(opts);
   }
 
-  static name: string = 'ToastService';
+  static serviceName: string = 'ToastService';
   static $inject: string[] = ['$mdToast'];
   static $depends: string[] = ['ngMaterial'];
   static module: angular.IModule =
-    angular.module(ToastService.name, ToastService.$depends)
-    .service(ToastService.name, ToastService);
+    angular.module(ToastService.serviceName, ToastService.$depends)
+    .service(ToastService.serviceName, ToastService);
 }
