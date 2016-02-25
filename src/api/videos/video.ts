@@ -1,4 +1,5 @@
 import { readdir } from 'fs';
+import { join } from 'path';
 
 import {
   Config,
@@ -19,11 +20,12 @@ export class VideoHandler extends RupertPlugin {
 
   @Route.GET('/incoming')
   incoming(q: Request, s: Response, n: Function): void {
-    let incoming = this.config.find<string>(
-      'archive.incoming',
-      'ARCHIVE_INCOMING',
-      '/var/incoming/'
+    const basePath: string = this.config.find<string>(
+      'archive.data_root',
+      'ARCHIVE_DATA_ROOT',
+      '/var/archives'
     );
+    const incoming: string = join(basePath, 'incoming');
     readdir(incoming, (err: any, files: string[]) => {
       if ( err ) { return n(err); }
       s.status(200).send(files);

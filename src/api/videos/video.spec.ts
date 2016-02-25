@@ -21,10 +21,10 @@ describe('VideoHandler', function() {
   let logger: ILogger = null;
 
   beforeEach(function() {
-    config = new Config({archive: { incoming: '/var/incoming/' }});
+    config = new Config({archive: { incoming: '/var/archives/incoming/' }});
     let files = {};
     mockIncoming.forEach((_) => files[_] = `Video ${_}`);
-    mock({'/var/incoming/': files, './data/.db.json': '{}'});
+    mock({'/var/archives/incoming/': files, './data/.db.json': '{}'});
     logger = getMockLogger();
     handler = new VideoHandler(logger, config);
   });
