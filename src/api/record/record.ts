@@ -109,7 +109,7 @@ export class RecordHandler extends RupertPlugin {
   moveFiles(oldId: string, newId: string, cb: (err: any) => void): void {
     // Assert oldId is present
     let oldPath = join(this.dataPath, oldId);
-    stat(dataPath, (statErr: any, stats: Stats) => {
+    stat(oldPath, (statErr: any, stats: Stats) => {
       if (statErr !== null) {
         // Probably doesn't exist.
         return cb(null);

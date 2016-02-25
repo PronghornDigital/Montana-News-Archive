@@ -235,9 +235,9 @@ describe('Record Handler', function() {
       recordMap['tape-1'] = Record.fromObj(MOCK_RECORD_1);
       let associateFs = {
         '/var/archives/incoming': {'path1': 'Video 1', 'path2': 'Video 2'},
-        './data/.db.json': '{}'
+        '/var/archives/data/.db.json': '{}'
       };
-      associateFs[handler.basePath + '/tape-1'] = {};
+      associateFs[handler.dataPath + '/tape-1'] = {};
       mockfs(associateFs);
     });
     it('associates videos with records', function(done: Function) {
@@ -254,6 +254,7 @@ describe('Record Handler', function() {
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.associate(q, s, (err: any) => {
+        if (err) { return done(err); }
         try {
           expect(err).to.not.exist;
           expect(renameSpy).to.have.been.calledTwice;
