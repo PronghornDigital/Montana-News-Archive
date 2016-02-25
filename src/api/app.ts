@@ -15,11 +15,13 @@ const defaults: any = {
   static: {
     routes: {
       '/': normalize(join(__dirname, '../_static')),
-      '/images/': normalize(join(process.cwd(), 'data'))
+      '/images/': normalize(
+          // TODO If and when Rupert gets referential configs, set that here.
+          join(process.env['ARCHIVE_DATA_ROOT'] || process.cwd(), 'data'))
     }
   },
   archive: {
-    incoming: normalize(join(process.cwd(), '/incoming/'))
+    data_root: normalize(process.cwd())
   }
 };
 

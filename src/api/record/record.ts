@@ -22,13 +22,13 @@ import {
 
 @Route.prefix('/api/records')
 export class RecordHandler extends RupertPlugin {
-  public basePath: string = join(process.cwd(), 'data');
-  public dbPath: string = join(this.basePath, '.db.json');
-  public incomingPath: string = this.config.find<string>(
-    'archive.incoming',
-    'ARCHIVE_INCOMING',
-    '/var/incoming/'
+  public basePath: string = this.config.find<string>(
+    'archive.data_root',
+    'ARCHIVE_DATA_ROOT',
+    '/var/archives'
   );
+  public dbPath: string = join(this.basePath, 'data', '.db.json');
+  public incomingPath: string = join(this.basePath, 'incoming');
   private cancelWrite: NodeJS.Timer;
 
   constructor(

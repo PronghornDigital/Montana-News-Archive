@@ -234,7 +234,7 @@ describe('Record Handler', function() {
     beforeEach(function() {
       recordMap['tape-1'] = Record.fromObj(MOCK_RECORD_1);
       let associateFs = {
-        '/var/incoming': {'path1': 'Video 1', 'path2': 'Video 2'},
+        '/var/archives/incoming': {'path1': 'Video 1', 'path2': 'Video 2'},
         './data/.db.json': '{}'
       };
       associateFs[handler.basePath + '/tape-1'] = {};
