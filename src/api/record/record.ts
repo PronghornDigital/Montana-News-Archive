@@ -27,7 +27,8 @@ export class RecordHandler extends RupertPlugin {
     'ARCHIVE_DATA_ROOT',
     '/var/archives'
   );
-  public dbPath: string = join(this.basePath, 'data', '.db.json');
+  public dataPath: string = join(this.basePath, 'data');
+  public dbPath: string = join(this.dataPath, '.db.json');
   public incomingPath: string = join(this.basePath, 'incoming');
   private cancelWrite: NodeJS.Timer;
 
@@ -107,7 +108,7 @@ export class RecordHandler extends RupertPlugin {
 
   moveFiles(oldId: string, newId: string, cb: (err: any) => void): void {
     // Assert oldId is present
-    let oldPath = join(this.basePath, oldId);
+    let oldPath = join(this.dataPath, oldId);
     stat(oldPath, (statErr: any, stats: Stats) => {
       if (statErr !== null) {
         // Probably doesn't exist.
@@ -117,7 +118,7 @@ export class RecordHandler extends RupertPlugin {
         return cb(null);
       }
       // Move from oldId to newId
-      let newPath = join(this.basePath, newId);
+      let newPath = join(this.dataPath, newId);
       rename(oldPath, newPath, (renameErr: any) => {
         // Return CB
         cb(renameErr);
@@ -134,7 +135,7 @@ export class RecordHandler extends RupertPlugin {
     if (_ === null || type !== 'image' ) {
         return n(new Error('Need an image.'));
     }
-    let root = join(this.basePath, id);
+    let root = join(this.dataPath, id);
     mkdirp(root, (mkdirperr: any) => {
       if (mkdirperr !== null) { return n(mkdirperr); }
       let name = id + '_' + ('' + Math.random()).substr(2);
@@ -142,7 +143,7 @@ export class RecordHandler extends RupertPlugin {
       this.logger.debug('Creating ' + path);
       let buffer = new Buffer(b64, 'base64');
       this.logger.debug('Writing ' + buffer.length + ' bytes');
-      writeFile(join(this.basePath, path), buffer, (writeerr: any) => {
+      writeFile(join(this.dataPath, path), buffer, (writeerr: any) => {
         if (writeerr !== null) { return n(writeerr); }
         this.logger.debug(`Wrote ${buffer.length} bytes to ${path}`);
         s.status(200).send({path});
@@ -172,7 +173,7 @@ export class RecordHandler extends RupertPlugin {
   private moveIncoming(paths: string[], id: string): Promise<void[]> {
     let movePath = (path: string) => new Promise<void>((s, j) => {
       let oldPath = join(this.incomingPath, path);
-      let newPath = join(this.basePath, id, path);
+      let newPath = join(this.dataPath, id, path);
       rename(oldPath, newPath, (err: any) => {
         if (err !== null) { return j(err); }
         s();
