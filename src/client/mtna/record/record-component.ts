@@ -54,7 +54,6 @@ export class RecordViewer {
   }
 
   safeVideoUrl(video: Video): string {
-    console.log(`Looking for safe: ${video}`);
     return '/images/' + video.path;
   }
 
