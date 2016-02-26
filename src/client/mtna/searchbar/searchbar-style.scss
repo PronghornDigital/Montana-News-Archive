@@ -1,0 +1,19 @@
+// todo keep an eye on https://github.com/angular/material/issues/6338
+
+mtna-searchbar {
+  .md-toolbar-tools {
+    md-input-container {
+      label {
+        color: rgba(255, 255, 255, 0.76);
+      }
+
+      input {
+        color: white;
+      }
+
+      .md-errors-spacer {
+        display: none;
+      }
+    }
+  }
+}
