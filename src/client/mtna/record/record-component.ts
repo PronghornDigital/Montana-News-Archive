@@ -54,8 +54,7 @@ export class RecordViewer {
   }
 
   safeVideoUrl(video: Video): string {
-    console.log(`Looking for safe: ${video}`);
-    return video.path;
+    return '/images/' + video.path;
   }
 
   static directive($timeout: ng.ITimeoutService): angular.IDirective {
