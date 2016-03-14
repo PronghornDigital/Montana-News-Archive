@@ -81,7 +81,7 @@ export class Associate {
 
   static directive(): angular.IDirective {
     return {
-      template: `<md-button ng-click="state.openVideoList()">Associate</md-button>`,
+      template: `<md-button ng-click="state.openVideoList()">Add Video</md-button>`,
       scope: {},
       controller: Associate,
       controllerAs: 'state',

@@ -1,16 +1,12 @@
 md-dialog.incoming-dialog(flex="50")
   md-toolbar
-    h3 Associate film
+    h3 Link Video
   md-dialog-content.md-dialog-content
+    p This is a list of all videos in the incoming folder. Contact your system administrator for more information.
     md-list
-      md-list-item
-        p Select all
-        md-checkbox(ng-model="state.isAllSelected"
-                    ng-change="state.selectAll()")
-      md-divider
       md-list-item(ng-repeat="video in state.videos")
         p {{ video.name }}
         md-checkbox(ng-model="video.selected")
   md-dialog-actions
     md-button(ng-click="state.cancel()") Cancel
-    md-button.md-primary(ng-click="state.associateSelection()") Associate
+    md-button.md-primary(ng-click="state.associateSelection()") Link
