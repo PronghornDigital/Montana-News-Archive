@@ -42,6 +42,9 @@ export class Archive {
   }
 
   select(record: Record): void {
+    if (this.current) {
+      this.save(this.current);
+    }
     this.currentIndex = this.records.indexOf(record);
     if (this.currentIndex === -1) {
       // Unsetting the current element
