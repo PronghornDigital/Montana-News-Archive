@@ -73,7 +73,10 @@ div(layout="column")
             | Can't play video: {{ video | json }}
         //- md-input-container
         div(flex-md=50)
-          md-input-container(style = "width: 15em;")
+          div(ng-if="!state.editing")
+            h3 Notes
+            p {{ state.record.notes }}
+          md-input-container(style = "width: 15em;" ng-if="state.editing")
             label Notes
             textarea(ng-model="state.record.notes" placeholder="Notes")
       div(flex-gt-md=75 layout="column")
