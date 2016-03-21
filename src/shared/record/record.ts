@@ -176,9 +176,9 @@ export class Record implements IRecord {
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
-    this.addStories( other.stories);
-    this.addImages(other.images);
-    this.addVideos(other.videos);
+    this.addStories(other.stories || []);
+    this.addImages(other.images || []);
+    this.addVideos(other.videos || []);
     return this;
   }
 
