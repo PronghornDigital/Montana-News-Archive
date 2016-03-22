@@ -42,6 +42,9 @@ export class Archive {
   }
 
   select(record: Record): void {
+    if (this.current) {
+      this.save(this.current);
+    }
     this.currentIndex = this.records.indexOf(record);
     if (this.currentIndex === -1) {
       // Unsetting the current element
@@ -58,6 +61,10 @@ export class Archive {
   }
 
   save(record: Record): void {
+    if (this.inFlight) {
+      // #74: Don't have more than one request at at time.
+      return;
+    }
     let success = () => {
       this.Toaster.toast(`Saved ${record.label}`);
       this.lastRecordSaved = record;
@@ -91,6 +98,10 @@ export class Archive {
   }
 
   edit(record: Record): void {
+    if (this.inFlight) {
+      // #74: Don't have more than one request at at time.
+      return;
+    }
     let success = () => this.editing = record;
     let error = (err: any) => this.error = err;
     let done = () => this.inFlight = false;
@@ -119,7 +130,7 @@ export class Archive {
   }
 
   collapse(): void {
-    if (this.current) {
+    if (this.current && !this.inFlight) {
       this.save(this.current);
     }
     this.current = null;

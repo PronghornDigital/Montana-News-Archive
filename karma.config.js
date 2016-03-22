@@ -1,6 +1,6 @@
 module.exports = function(config) {
   config.set({
-    "frameworks" : [ "mocha" ],
+    "frameworks" : [ "mocha", "sinon" ],
     "files" : [
       "./src/vendors/angular.js",
       "./src/vendors/angular-*.js",
