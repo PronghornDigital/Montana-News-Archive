@@ -24,7 +24,7 @@ export class RecordViewer {
     this.resetStory();
   }
 
-  public updateRecord(updatedRecordData: any) {
+  public updateRecord({updatedRecordData}) {
     this.record.merge(updatedRecordData);
   }
 

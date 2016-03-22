@@ -120,6 +120,8 @@ describe('Record', function() {
         new Story('Story 2', new Date('10/15/2015'), 'VO', '5:30')
       ]);
       record1.merge(record2);
+      let record3 = new Record('Tape 1', 'Test', '3/4"');
+      record1.merge(record3);
       expect(record1.stories.length).to.equal(2);
     });
   });
