@@ -86,6 +86,12 @@ export class RecordHandler extends RupertPlugin {
     if (Record.isProtoRecord(protoRecord)) {
       let record = Record.fromObj(protoRecord);
       record.forceId(id);
+      if ( replaceId !== record.id && record.id in this.database ) {
+        s.status(409);
+        s.send('The label is already used for a different record.');
+        s.end();
+        return n();
+      }
       if ( replaceId  && replaceId in this.database ) {
         record = this.database[replaceId].merge(record);
         this.moveFiles(replaceId, record.id, (err: any) => {

@@ -2,12 +2,14 @@ import {
   Record, Story, Image, Video
 } from '../../../shared/record/record';
 import { Associate  } from './associate/associate-component';
+import { Archive } from '../archive-component';
 
 import { FileReaderService } from '../../util/fileinput/fileinput-service';
 import { FileInput } from '../../util/fileinput/fileinput-directive';
 
 export class RecordViewer {
   public record: Record;
+  public archive: Archive;
   public editing: boolean;
   public selected: boolean;
   public doneEditing: any;
@@ -35,6 +37,14 @@ export class RecordViewer {
 
   private resetStory(): void {
     this.newStory = new Story('', new Date);
+  }
+
+  done() {
+    if (this.editing) {
+      this.doneEditing().then(() => {
+        this.editing = false;
+      });
+    }
   }
 
   loadImage() {

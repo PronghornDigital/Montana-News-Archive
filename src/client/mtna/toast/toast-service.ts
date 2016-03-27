@@ -4,16 +4,27 @@ export class ToastService {
   private _position: string = 'bottom right';
   get position(): string { return this._position; }
 
-  toast(message: string, timeout: number = 3000) {
-    let opts = this._mdToast.simple()
-        .content(message)
+  _config(
+      message: string,
+      hideDelay: number
+  ): angular.material.ISimpleToastPreset {
+    return this._mdToast.simple()
+        .textContent(message)
         .position(this.position)
+        .hideDelay(hideDelay)
         .action('OK');
+  }
 
-    if (timeout <= 0) {
-      opts.hideDelay(timeout);
-    }
+  toast(message: string, hideDelay: number = 3000) {
+    let opts = this._config(message, hideDelay);
+    this._mdToast.show(opts);
+  }
 
+  error(message: string) {
+    let opts = this._config(message, 0)
+      // TODO: Add this after 1.1.0 is available
+      // .highlightClass('md-warn')
+      ;
     this._mdToast.show(opts);
   }
 
