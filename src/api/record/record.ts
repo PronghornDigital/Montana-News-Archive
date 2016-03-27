@@ -173,10 +173,14 @@ export class RecordHandler extends RupertPlugin {
   private moveIncoming(paths: string[], id: string): Promise<void[]> {
     let movePath = (path: string) => new Promise<void>((s, j) => {
       let oldPath = join(this.incomingPath, path);
-      let newPath = join(this.dataPath, id, path);
-      rename(oldPath, newPath, (err: any) => {
-        if (err !== null) { return j(err); }
-        s();
+      let newRoot = join(this.dataPath, id);
+      let newPath = join(newRoot, path);
+      mkdirp(newRoot, (mkdirperr: any) => {
+        if (mkdirperr !== null) { return j(mkdirperr); }
+        rename(oldPath, newPath, (err: any) => {
+          if (err !== null) { return j(err); }
+          s();
+        });
       });
     });
     return Promise.all(paths.map(movePath));
