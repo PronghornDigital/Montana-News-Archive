@@ -231,17 +231,22 @@ describe('Record Handler', function() {
   });
 
   describe('Associate', function() {
+    let renameSpy: Sinon.SinonSpy;
     beforeEach(function() {
       recordMap['tape-1'] = Record.fromObj(MOCK_RECORD_1);
+      recordMap['tape-2'] = Record.fromObj(MOCK_RECORD_2);
       let associateFs = {
         '/var/archives/incoming': {'path1': 'Video 1', 'path2': 'Video 2'},
         '/var/archives/data/.db.json': '{}'
       };
       associateFs[handler.dataPath + '/tape-1'] = {};
       mockfs(associateFs);
+      renameSpy = sinon.spy(fs, 'rename');
+    });
+    afterEach(function() {
+      renameSpy.restore();
     });
     it('associates videos with records', function(done: Function) {
-      let renameSpy = sinon.spy(fs, 'rename');
       let q: Request = <Request><any>{
         params: { id: 'tape-1' },
         body: ['path1', 'path2']
@@ -256,10 +261,35 @@ describe('Record Handler', function() {
       handler.associate(q, s, (err: any) => {
         if (err) { return done(err); }
         try {
-          expect(err).to.not.exist;
           expect(renameSpy).to.have.been.calledTwice;
           let videoPaths = recordMap['tape-1'].videos.map((_) => _.path);
           expect(videoPaths).to.deep.equal(['tape-1/path1', 'tape-1/path2']);
+          expect(statusSpy).to.have.been.calledWith(200);
+          // expect(s.send).to.have.been.called.with(MOCK_RECORD_1);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+    it('associates videos with uncreated folders', function(done: Function) {
+      let q: Request = <Request><any>{
+        params: { id: 'tape-2' },
+        body: ['path1', 'path2']
+      };
+      let s: Response = <Response><any>{
+        status: function(status: number): Response {
+          return this;
+        },
+        send: sinon.spy()
+      };
+      let statusSpy = sinon.spy(s, 'status');
+      handler.associate(q, s, (err: any) => {
+        if (err) { return done(err); }
+        try {
+          expect(renameSpy).to.have.been.calledTwice;
+          let videoPaths = recordMap['tape-2'].videos.map((_) => _.path);
+          expect(videoPaths).to.deep.equal(['tape-2/path1', 'tape-2/path2']);
           expect(statusSpy).to.have.been.calledWith(200);
           // expect(s.send).to.have.been.called.with(MOCK_RECORD_1);
           done();
