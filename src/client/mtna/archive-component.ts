@@ -68,6 +68,8 @@ export class Archive {
     let success = () => {
       this.Toaster.toast(`Saved ${record.label}`);
       this.lastRecordSaved = record;
+      record.baseId = record.id;
+      record.isNewTape = false;
     };
     let error = (err: any) => {
       this.error = err;
@@ -78,7 +80,7 @@ export class Archive {
     let done = (err: any) => { this.inFlight = false; };
     this.inFlight = true;
     let params = {id : record.id, replaceId : record.baseId};
-    if (!record.modified) {
+    if (record.isNewTape || !record.modified) {
       delete params.replaceId;
     }
     let update = this.RecordResource.update(params, record).$promise.then(() => {
