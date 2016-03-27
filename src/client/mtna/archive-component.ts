@@ -60,7 +60,7 @@ export class Archive {
     }
   }
 
-  save(record: Record): void {
+  save(record: Record): Promise<any> {
     if (this.inFlight) {
       // #74: Don't have more than one request at at time.
       return;
@@ -71,30 +71,29 @@ export class Archive {
     };
     let error = (err: any) => {
       this.error = err;
-      this.Toaster.toast(`Error inFlight ${record.label}: ${this.error}`, -1);
+      this.Toaster.error(
+        `${this.error.status} Error saving ${record.label}: ${this.error.data}`
+      );
     };
-    let done = () => this.inFlight = false;
+    let done = (err: any) => { this.inFlight = false; };
     this.inFlight = true;
     let params = {id : record.id, replaceId : record.baseId};
     if (!record.modified) {
       delete params.replaceId;
     }
-    this.RecordResource.update(params, record)
-        .$promise.then(() => {
+    let update = this.RecordResource.update(params, record).$promise.then(() => {
                    if (!record.rawImage) {
                      return;
                    }
-                   this._http.post(`/api/record/#{record.id}/upload`, {
+                   return this._http.post(`/api/record/#{record.id}/upload`, {
                      filename : record.rawImage.name,
                      image : record.rawImage
                    });
-                 })
-        .catch(function(err: any) {
-          this.errors = err;
-          throw err;
-        })
-        .then(success, error)
-        .then(done, done);
+                 });
+    update
+      .then(success, error)
+      .then(done, done);
+    return update;
   }
 
   edit(record: Record): void {

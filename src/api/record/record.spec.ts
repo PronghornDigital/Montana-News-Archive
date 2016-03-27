@@ -119,6 +119,42 @@ describe('Record Handler', function() {
       });
     });
 
+    it('errors when replacing existing tapes', function(done: Function) {
+      recordMap['klip_1'] = new Record('Klip 1', 'tapes');
+      recordMap['klip_2'] = new Record('Klip 2', 'tapes');
+      let q: Request = <Request><any>{
+        params: {
+          id: 'klip_2'
+        },
+        query: {
+          replaceId: 'klip_1'
+        },
+        body: {
+          label: 'Klip 2',
+          family: 'Tapes',
+          medium: '3/4"',
+          stories: []
+        }
+      };
+      let s: Response = <Response><any>{
+        status: function(status: number): Response {
+          return this;
+        },
+        send: sinon.spy(),
+        end: sinon.spy()
+      };
+      let statusSpy = sinon.spy(s, 'status');
+      handler.save(q, s, (err: any) => {
+        try {
+          expect(err).to.not.exist;
+          expect(statusSpy).to.have.been.calledWithExactly(409);
+          done();
+        } catch (e) {
+          done(e);
+        }
+      });
+    });
+
     it('replaces missing tapes', function(done: Function) {
       let q: Request = <Request><any>{
         params: {

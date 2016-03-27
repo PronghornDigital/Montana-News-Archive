@@ -48,7 +48,7 @@ div(layout="column")
           input(type="date" ng-model="state.record.last")
         div(flex)
         md-input-container
-          md-button(ng-click="state.editing = false") Done
+          md-button(ng-click="state.done()") Done
       div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
         div(flex="30")
           sup.md-subheader
@@ -73,10 +73,7 @@ div(layout="column")
             | Can't play video: {{ video | json }}
         //- md-input-container
         div(flex-md=50)
-          div(ng-if="!state.editing")
-            h3 Notes
-            p {{ state.record.notes }}
-          md-input-container(style = "width: 15em;" ng-if="state.editing")
+          md-input-container(style = "width: 15em;")
             label Notes
             textarea(ng-model="state.record.notes" placeholder="Notes")
       div(flex-gt-md=75 layout="column")
