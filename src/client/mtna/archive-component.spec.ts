@@ -7,6 +7,10 @@ import {
 } from './record/record-resource';
 
 import {
+  LocationService
+} from './location/location-service';
+
+import {
   Record
 } from '../../shared/record/record';
 
@@ -44,6 +48,7 @@ let mockToastService = <angular.material.IToastService>{
 };
 /* tslint:enable */
 let toast: ToastService = new ToastService(mockToastService);
+let _location: LocationService;
 
 class MockRecordResource {
   [key: string]: any;
@@ -70,12 +75,14 @@ describe('MTNA Archive', function() {
   beforeEach(inject(function(
     _$q_: ng.IQService,
     _$rootScope_: ng.IScope,
-    _$http_: ng.IHttpService
+    _$http_: ng.IHttpService,
+    _$location_: ng.ILocationService
   ){
     $q = _$q_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $http = _$http_;
+    _location = new LocationService(_$location_);
   }));
 
   it('exposes a directive', function() {
@@ -84,7 +91,9 @@ describe('MTNA Archive', function() {
   });
 
   it('can add a tape', function() {
-    let archive = new Archive($scope, $q, <RecordResource><any>MockRecordResource, toast, $http);
+    let archive = new Archive(
+        $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location
+    );
     expect(archive.records.length).to.equal(0);
     archive.addTape();
     expect(archive.records.length).to.equal(1);
@@ -93,7 +102,9 @@ describe('MTNA Archive', function() {
 
   describe('edit mode', function() {
     it('transitions between editing and non-editing', function() {
-      let archive = new Archive($scope, $q, <RecordResource><any>MockRecordResource, toast, $http);
+      let archive = new Archive(
+          $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location
+      );
       let record = new MockRecordResource(MOCK_RECORD_1);
       archive.edit(<Record><any>record);
       expect(archive.editing).to.equal(record);
@@ -105,7 +116,9 @@ describe('MTNA Archive', function() {
     });
 
     it('saves when transitioning from one edit to another', function() {
-      let archive = new Archive($scope, $q, <RecordResource><any>MockRecordResource, toast, $http);
+      let archive = new Archive(
+          $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location
+      );
       let record1 = new MockRecordResource(MOCK_RECORD_1);
       let record2 = new MockRecordResource(MOCK_RECORD_2);
       archive.edit(<Record><any>record1);
@@ -123,7 +136,9 @@ describe('MTNA Archive', function() {
   });
   describe('selection', function() {
     it('changes pre/current/post lists', function() {
-      let archive = new Archive($scope, $q, <RecordResource><any>MockRecordResource, toast, $http);
+      let archive = new Archive(
+          $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location
+      );
       let record1: Record = <Record><any> new MockRecordResource(MOCK_RECORD_1);
       let record2: Record = <Record><any> new MockRecordResource(MOCK_RECORD_2);
       let record3: Record = <Record><any> new MockRecordResource(MOCK_RECORD_3);
@@ -167,7 +182,9 @@ describe('MTNA Archive', function() {
     let saveSpy: Sinon.SinonSpy;
 
     beforeEach(function() {
-      archive = new Archive($scope, $q, <RecordResource><any>MockRecordResource, toast, $http);
+      archive = new Archive(
+          $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location
+      );
       saveSpy = sinon.spy(archive, 'save');
       record1 = <Record><any> new MockRecordResource(MOCK_RECORD_1);
       record2 = <Record><any> new MockRecordResource(MOCK_RECORD_2);

@@ -10,6 +10,10 @@ interface ISearchParams {
   after: string;
 }
 
+function dToS(d: Date): string {
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDay()}`;
+}
+
 class SearchQuery implements ISearchQuery {
   public query: string = '';
   public before: Date = null;
@@ -25,8 +29,8 @@ class SearchQuery implements ISearchQuery {
   toJSON(): ISearchParams {
     return {
       query: this.query,
-      before: this.before ? this.before.toUTCString() : null,
-      after: this.after ? this.after.toUTCString() : null,
+      before: this.before ? dToS(this.before) : null,
+      after: this.after ? dToS(this.after) : null,
     };
   }
 }
