@@ -7,6 +7,8 @@ export class LocationService {
   private _endDate: string = '';
   private _recordId: string = '';
 
+  private _dateRegex: RegExp = /(\d\d\d\d-\d\d-\d\d)?\+(\d\d\d\d-\d\d-\d\d)?/;
+
   /**
    * The URLs for archives look like:
    *
@@ -15,9 +17,28 @@ export class LocationService {
   constructor(private _location: ng.ILocationService) {
     const path = this._location.path() || '//+/';
     const pathParts = path.substring(1).split('/');
-    this._queryString = pathParts[0] || '';
-    this._recordId = pathParts[2] || '';
-    const dateParts = (pathParts[1] || '+').split('+');
+    if (pathParts.length === 3) {
+      // /query/start+end/id
+      this._queryString = pathParts[0];
+      this.dates = pathParts[1];
+      this._recordId = pathParts[2];
+    } else if (pathParts.length === 2) {
+      if (this._dateRegex.test(pathParts[0])) {
+        // /start+end/id?
+        this.dates = pathParts[0];
+      } else {
+        // /query/id?
+        this._queryString = pathParts[0];
+      }
+      this._recordId = pathParts[1] || '';
+    } else if (pathParts.length === 1) {
+      // /id?
+      this._recordId = pathParts[0] || '';
+    }
+  }
+
+  set dates(s: string) {
+    const dateParts = s.split('+');
     this._startDate = dateParts[0];
     this._endDate = dateParts[1];
   }
@@ -68,7 +89,7 @@ export class LocationService {
   buildPath(): string {
     const datePart = `${this._startDate}+${this._endDate}`;
     const recordId = this.hasRecordId ? `${this._recordId}` : '';
-    return `/${this.encodeQueryString()}/${datePart}/${recordId}`;
+    return `/${this.encodeQueryString()}/${datePart}/${recordId}`.replace('//', '/');
   }
 
   encodeQueryString(): string {
