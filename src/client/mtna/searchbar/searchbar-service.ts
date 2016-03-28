@@ -1,3 +1,5 @@
+import { dToS } from '../../util/date';
+
 export interface ISearchQuery {
   query: string;
   before: Date;
@@ -8,10 +10,6 @@ interface ISearchParams {
   query: string;
   before: string;
   after: string;
-}
-
-function dToS(d: Date): string {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDay()}`;
 }
 
 class SearchQuery implements ISearchQuery {

@@ -1,4 +1,5 @@
 import { Record } from '../../../shared/record/record';
+import { dToS, sToD } from '../../util/date';
 
 export class LocationService {
   private _queryString: string = '';
@@ -14,9 +15,9 @@ export class LocationService {
   constructor(private _location: ng.ILocationService) {
     const path = this._location.path() || '//+/';
     const pathParts = path.substring(1).split('/');
-    this._queryString = pathParts[0];
-    this._recordId = pathParts[2];
-    const dateParts = pathParts[1].split('+');
+    this._queryString = pathParts[0] || '';
+    this._recordId = pathParts[2] || '';
+    const dateParts = (pathParts[1] || '+').split('+');
     this._startDate = dateParts[0];
     this._endDate = dateParts[1];
   }
@@ -49,32 +50,19 @@ export class LocationService {
     return this._recordId;
   }
 
-  private sToD(s: string): Date {
-    const parts = s.split('-');
-    if (parts.length !== 3) {
-      return null;
-    } else {
-      return new Date(
-          parseInt(parts[0], 10),
-          parseInt(parts[1], 10),
-          parseInt(parts[2], 10)
-      );
-    }
-  }
-
   set startDate(d: Date) {
-    this._startDate = d ? `${d.getFullYear()}-${d.getMonth()}-${d.getDay()}` : '';
+    this._startDate = d ? dToS(d) : '';
   }
   get startDate(): Date {
-    return this.sToD(this._startDate);
+    return sToD(this._startDate);
   }
 
   set endDate(d: Date) {
-    this._endDate = d ? `${d.getFullYear()}-${d.getMonth()}-${d.getDay()}` : '';
+    this._endDate = d ? dToS(d) : '';
   }
 
   get endDate(): Date {
-    return this.sToD(this._endDate);
+    return sToD(this._endDate);
   }
 
   buildPath(): string {
