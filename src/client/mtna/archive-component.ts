@@ -9,6 +9,7 @@ import {RecordViewer} from './record/record-component';
 import {Searchbar} from './searchbar/searchbar-component';
 import {ISearchQuery, SEARCH_EVENT} from './searchbar/searchbar-service';
 import {ElemClick} from './elem-click/elem-click-directive';
+import {LocationService} from './location/location-service';
 import {ToastService} from './toast/toast-service';
 
 export class Archive {
@@ -28,17 +29,43 @@ export class Archive {
   public error: any = null;
   constructor(private $scope: ng.IScope, private $q: ng.IQService,
               private RecordResource: RecordResource,
-              private Toaster: ToastService, private _http: ng.IHttpService) {
+              private Toaster: ToastService,
+              private _http: ng.IHttpService,
+              private _location: LocationService) {
     $scope.$on(SEARCH_EVENT, (event: any, query: ISearchQuery) => {
-      this.inFlight = true;
-      this.RecordResource.query(query)
-          .$promise.then((__: IRecordResource[]) => {
-                     this.inFlight = false;
-                     this.records = __.map(Record.fromObj);
-                     this.select(null);
-                   })
-          .catch(() => { this.inFlight = false; });
+      this.doSearch(query);
     });
+    if (this._location.hasRecordId) {
+      // Do search and _force_ selection.
+      const id = this._location.currentId;
+      this.doSearch({
+        after: this._location.startDate,
+        before: this._location.endDate,
+        query: this._location.queryString,
+      }).then(() => {
+        this.select(this.records.filter((_) => _.id === id)[0]);
+      });
+    } else if (this._location.hasSearch) {
+      this.doSearch({
+        after: this._location.startDate,
+        before: this._location.endDate,
+        query: this._location.queryString,
+      });
+    }
+  }
+
+  doSearch(query: ISearchQuery): Promise<void> {
+    this.inFlight = true;
+    return this.RecordResource.query(query)
+        .$promise.then((__: IRecordResource[]) => {
+           this.inFlight = false;
+           this.records = __.map(Record.fromObj);
+           this.select(null);
+           this._location.startDate = query.after;
+           this._location.endDate = query.before;
+           this._location.queryString = query.query;
+         })
+        .catch(() => { this.inFlight = false; });
   }
 
   select(record: Record): void {
@@ -58,6 +85,7 @@ export class Archive {
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
     }
+    this._location.current = this.current;
   }
 
   save(record: Record): Promise<any> {
@@ -83,15 +111,16 @@ export class Archive {
     if (record.isNewTape || !record.modified) {
       delete params.replaceId;
     }
-    let update = this.RecordResource.update(params, record).$promise.then(() => {
-                   if (!record.rawImage) {
-                     return;
-                   }
-                   return this._http.post(`/api/record/#{record.id}/upload`, {
-                     filename : record.rawImage.name,
-                     image : record.rawImage
-                   });
-                 });
+    let update = this.RecordResource.update(params, record)
+      .$promise.then(() => {
+         if (!record.rawImage) {
+           return;
+         }
+         return this._http.post(`/api/record/#{record.id}/upload`, {
+           filename : record.rawImage.name,
+           image : record.rawImage
+         });
+       });
     update
       .then(success, error)
       .then(done, done);
@@ -149,13 +178,20 @@ export class Archive {
     };
   }
 
-  static $inject: string[] =
-      [ '$scope', '$q', 'RecordResource', ToastService.serviceName, '$http' ];
+  static $inject: string[] = [
+    '$scope',
+    '$q',
+    'RecordResource',
+    ToastService.serviceName,
+    '$http',
+    LocationService.serviceName
+  ];
   static $depends: string[] = [
     RecordModule.name,
     RecordViewer.module.name,
     Searchbar.module.name,
     ElemClick.module.name,
+    LocationService.module.name,
     ToastService.module.name,
     'ngMaterial',
     'angular.filter'

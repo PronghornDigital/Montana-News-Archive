@@ -1,3 +1,5 @@
+import { dToS } from '../../util/date';
+
 export interface ISearchQuery {
   query: string;
   before: Date;
@@ -25,8 +27,8 @@ class SearchQuery implements ISearchQuery {
   toJSON(): ISearchParams {
     return {
       query: this.query,
-      before: this.before ? this.before.toUTCString() : null,
-      after: this.after ? this.after.toUTCString() : null,
+      before: this.before ? dToS(this.before) : null,
+      after: this.after ? dToS(this.after) : null,
     };
   }
 }
