@@ -31,7 +31,8 @@ export class Archive {
               private RecordResource: RecordResource,
               private Toaster: ToastService,
               private _http: ng.IHttpService,
-              private _location: LocationService) {
+              private _location: LocationService,
+              private _timeout: ng.ITimeoutService) {
     $scope.$on(SEARCH_EVENT, (event: any, query: ISearchQuery) => {
       this.doSearch(query);
     });
@@ -155,7 +156,9 @@ export class Archive {
     }
     this.records.push(record);
     this.edit(record);
-    this.select(record);
+    this._timeout(() => {
+      this.select(record);
+    });
   }
 
   collapse(): void {
@@ -180,7 +183,8 @@ export class Archive {
     'RecordResource',
     ToastService.serviceName,
     '$http',
-    LocationService.serviceName
+    LocationService.serviceName,
+    '$timeout'
   ];
   static $depends: string[] = [
     RecordModule.name,
