@@ -11,6 +11,7 @@ export class RecordViewer {
   public record: Record;
   public archive: Archive;
   public editing: boolean;
+  private editingStory: boolean[] = [];
   public selected: boolean;
   public doneEditing: any;
 
@@ -22,21 +23,26 @@ export class RecordViewer {
       private _fileReader: FileReaderService,
       private _http: ng.IHttpService,
       private _scope: ng.IScope
-  ) {
-    this.resetStory();
-  }
+  ) { }
 
-  public updateRecord({updatedRecordData}) {
+  updateRecord({updatedRecordData}) {
     this.record.merge(updatedRecordData);
   }
 
-  public addStory(story: Story): void {
-    this.record.addStories([story]);
-    this.resetStory();
+  addStory(): void {
+    const newStory = new Story('', new Date);
+    this.record.addStories([newStory]);
+    this.toggleEditing(newStory);
   }
 
-  private resetStory(): void {
-    this.newStory = new Story('', new Date);
+  toggleEditing(story: Story): void {
+    const i = this.record.stories.indexOf(story);
+    this.editingStory[i] = !this.editingStory[i];
+  }
+
+  isEditing(story: Story): boolean {
+    const i = this.record.stories.indexOf(story);
+    return !!this.editingStory[i];
   }
 
   done() {
