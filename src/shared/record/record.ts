@@ -118,12 +118,9 @@ export class Record implements IRecord {
   addStories(stories: Story[]): Record {
     this._stories = this._stories.concat(stories).reduce(
         (p: Story[], c: Story) => {
-          for (let i = 0; i < p.length; i++) {
-            if (p[i].slug === c.slug) {
-              return p;
-            }
+          if (indexOfC(p, c, (a, b) => a.equals(b)) < 0) {
+            p.push(c);
           }
-          p.push(c);
           return p;
         },
         [])
@@ -325,7 +322,7 @@ export class Story {
 
   equals(other: Story): boolean {
     return this.slug === other.slug &&
-      this.date === other.date &&
+      this.date.getTime() === other.date.getTime() &&
       this.format === other.format &&
       this.runtime === other.runtime &&
       this.notes === other.notes &&
