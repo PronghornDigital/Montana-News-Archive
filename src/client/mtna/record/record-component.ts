@@ -11,7 +11,7 @@ export class RecordViewer {
   public record: Record;
   public archive: Archive;
   public editing: boolean;
-  private editingStory: boolean[] = [];
+  private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;
 
@@ -36,17 +36,19 @@ export class RecordViewer {
   }
 
   toggleEditing(story: Story): void {
-    const i = this.record.stories.indexOf(story);
-    const editing = this.editingStory[i] = !this.editingStory[i];
-    if (!editing) {
-      // Just finished editing
+    if (this.editingStory != null) {
+      // Were editing something, not anymore!
       this.doneEditing();
+    }
+    if (this.editingStory === story) {
+      this.editingStory = null;
+    } else {
+      this.editingStory = story;
     }
   }
 
   isEditing(story: Story): boolean {
-    const i = this.record.stories.indexOf(story);
-    return !!this.editingStory[i];
+    return this.editingStory === story;
   }
 
   done() {
