@@ -19,7 +19,7 @@ export class LocationService {
     const pathParts = path.substring(1).split('/');
     if (pathParts.length === 3) {
       // /query/start+end/id
-      this._queryString = pathParts[0];
+      this._queryString = this.decodeQueryString(pathParts[0]);
       this.dates = pathParts[1];
       this._recordId = pathParts[2];
     } else if (pathParts.length === 2) {
@@ -28,7 +28,7 @@ export class LocationService {
         this.dates = pathParts[0];
       } else {
         // /query/id?
-        this._queryString = pathParts[0];
+        this._queryString = this.decodeQueryString(pathParts[0]);
       }
       this._recordId = pathParts[1] || '';
     } else if (pathParts.length === 1) {
@@ -90,6 +90,10 @@ export class LocationService {
     const datePart = `${this._startDate}+${this._endDate}`;
     const recordId = this.hasRecordId ? `${this._recordId}` : '';
     return `/${this.encodeQueryString()}/${datePart}/${recordId}`.replace('//', '/');
+  }
+
+  decodeQueryString(s: string): string {
+    return s.replace('+', ' ');
   }
 
   encodeQueryString(): string {

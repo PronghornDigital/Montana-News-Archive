@@ -84,34 +84,45 @@ div(layout="column")
               th Date
               th Format
               th Runtime
+              th
           tbody
             tr(ng-repeat="story in state.record.stories")
-              td {{ story.slug }}
-              td {{ story.date | date:'fullDate' }}
-              td {{ story.format || "Unknown" }}
-              td {{ story.runtime || "Unknown" }}
-          tfoot
-            tr
-              td
+              td(ng-if="!state.isEditing(story)")
+                | {{ story.slug }}
+              td(ng-if="state.isEditing(story)")
                 md-input-container
                   label Slug
-                  input(ng-model="state.newStory.slug")
-              td
+                  input(ng-model="story.slug" set-focus="state.isEditing(story)")
+              td(ng-if="!state.isEditing(story)")
+                | {{ story.date | date:'fullDate' }}
+              td(ng-if="state.isEditing(story)")
                 md-input-container
                   label Story date
-                  input(type="date" ng-model="state.newStory.date")
-              td
+                  input(type="date" ng-model="story.date")
+              td(ng-if="!state.isEditing(story)")
+                | {{ story.format || "Unknown" }}
+              td(ng-if="state.isEditing(story)")
                 md-input-container
                   label Format
-                  input(ng-model="state.newStory.format")
-              td
+                  input(ng-model="story.format")
+              td(ng-if="!state.isEditing(story)")
+                | {{ story.runtime || "Unknown" }}
+              td(ng-if="state.isEditing(story)")
                 md-input-container
                   label Runtime
-                  input(ng-model="state.newStory.runtime")
-            tr
-              td(colspan="3")
+                  input(ng-model="story.runtime")
+              td(ng-if="state.isEditing(story)")
+                md-button(ng-if="story.slug != ''" ng-click="state.toggleEditing(story)")
+                  md-icon save 
+                md-button.md-warn(ng-if="story.slug == ''" ng-click="state.removeStory(story)")
+                  md-icon delete 
+              td(ng-if="!state.isEditing(story)")
+                md-button(ng-click="state.toggleEditing(story)")
+                  md-icon edit 
+            tfoot
+              td(colspan="4")
               td
-                md-button(ng-click="state.addStory(state.newStory)")
+                md-button(set-focus="state.savedLast" ng-click="state.addStory()")
                   md-icon add
         div.recordImage(ng-repeat="image in state.record.images" flex)
           img.img-responsive.img-rounded.center-block(

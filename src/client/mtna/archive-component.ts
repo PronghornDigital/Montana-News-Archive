@@ -4,7 +4,7 @@ import {
   RecordResource
 } from './record/record-resource';
 
-import {Record} from '../../shared/record/record';
+import {IRecord, Record} from '../../shared/record/record';
 import {RecordViewer} from './record/record-component';
 import {Searchbar} from './searchbar/searchbar-component';
 import {ISearchQuery, SEARCH_EVENT} from './searchbar/searchbar-service';
@@ -69,9 +69,6 @@ export class Archive {
   }
 
   select(record: Record): void {
-    if (this.current) {
-      this.save(this.current);
-    }
     this.currentIndex = this.records.indexOf(record);
     if (this.currentIndex === -1) {
       // Unsetting the current element
@@ -81,7 +78,9 @@ export class Archive {
     } else {
       this.current = record;
       this.RecordResource.get({id : record.id})
-          .$promise.then((_: Record) => { this.current.merge(_); });
+          .$promise.then((_: IRecord) => {
+            this.current.merge(Record.fromObj(_));
+          });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
     }
@@ -160,9 +159,6 @@ export class Archive {
   }
 
   collapse(): void {
-    if (this.current && !this.inFlight) {
-      this.save(this.current);
-    }
     this.current = null;
     this.pre = this.records;
     this.post = null;
