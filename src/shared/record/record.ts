@@ -165,15 +165,17 @@ export class Record implements IRecord {
    *
    * This method merges the contents of the specified Record into the current
    * Record. Fields that are set in the specified record overwrite
-   * the corresponding fields in the current record. Storys are
-   * appended. Record date ranges are expanded.
+   * the corresponding fields in the current record. Stories are replaced,
+   * unless they are not present in `other`. Record date ranges are expanded.
    */
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
-    this.addStories(other.stories || []);
+    // Stories can be edited, so merging would duplicate them. Instead, copy the
+    // new stories, and trust that the user calls this correctly.
+    this._stories = other.stories.length > 0 ? other.stories : this.stories;
     this.addImages(other.images || []);
     this.addVideos(other.videos || []);
     return this;
