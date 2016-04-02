@@ -6,6 +6,7 @@ import { Archive } from '../archive-component';
 
 import { FileReaderService } from '../../util/fileinput/fileinput-service';
 import { FileInput } from '../../util/fileinput/fileinput-directive';
+import { SetFocus } from '../../util/setfocus/setfocus-directive';
 
 export class RecordViewer {
   public record: Record;
@@ -14,6 +15,7 @@ export class RecordViewer {
   private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;
+  public savedLast: boolean;
 
   public newStory: Story = null;
   public image: File = null;
@@ -45,6 +47,9 @@ export class RecordViewer {
       // Were editing something, not anymore!
       this.doneEditing();
     }
+    this.savedLast =
+      this.record.stories.indexOf(this.editingStory) ===
+      this.record.stories.length - 1;
     if (this.editingStory === story) {
       this.editingStory = null;
     } else {
@@ -108,7 +113,7 @@ export class RecordViewer {
               if (input) {
                 input.focus();
               }
-            }); // two frames
+            });
           }
         }
       }
@@ -119,6 +124,7 @@ export class RecordViewer {
     FileReaderService.module.name,
     FileInput.module.name,
     Associate.module.name,
+    SetFocus.module.name,
   ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends

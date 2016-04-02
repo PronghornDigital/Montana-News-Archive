@@ -92,7 +92,7 @@ div(layout="column")
               td(ng-if="state.isEditing(story)")
                 md-input-container
                   label Slug
-                  input(ng-model="story.slug")
+                  input(ng-model="story.slug" set-focus="state.isEditing(story)")
               td(ng-if="!state.isEditing(story)")
                 | {{ story.date | date:'fullDate' }}
               td(ng-if="state.isEditing(story)")
@@ -122,7 +122,7 @@ div(layout="column")
             tfoot
               td(colspan="4")
               td
-                md-button(ng-click="state.addStory()")
+                md-button(set-focus="state.savedLast" ng-click="state.addStory()")
                   md-icon add
         div.recordImage(ng-repeat="image in state.record.images" flex)
           img.img-responsive.img-rounded.center-block(
