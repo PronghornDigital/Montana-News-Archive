@@ -37,7 +37,11 @@ export class RecordViewer {
 
   toggleEditing(story: Story): void {
     const i = this.record.stories.indexOf(story);
-    this.editingStory[i] = !this.editingStory[i];
+    const editing = this.editingStory[i] = !this.editingStory[i];
+    if (!editing) {
+      // Just finished editing
+      this.doneEditing();
+    }
   }
 
   isEditing(story: Story): boolean {
