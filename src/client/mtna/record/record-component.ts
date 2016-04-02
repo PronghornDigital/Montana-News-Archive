@@ -6,13 +6,16 @@ import { Archive } from '../archive-component';
 
 import { FileReaderService } from '../../util/fileinput/fileinput-service';
 import { FileInput } from '../../util/fileinput/fileinput-directive';
+import { SetFocus } from '../../util/setfocus/setfocus-directive';
 
 export class RecordViewer {
   public record: Record;
   public archive: Archive;
   public editing: boolean;
+  private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;
+  public savedLast: boolean;
 
   public newStory: Story = null;
   public image: File = null;
@@ -22,21 +25,40 @@ export class RecordViewer {
       private _fileReader: FileReaderService,
       private _http: ng.IHttpService,
       private _scope: ng.IScope
-  ) {
-    this.resetStory();
-  }
+  ) { }
 
-  public updateRecord({updatedRecordData}) {
+  updateRecord({updatedRecordData}) {
     this.record.merge(updatedRecordData);
   }
 
-  public addStory(story: Story): void {
-    this.record.addStories([story]);
-    this.resetStory();
+  addStory(): void {
+    const newStory = new Story('', new Date);
+    this.record.addStories([newStory]);
+    this.toggleEditing(newStory);
   }
 
-  private resetStory(): void {
-    this.newStory = new Story('', new Date);
+  removeStory(story: Story): void {
+    this.record.removeStory(story);
+    this.doneEditing();
+  }
+
+  toggleEditing(story: Story): void {
+    if (this.editingStory != null) {
+      // Were editing something, not anymore!
+      this.doneEditing();
+    }
+    this.savedLast =
+      this.record.stories.indexOf(this.editingStory) ===
+      this.record.stories.length - 1;
+    if (this.editingStory === story) {
+      this.editingStory = null;
+    } else {
+      this.editingStory = story;
+    }
+  }
+
+  isEditing(story: Story): boolean {
+    return this.editingStory === story;
   }
 
   done() {
@@ -91,7 +113,7 @@ export class RecordViewer {
               if (input) {
                 input.focus();
               }
-            }); // two frames
+            });
           }
         }
       }
@@ -102,6 +124,7 @@ export class RecordViewer {
     FileReaderService.module.name,
     FileInput.module.name,
     Associate.module.name,
+    SetFocus.module.name,
   ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends

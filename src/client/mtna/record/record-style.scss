@@ -54,6 +54,21 @@ record-viewer {
     width: 100%;
     height: auto;
   }
+
+  table {
+    tr {
+      td, th {
+        &:last-child {
+          width: 36px;
+
+          .md-button {
+            margin: 0;
+            min-width: 24px;
+          }
+        }
+      }
+    }
+  }
 }
 
 sup {

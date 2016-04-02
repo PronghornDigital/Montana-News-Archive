@@ -118,16 +118,23 @@ export class Record implements IRecord {
   addStories(stories: Story[]): Record {
     this._stories = this._stories.concat(stories).reduce(
         (p: Story[], c: Story) => {
-          for (let i = 0; i < p.length; i++) {
-            if (p[i].slug === c.slug) {
-              return p;
-            }
+          if (indexOfC(p, c, (a, b) => a.equals(b)) < 0) {
+            p.push(c);
           }
-          p.push(c);
           return p;
         },
         [])
         .sort(Story.compare);
+    return this;
+  }
+
+  removeStory(story: Story): Record {
+    const i = this._stories.indexOf(story);
+    if (i > -1) {
+      const head = this._stories.slice(0, i);
+      const tail = this._stories.slice(i + 1);
+      this._stories = head.concat(tail);
+    }
     return this;
   }
 
@@ -168,15 +175,17 @@ export class Record implements IRecord {
    *
    * This method merges the contents of the specified Record into the current
    * Record. Fields that are set in the specified record overwrite
-   * the corresponding fields in the current record. Storys are
-   * appended. Record date ranges are expanded.
+   * the corresponding fields in the current record. Stories are replaced,
+   * unless they are not present in `other`. Record date ranges are expanded.
    */
   merge(other: Record): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
-    this.addStories(other.stories || []);
+    // Stories can be edited, so merging would duplicate them. Instead, copy the
+    // new stories, and trust that the user calls this correctly.
+    this._stories = other.stories.length > 0 ? other.stories : this.stories;
     this.addImages(other.images || []);
     this.addVideos(other.videos || []);
     return this;
@@ -325,7 +334,7 @@ export class Story {
 
   equals(other: Story): boolean {
     return this.slug === other.slug &&
-      this.date === other.date &&
+      this.date.getTime() === other.date.getTime() &&
       this.format === other.format &&
       this.runtime === other.runtime &&
       this.notes === other.notes &&

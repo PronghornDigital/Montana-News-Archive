@@ -132,6 +132,15 @@ describe('Record', function() {
       record1.label = 'David 1';
       expect(record1.modified).to.be.true;
     });
+
+    it('allows stories with duplicate slugs', function() {
+      let record = new Record('Tape 1', 'Test', '3/4"');
+      record.addStories([
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30'),
+        new Story('Story 1', new Date('10/15/2015'), 'VO', '8:30')
+      ]);
+      expect(record.stories.length).to.equal(2);
+    });
   });
 });
 
