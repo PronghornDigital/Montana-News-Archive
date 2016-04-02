@@ -128,6 +128,16 @@ export class Record implements IRecord {
     return this;
   }
 
+  removeStory(story: Story): Record {
+    const i = this._stories.indexOf(story);
+    if (i > -1) {
+      const head = this._stories.slice(0, i);
+      const tail = this._stories.slice(i + 1);
+      this._stories = head.concat(tail);
+    }
+    return this;
+  }
+
   addImages(images: Image[]): Record {
     this._images = this._images.concat(images).reduce(
         (p: Image[], c: Image) => {

@@ -35,6 +35,11 @@ export class RecordViewer {
     this.toggleEditing(newStory);
   }
 
+  removeStory(story: Story): void {
+    this.record.removeStory(story);
+    this.doneEditing();
+  }
+
   toggleEditing(story: Story): void {
     if (this.editingStory != null) {
       // Were editing something, not anymore!

@@ -112,8 +112,10 @@ div(layout="column")
                   label Runtime
                   input(ng-model="story.runtime")
               td(ng-if="state.isEditing(story)")
-                md-button(ng-click="state.toggleEditing(story)")
+                md-button(ng-if="story.slug != ''" ng-click="state.toggleEditing(story)")
                   md-icon save 
+                md-button.md-warn(ng-if="story.slug == ''" ng-click="state.removeStory(story)")
+                  md-icon delete 
               td(ng-if="!state.isEditing(story)")
                 md-button(ng-click="state.toggleEditing(story)")
                   md-icon edit 
