@@ -57,14 +57,14 @@ div(layout="column")
             | {{ state.record.label }}
         h3(flex="20" hide-gt-xs show-xs) {{ state.record.first | date:'shortDate' }}
         h3(flex="20" hide-gt-xs show-xs) {{ state.record.last | date: 'shortDate' }}
-        h3(flex="20" hide-xs) {{ state.record.first | date:'mediumDate' }}
-        h3(flex="20" hide-xs) {{ state.record.last | date:'mediumDate' }}
+        h3(flex="15" hide-xs) {{ state.record.first | date:'mediumDate' }}
+        h3(flex="15" hide-xs) {{ state.record.last | date:'mediumDate' }}
         h3(flex="10") {{ state.record.medium }}
         div(flex)
         md-input-container
           md-button(ng-click="state.editing = true") Edit
           associate(record-id="{{state.record.id}}" on-update-record="state.updateRecord({updatedRecordData: updatedRecordData})")
-          div.md-button.md-ink-ripple(file-input="state.image" on-change="state.loadImage()")
+          file-input(model="state.image" on-change="state.loadImage()")
     div(layout="row" layout-md="column" layout-sm="column" layout-xs="column")
       div(flex-gt-md=25 layout="column" layout-md="row" layout-sm="row")
         div(flex-md=50 ng-repeat="video in state.record.videos")
