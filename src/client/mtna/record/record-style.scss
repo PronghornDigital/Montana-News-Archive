@@ -25,23 +25,26 @@ record-viewer {
   }
 
   .recordImage {
-    /* This kills the layout. */
-    /* position: absolute; */
-    /* */
-
-    .md-button {
-      display: none;
-      position: relative;
-      bottom: 0;
-      right: 0;
-      background: rgba(255, 255, 255, .2);
-    }
+    position: relative;
 
     &:hover {
-      .md-button {
+      .deleteImageWrapper {
         display: block;
       }
     }
+    .deleteImageWrapper {
+      border-radius: 3px 0 0 0;
+      display: none;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 1);
+
+      .md-button {
+        margin: 0;
+      }
+    }
+
   }
 
   video {
