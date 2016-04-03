@@ -154,6 +154,16 @@ export class Record implements IRecord {
     return this;
   }
 
+  removeImage(image: Image): Record {
+    const i = this._images.indexOf(image);
+    if (i > -1) {
+      const head = this._images.slice(0, i);
+      const tail = this._images.slice(i + 1);
+      this._images = head.concat(tail);
+    }
+    return this;
+  }
+
   addVideos(videos: Video[]): Record {
     this._videos = this._videos.concat(videos).reduce(
         (p: Video[], c: Video) => {
