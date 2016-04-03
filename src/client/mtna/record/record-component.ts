@@ -7,6 +7,7 @@ import { Archive } from '../archive-component';
 import { FileReaderService } from '../../util/fileinput/fileinput-service';
 import { FileInput } from '../../util/fileinput/fileinput-directive';
 import { SetFocus } from '../../util/setfocus/setfocus-directive';
+import {ToastService} from '../toast/toast-service';
 
 export class RecordViewer {
   public record: Record;
@@ -20,11 +21,17 @@ export class RecordViewer {
   public newStory: Story = null;
   public image: File = null;
 
-  static $inject: string[] = [FileReaderService.serviceName, '$http', '$scope'];
+  static $inject: string[] = [
+    FileReaderService.serviceName,
+    '$http', '$scope', '$mdDialog',
+    ToastService.serviceName
+  ];
   constructor(
       private _fileReader: FileReaderService,
       private _http: ng.IHttpService,
-      private _scope: ng.IScope
+      private _scope: ng.IScope,
+      private $dialog: ng.material.IDialogService,
+      private Toaster: ToastService
   ) { }
 
   updateRecord({updatedRecordData}) {
@@ -82,6 +89,24 @@ export class RecordViewer {
     }).then((result: any) => {
      this.image = null;
      this.record.images.push(Image.fromObj(result.data));
+     this.doneEditing();
+    });
+  }
+
+  removeImage(image: Image): void {
+    this.$dialog.show(
+      this.$dialog.confirm()
+      .textContent('Are you sure you want to delete this image?')
+      .ok('Ok')
+      .cancel('Cancel')
+    ).then(() => {
+      this._http.post(`/api/records/${this.record.id}/remove`, image.toJSON())
+      .then(() => {
+        this.record.removeImage(image);
+        this.doneEditing();
+      }).catch((err: any) => {
+        this.Toaster.toast(err);
+      });
     });
   }
 
@@ -125,6 +150,7 @@ export class RecordViewer {
     FileInput.module.name,
     Associate.module.name,
     SetFocus.module.name,
+    ToastService.module.name
   ];
   static module: angular.IModule = angular.module(
     'mtna.recordViewer', RecordViewer.$depends

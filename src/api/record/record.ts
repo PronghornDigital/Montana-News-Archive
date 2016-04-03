@@ -1,4 +1,4 @@
-import { writeFile, readFile, stat, Stats, rename } from 'fs';
+import { writeFile, readFile, stat, Stats, rename, unlink } from 'fs';
 import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
@@ -155,6 +155,16 @@ export class RecordHandler extends RupertPlugin {
         s.status(200).send({path});
         n();
       });
+    });
+  }
+
+  @Route.POST('/:id/remove')
+  remove(q: Request, s: Response, n: Function): void {
+    let path = q.body['path'];
+    unlink(join(this.dataPath, path), (err: any) => {
+      if (err) { return  n(err); }
+      s.status(204).end();
+      n();
     });
   }
 
