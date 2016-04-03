@@ -141,6 +141,26 @@ describe('Record', function() {
       ]);
       expect(record.stories.length).to.equal(2);
     });
+
+    it('sorts records first by family, then by date', function() {
+      let recorda1 = new Record('A1', 'A', '3/4"');
+      recorda1.first = new Date('10/15/2015');
+      let recorda2 = new Record('A2', 'A', '3/4"');
+      recorda2.first = new Date('10/16/2015');
+      let recordb1 = new Record('B1', 'B', '3/4"');
+      recordb1.first = new Date('10/15/2015');
+      let recordb2 = new Record('B2', 'B', '3/4"');
+      recordb2.first = new Date('10/16/2015');
+
+      let records: Record[] = [
+        recorda2, recordb1, recordb2, recorda1
+      ].sort(Record.comparator);
+
+      expect(records[0]).to.equal(recorda1);
+      expect(records[1]).to.equal(recorda2);
+      expect(records[2]).to.equal(recordb1);
+      expect(records[3]).to.equal(recordb2);
+    });
   });
 });
 

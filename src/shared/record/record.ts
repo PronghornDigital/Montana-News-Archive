@@ -206,6 +206,18 @@ export class Record implements IRecord {
     };
   }
 
+  compareTo(other: Record): number {
+    if (this.family === other.family) {
+      return compareDates(this.first, other.first);
+    } else {
+      return this.family.localeCompare(other.family);
+    }
+  }
+
+  static comparator(a: Record, b: Record): number {
+    return a.compareTo(b);
+  }
+
   static fromObj(obj: IRecord): Record {
     let {label, family, medium, notes, deleted, first, last} = obj;
     let record = new Record(label, family, medium, notes, first, last, deleted);
@@ -319,13 +331,7 @@ export class Story {
   }
 
   compareTo(other: Story): number {
-    if (this.date > other.date) {
-      return 1;
-    } else if (this.date < other.date) {
-      return -1;
-    } else {
-      return 0;
-    }
+    return compareDates(this.date, other.date);
   }
 
   static compare(a: Story, b: Story): number {
@@ -395,5 +401,15 @@ export function indexOfC<T>(
       if (found > -1) { return found; }
       if (comparator(value, item)) { return index; }
       return -1;
+    }
+}
+
+export function compareDates(a: Date, b: Date): number {
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
     }
 }
