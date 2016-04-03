@@ -1,7 +1,9 @@
 div.relative(role="main"
   layout="column" layout-fill
 )
-  md-button.md-fab.md-fab-bottom-right(ng-click="state.addTape()")
+  md-button.md-fab.md-fab-bottom-right(
+    ng-show="state.current == null" ng-click="state.addTape()"
+  )
     md-icon library_add
 
   section.md-whiteframe-glow-z1
