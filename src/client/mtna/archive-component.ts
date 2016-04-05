@@ -59,7 +59,7 @@ export class Archive {
     return this.RecordResource.query(query)
         .$promise.then((__: IRecordResource[]) => {
            this.inFlight = false;
-           this.records = __.map(Record.fromObj);
+           this.records = __.map(Record.fromObj).sort(Record.comparator);
            this.select(null);
            this._location.startDate = query.after;
            this._location.endDate = query.before;
