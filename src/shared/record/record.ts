@@ -180,6 +180,15 @@ export class Record implements IRecord {
     return this;
   }
 
+  updateMedia(oldId: string) {
+    this._videos.forEach((_: Video) => {
+      _.path = _.path.replace(oldId, this.id);
+    });
+    this._images.forEach((_: Image) => {
+      _.path = _.path.replace(oldId, this.id);
+    });
+  }
+
   /**
    * Merges the contents of the specified Record into current Record.
    *

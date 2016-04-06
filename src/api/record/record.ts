@@ -97,6 +97,8 @@ export class RecordHandler extends RupertPlugin {
         this.moveFiles(replaceId, record.id, (err: any) => {
           if (err !== null) { return n(err); }
           delete this.database[replaceId];
+          // Update all media links
+          record.updateMedia(replaceId);
           this.database[record.id] = record;
           s.status(204).end();
           n();

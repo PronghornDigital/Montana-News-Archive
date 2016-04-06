@@ -3,8 +3,10 @@ import {
 } from 'chai';
 
 import {
+  Image,
   Record,
-  Story
+  Story,
+  Video
 } from './record';
 
 describe('Record', function() {
@@ -140,6 +142,27 @@ describe('Record', function() {
         new Story('Story 1', new Date('10/15/2015'), 'VO', '8:30')
       ]);
       expect(record.stories.length).to.equal(2);
+    });
+
+    it('can rename all media', function() {
+      let record = new Record('Renamed Tape', 'Test', '3/4"');
+      record.addImages([
+        new Image('tape_1/tape_1_1234.jpeg'),
+        new Image('tape_1/tape_1_5678.jpeg'),
+      ]);
+      record.addVideos([
+        new Video('tape_1/tape_1_1234.mov'),
+        new Video('tape_1/foo.mov'),
+      ]);
+      record.updateMedia('tape_1');
+      expect(record.images.map((_) => _.path)).to.deep.equal([
+        'renamed_tape/tape_1_1234.jpeg',
+        'renamed_tape/tape_1_5678.jpeg',
+      ]);
+      expect(record.videos.map((_) => _.path)).to.deep.equal([
+        'renamed_tape/tape_1_1234.mov',
+        'renamed_tape/foo.mov'
+      ]);
     });
   });
 });
