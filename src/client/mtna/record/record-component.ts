@@ -16,6 +16,7 @@ export class RecordViewer {
   private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;
+  public removeRecord: any;
   public savedLast: boolean;
 
   public newStory: Story = null;
@@ -93,6 +94,22 @@ export class RecordViewer {
     });
   }
 
+  delete(): void {
+    this.$dialog.show(
+      this.$dialog.confirm()
+      .textContent('Are you sure you want to delete this tape, permanently?')
+      .ok('Yes')
+      .cancel('No')
+    ).then(() => {
+      this._http.delete(`/api/records/${this.record.id}`)
+      .then(() => {
+        this.removeRecord();
+      }).catch((err: any) => {
+        this.Toaster.toast(err);
+      });
+    });
+  }
+
   removeImage(image: Image): void {
     this.$dialog.show(
       this.$dialog.confirm()
@@ -122,7 +139,8 @@ export class RecordViewer {
       scope: {
         record: '=',
         selected: '=',
-        doneEditing: '&'
+        doneEditing: '&',
+        removeRecord: '&',
       },
       templateUrl: '/mtna/record/record-template.html',
       link: {
