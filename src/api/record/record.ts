@@ -221,6 +221,15 @@ export class RecordHandler extends RupertPlugin {
           const sourceString = (<any>a)[k].toLowerCase();
           found = found || (sourceString.indexOf(searchString) > -1);
         });
+        if (!found) {
+          const l = a.stories.length;
+          any: for (let i = 0 ; i < l; i++) {
+            if (a.stories[i].slug.toLowerCase().indexOf(searchString) > -1) {
+              found = true;
+              break any;
+            }
+          }
+        }
         return found;
       });
     }

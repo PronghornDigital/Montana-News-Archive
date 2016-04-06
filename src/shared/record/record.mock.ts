@@ -26,3 +26,20 @@ export const MOCK_RECORDS = [
   MOCK_RECORD_1, MOCK_RECORD_2, MOCK_RECORD_3
 ];
 
+export const MOCK_STORY_1 =  {
+  slug: 'Story 1',
+  date: new Date('10/15/2015'),
+  format: 'VO',
+  runtime: '5:30'
+};
+
+export const MOCK_STORY_2 =  {
+  slug: 'Story 2',
+  date: new Date('10/17/2015'),
+  format: 'FEATURE',
+  runtime: '2:30'
+};
+
+export const MOCK_STORIES = [
+  MOCK_STORY_1, MOCK_STORY_2
+];
