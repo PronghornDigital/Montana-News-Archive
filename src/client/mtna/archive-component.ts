@@ -24,8 +24,6 @@ export class Archive {
   public currentIndex: number = -1;
   public post: Record[] = [];
 
-  public editing: Record = null;
-
   public error: any = null;
   constructor(private $scope: ng.IScope, private $q: ng.IQService,
               private $anchorScroll: ng.IAnchorScrollService,
@@ -131,25 +129,6 @@ export class Archive {
     return update;
   }
 
-  edit(record: Record): void {
-    if (this.inFlight) {
-      // #74: Don't have more than one request at at time.
-      return;
-    }
-    let success = () => this.editing = record;
-    let error = (err: any) => this.error = err;
-    let done = () => this.inFlight = false;
-    if (this.editing && record !== this.editing) {
-      this.inFlight = true;
-      (new this.RecordResource(this.editing))
-          .$save()
-          .then(success, error)
-          .then(done, done);
-    } else {
-      success();
-    }
-  }
-
   addTape(): void {
     this.collapse();
     let record = new Record('', '');
@@ -159,10 +138,7 @@ export class Archive {
       record.medium = this.lastRecordSaved.medium;
     }
     this.records.push(record);
-    this.edit(record);
-    this.$timeout(() => {
-      this.select(record);
-    });
+    this.select(record);
   }
 
   collapse(): void {

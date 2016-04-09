@@ -10,7 +10,7 @@ import {ToastService} from '../toast/toast-service';
 export class RecordViewer {
   public record: Record;
   public archive: Archive;
-  public editing: boolean;
+  public editing: boolean = false;
   private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;

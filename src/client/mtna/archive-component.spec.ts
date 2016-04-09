@@ -93,39 +93,10 @@ describe('MTNA Archive', function() {
     expect(archive.records.length).to.equal(0);
     archive.addTape();
     expect(archive.records.length).to.equal(1);
-    expect(archive.editing).to.equal(archive.records[0]);
+    $timeout.flush();
+    expect(archive.current).to.equal(archive.records[0]);
   });
 
-  describe('edit mode', function() {
-    it('transitions between editing and non-editing', function() {
-      let archive = buildArchive();
-      let record = new MockRecordResource(MOCK_RECORD_1);
-      archive.edit(<Record><any>record);
-      expect(archive.editing).to.equal(record);
-      expect(archive.inFlight).to.be.false;
-      archive.edit(null);
-      expect(archive.inFlight).to.be.true;
-      $rootScope.$apply();
-      expect(archive.inFlight).to.be.false;
-    });
-
-    it('saves when transitioning from one edit to another', function() {
-      let archive = buildArchive();
-      let record1 = new MockRecordResource(MOCK_RECORD_1);
-      let record2 = new MockRecordResource(MOCK_RECORD_2);
-      archive.edit(<Record><any>record1);
-      expect(archive.editing).to.equal(record1);
-      expect(archive.inFlight).to.be.false;
-      archive.edit(<Record><any>record2);
-      // Stay on record1 until the save finishes.
-      // If the save errors, then the old data isn't erased.
-      expect(archive.editing).to.equal(record1);
-      expect(archive.inFlight).to.be.true;
-      $rootScope.$apply();
-      expect(archive.editing).to.equal(record2);
-      expect(archive.inFlight).to.be.false;
-    });
-  });
   describe('selection', function() {
     it('changes pre/current/post lists', function() {
       let archive = buildArchive();
