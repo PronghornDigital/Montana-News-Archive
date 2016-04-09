@@ -200,6 +200,8 @@ export class Record implements IRecord {
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
+    this.first = other.first || this.first;
+    this.last = other.last || this.last;
     // Stories can be edited, so merging would duplicate them. Instead, copy the
     // new stories, and trust that the user calls this correctly.
     this._stories = other.stories.length > 0 ? other.stories : this.stories;
@@ -401,7 +403,7 @@ export class Story {
   }
 }
 
-export function makeRecordId(label: string): string {
+export function makeRecordId(label: string = ''): string {
   return label
     // .replace(/[0x00-0x1f]/g, '') // Strip low bytes
     // .replace(/[0x7f]/g, '') // Strip 127
