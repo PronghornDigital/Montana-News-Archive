@@ -111,10 +111,13 @@ describe('Record', function() {
   describe('Merging', function() {
     it('merges records sanely', function() {
       let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.first = new Date('10/15/2015');
+      record1.last = new Date('10/16/2015');
       record1.addStories([
         new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
       ]);
       let record2 = new Record('Tape 1', 'Test', '3/4"');
+      record2.first = new Date('10/14/2015');
       record2.addStories([
         new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30'),
         new Story('Story 2', new Date('10/15/2015'), 'VO', '5:30')
@@ -122,6 +125,8 @@ describe('Record', function() {
       record1.merge(record2);
       let record3 = new Record('Tape 1', 'Test', '3/4"');
       record1.merge(record3);
+      expect(record1.first.toString())
+        .to.equal(new Date('10/14/2015').toString());
       expect(record1.stories.length).to.equal(2);
     });
   });
