@@ -391,7 +391,7 @@ export class Story {
   }
 }
 
-export function makeRecordId(label: string): string {
+export function makeRecordId(label: string = ''): string {
   return label
     // .replace(/[0x00-0x1f]/g, '') // Strip low bytes
     // .replace(/[0x7f]/g, '') // Strip 127
