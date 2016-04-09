@@ -79,7 +79,8 @@ export class Archive {
       this.current = record;
       this.RecordResource.get({id : record.id})
           .$promise.then((_: IRecord) => {
-            this.current.merge(Record.fromObj(_));
+            const updated = Record.fromObj(_);
+            this.current.merge(updated, true);
           });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);

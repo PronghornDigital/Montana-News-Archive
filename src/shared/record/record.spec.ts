@@ -126,6 +126,18 @@ describe('Record', function() {
       record1.merge(record3);
       expect(record1.stories.length).to.equal(2);
     });
+    it('can replace media', function() {
+      let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.addImages([new Image('image.jpg')]);
+      record1.addVideos([new Video('video.mp4')]);
+      let record2 = new Record('Tape 1', 'Test', '3/4"');
+      record2.addImages([new Image('other.jpg')]);
+      record2.addVideos([new Video('other.mp4')]);
+      record1.merge(record2);
+      expect(record1.images.length).to.equal(2);
+      record1.merge(record2, true);
+      expect(record1.images.length).to.equal(1);
+    });
   });
 
   describe('Other functionality', function() {
