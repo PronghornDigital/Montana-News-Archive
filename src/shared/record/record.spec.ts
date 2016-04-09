@@ -111,10 +111,13 @@ describe('Record', function() {
   describe('Merging', function() {
     it('merges records sanely', function() {
       let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.first = new Date('10/15/2015');
+      record1.last = new Date('10/16/2015');
       record1.addStories([
         new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30')
       ]);
       let record2 = new Record('Tape 1', 'Test', '3/4"');
+      record2.first = new Date('10/14/2015');
       record2.addStories([
         new Story('Story 1', new Date('10/15/2015'), 'VO', '5:30'),
         new Story('Story 2', new Date('10/15/2015'), 'VO', '5:30')
@@ -122,6 +125,8 @@ describe('Record', function() {
       record1.merge(record2);
       let record3 = new Record('Tape 1', 'Test', '3/4"');
       record1.merge(record3);
+      expect(record1.first.toString())
+        .to.equal(new Date('10/14/2015').toString());
       expect(record1.stories.length).to.equal(2);
     });
   });
@@ -140,6 +145,26 @@ describe('Record', function() {
         new Story('Story 1', new Date('10/15/2015'), 'VO', '8:30')
       ]);
       expect(record.stories.length).to.equal(2);
+    });
+
+    it('sorts records first by family, then by date', function() {
+      let recorda1 = new Record('A1', 'A', '3/4"');
+      recorda1.first = new Date('10/15/2015');
+      let recorda2 = new Record('A2', 'A', '3/4"');
+      recorda2.first = new Date('10/16/2015');
+      let recordb1 = new Record('B1', 'B', '3/4"');
+      recordb1.first = new Date('10/15/2015');
+      let recordb2 = new Record('B2', 'B', '3/4"');
+      recordb2.first = new Date('10/16/2015');
+
+      let records: Record[] = [
+        recorda2, recordb1, recordb2, recorda1
+      ].sort(Record.comparator);
+
+      expect(records[0]).to.equal(recorda1);
+      expect(records[1]).to.equal(recorda2);
+      expect(records[2]).to.equal(recordb1);
+      expect(records[3]).to.equal(recordb2);
     });
   });
 });

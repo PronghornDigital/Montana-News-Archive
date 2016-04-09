@@ -193,6 +193,8 @@ export class Record implements IRecord {
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
     this.notes = other.notes || this.notes;
+    this.first = other.first || this.first;
+    this.last = other.last || this.last;
     // Stories can be edited, so merging would duplicate them. Instead, copy the
     // new stories, and trust that the user calls this correctly.
     this._stories = other.stories.length > 0 ? other.stories : this.stories;
@@ -214,6 +216,18 @@ export class Record implements IRecord {
       videos: this.videos,
       deleted: this.deleted
     };
+  }
+
+  compareTo(other: Record): number {
+    if (this.family === other.family) {
+      return compareDates(this.first, other.first);
+    } else {
+      return this.family.localeCompare(other.family);
+    }
+  }
+
+  static comparator(a: Record, b: Record): number {
+    return a.compareTo(b);
   }
 
   static fromObj(obj: IRecord): Record {
@@ -329,13 +343,7 @@ export class Story {
   }
 
   compareTo(other: Story): number {
-    if (this.date > other.date) {
-      return 1;
-    } else if (this.date < other.date) {
-      return -1;
-    } else {
-      return 0;
-    }
+    return compareDates(this.date, other.date);
   }
 
   static compare(a: Story, b: Story): number {
@@ -405,5 +413,15 @@ export function indexOfC<T>(
       if (found > -1) { return found; }
       if (comparator(value, item)) { return index; }
       return -1;
+    }
+}
+
+export function compareDates(a: Date, b: Date): number {
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
     }
 }

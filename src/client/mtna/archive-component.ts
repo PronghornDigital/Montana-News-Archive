@@ -28,6 +28,8 @@ export class Archive {
 
   public error: any = null;
   constructor(private $scope: ng.IScope, private $q: ng.IQService,
+              private $anchorScroll: ng.IAnchorScrollService,
+              private $timeout: ng.ITimeoutService,
               private RecordResource: RecordResource,
               private Toaster: ToastService,
               private _http: ng.IHttpService,
@@ -59,7 +61,7 @@ export class Archive {
     return this.RecordResource.query(query)
         .$promise.then((__: IRecordResource[]) => {
            this.inFlight = false;
-           this.records = __.map(Record.fromObj);
+           this.records = __.map(Record.fromObj).sort(Record.comparator);
            this.select(null);
            this._location.startDate = query.after;
            this._location.endDate = query.before;
@@ -83,6 +85,9 @@ export class Archive {
           });
       this.pre = this.records.slice(0, this.currentIndex);
       this.post = this.records.slice(this.currentIndex + 1);
+      this.$timeout(() => {
+        this.$anchorScroll(`record-${this.current.id}`);
+      });
     }
     this._location.current = this.current;
   }
@@ -177,6 +182,8 @@ export class Archive {
   static $inject: string[] = [
     '$scope',
     '$q',
+    '$anchorScroll',
+    '$timeout',
     'RecordResource',
     ToastService.serviceName,
     '$http',
