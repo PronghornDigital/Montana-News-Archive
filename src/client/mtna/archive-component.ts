@@ -102,6 +102,7 @@ export class Archive {
       this.lastRecordSaved = record;
       record.baseId = record.id;
       record.isNewTape = false;
+      this._location.current = record;
     };
     let error = (err: any) => {
       this.error = err;
@@ -167,6 +168,7 @@ export class Archive {
     this.current = null;
     this.pre = this.records;
     this.post = null;
+    this._location.current = null;
   }
 
   static directive(): angular.IDirective {
