@@ -1,18 +1,10 @@
-import {
-  expect
-} from 'chai';
+import {expect} from 'chai';
 
-import {
-  RecordResource
-} from './record/record-resource';
+import {RecordResource} from './record/record-resource';
 
-import {
-  LocationService
-} from './location/location-service';
+import {LocationService} from './location/location-service';
 
-import {
-  Record
-} from '../../shared/record/record';
+import {Record} from '../../shared/record/record';
 
 import {
   MOCK_RECORD_1,
@@ -20,32 +12,29 @@ import {
   MOCK_RECORD_3
 } from '../../shared/record/record.mock';
 
-import {
-  Archive
-} from './archive-component';
+import {Archive} from './archive-component';
 
-import {
-  ToastService
-} from './toast/toast-service';
+import {ToastService} from './toast/toast-service';
 
 let $rootScope: ng.IScope = null;
 let $q: ng.IQService = null;
 let $scope: ng.IScope = null;
+let $anchorScroll: ng.IAnchorScrollService = null;
 let $timeout: ng.ITimeoutService = null;
 let $http: ng.IHttpService = null;
 /* tslint:disable */
 let mockToastService = <angular.material.IToastService>{
-  simple: function() { return this; },
-  showSimple: function() { return this; },
-  build: function() { return this; },
-  content: function() { return this; },
-  updateContent: function() { return this; },
-  position: function() { return this; },
-  action: function() { return this; },
-  hideDelay: function() { return this ; },
-  show: function() { return this; },
-  hide: function() { return this; },
-  cancel: function() { return this; },
+  simple : function() { return this; },
+  showSimple : function() { return this; },
+  build : function() { return this; },
+  content : function() { return this; },
+  updateContent : function() { return this; },
+  position : function() { return this; },
+  action : function() { return this; },
+  hideDelay : function() { return this; },
+  show : function() { return this; },
+  hide : function() { return this; },
+  cancel : function() { return this; },
 };
 /* tslint:enable */
 let toast: ToastService = new ToastService(mockToastService);
@@ -61,7 +50,7 @@ class MockRecordResource {
   update() { return $q.resolve(); }
 
   static query(): {$promise: Thenable<Record[]>} {
-    return {$promise: $q.resolve([<Record><any>MOCK_RECORD_1])};
+    return {$promise: $q.resolve([<Record><any>MOCK_RECORD_1 ])};
   }
   static update(r: Record): {$promise: Thenable<void>} {
     return {$promise: $q.resolve()};
@@ -74,24 +63,24 @@ class MockRecordResource {
 
 describe('MTNA Archive', function() {
   beforeEach(inject(function(
-    _$q_: ng.IQService,
-    _$rootScope_: ng.IScope,
-    _$http_: ng.IHttpService,
-    _$location_: ng.ILocationService,
-    _$timeout_: ng.ITimeoutService
-  ){
+      _$q_: ng.IQService, _$rootScope_: ng.IScope,
+      _$anchorScroll_: ng.IAnchorScrollService,
+      _$http_: ng.IHttpService, _$location_: ng.ILocationService,
+      _$timeout_: ng.ITimeoutService) {
     $q = _$q_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
+    $anchorScroll = _$anchorScroll_;
     $http = _$http_;
-    _location = new LocationService(_$location_);
     $timeout = _$timeout_;
+    _location = new LocationService(_$location_);
   }));
 
-  function buildArchive(): Archive {
-    return new Archive(
-        $scope, $q, <RecordResource><any>MockRecordResource, toast, $http, _location, $timeout
-    );
+  function buildArchive() {
+    let archive = new Archive($scope, $q, $anchorScroll, $timeout,
+                              <RecordResource><any>MockRecordResource, toast,
+                              $http, _location);
+    return archive;
   }
 
   it('exposes a directive', function() {
@@ -140,10 +129,10 @@ describe('MTNA Archive', function() {
   describe('selection', function() {
     it('changes pre/current/post lists', function() {
       let archive = buildArchive();
-      let record1: Record = <Record><any> new MockRecordResource(MOCK_RECORD_1);
-      let record2: Record = <Record><any> new MockRecordResource(MOCK_RECORD_2);
-      let record3: Record = <Record><any> new MockRecordResource(MOCK_RECORD_3);
-      archive.records = [record1, record2, record3];
+      let record1: Record = <Record><any>new MockRecordResource(MOCK_RECORD_1);
+      let record2: Record = <Record><any>new MockRecordResource(MOCK_RECORD_2);
+      let record3: Record = <Record><any>new MockRecordResource(MOCK_RECORD_3);
+      archive.records = [ record1, record2, record3 ];
       archive.select(null);
       expect(archive.pre.length).to.equal(3);
       expect(archive.current).to.equal(null);
@@ -185,10 +174,10 @@ describe('MTNA Archive', function() {
     beforeEach(function() {
       archive = buildArchive();
       saveSpy = sinon.spy(archive, 'save');
-      record1 = <Record><any> new MockRecordResource(MOCK_RECORD_1);
-      record2 = <Record><any> new MockRecordResource(MOCK_RECORD_2);
-      record3 = <Record><any> new MockRecordResource(MOCK_RECORD_3);
-      archive.records = [record1, record2, record3];
+      record1 = <Record><any>new MockRecordResource(MOCK_RECORD_1);
+      record2 = <Record><any>new MockRecordResource(MOCK_RECORD_2);
+      record3 = <Record><any>new MockRecordResource(MOCK_RECORD_3);
+      archive.records = [ record1, record2, record3 ];
       archive.select(record2);
     });
 
@@ -214,4 +203,3 @@ describe('MTNA Archive', function() {
     });
   });
 });
-

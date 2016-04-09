@@ -25,14 +25,14 @@ div.relative(role="main"
       md-list
         md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.pre | groupBy: 'family' ")
           h2 {{ key }}
-        md-list-item(ng-repeat="item in value track by item.id")
+        md-list-item(id="record-{{item.id}}" ng-repeat="item in value track by item.id")
             record-viewer(
               ng-click="state.select(item)"
               record="item"
             )
         md-divider(ng-repeat-end)
 
-    md-card.md-padding.firefox-tweak(
+    md-card.md-padding.firefox-tweak(id="record-{{state.current.id}}"
       ng-if="state.current" flex-gt-sm="95" flex-gt-md="85"
     )
       record-viewer(
@@ -48,7 +48,7 @@ div.relative(role="main"
       md-list
         md-subheader.md-no-sticky(ng-repeat-start="(key,value) in state.post | groupBy: 'family' ")
           h2 {{ key }}
-        md-list-item(ng-repeat="item in value track by item.id")
+        md-list-item(id="record-{{item.id}}" ng-repeat="item in value track by item.id")
             record-viewer(
               ng-click="state.select(item)"
               record="item"

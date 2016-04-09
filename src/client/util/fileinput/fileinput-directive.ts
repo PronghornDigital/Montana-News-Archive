@@ -6,8 +6,9 @@ export class FileInput {
 
   static directive($parse: ng.IParseService): angular.IDirective {
     return {
-      restrict: 'EA',
-      template: `<input type="file" />`,
+      restrict: 'E',
+      template: `<input type="file" style="display: none"; />
+        <md-button ng-click="open($event)">Add Image</md-button>`,
       replace: false,
       scope: false,
       link: { post:  function(
@@ -15,10 +16,14 @@ export class FileInput {
           element: ng.IAugmentedJQuery,
           attrs: ng.IAttributes
       ) {
-        let input = <HTMLInputElement>element[0];
-        let modelGet = $parse(attrs['fileInput']);
+        let input = <HTMLInputElement>element.find('input')[0];
+        let modelGet = $parse(attrs['model']);
         let modelSet = modelGet.assign;
         let onChange = $parse(attrs['onChange']);
+
+        scope['open'] = ($event: any): void => {
+          input.click();
+        };
 
         element.bind('change', (event: any) => {
           scope.$apply(() => {
