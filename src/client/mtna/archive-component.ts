@@ -96,7 +96,8 @@ export class Archive {
       // #74: Don't have more than one request at at time.
       return;
     }
-    let success = () => {
+    let success = (saved: IRecord) => {
+      record.merge(Record.fromObj(saved), true);
       this.Toaster.toast(`Saved ${record.label}`);
       this.lastRecordSaved = record;
       record.baseId = record.id;
@@ -115,16 +116,15 @@ export class Archive {
     if (record.isNewTape || !record.modified) {
       delete params.replaceId;
     }
-    let update = this.RecordResource.update(params, record)
-      .$promise.then(() => {
-         if (!record.rawImage) {
-           return;
-         }
+    let update = this.RecordResource.update(params, record).$promise;
+    if (record.rawImage) {
+      update.then(() => {
          return this._http.post(`/api/record/#{record.id}/upload`, {
            filename : record.rawImage.name,
            image : record.rawImage
          });
        });
+    }
     update
       .then(success, error)
       .then(done, done);

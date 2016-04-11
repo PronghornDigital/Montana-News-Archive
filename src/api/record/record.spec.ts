@@ -58,13 +58,13 @@ describe('Record Handler', function() {
         status: function(status: number): Response {
           return this;
         },
-        end: sinon.spy()
+        send: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s,  (err: any) => {
         try {
           expect(err).to.not.exist;
-          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect(statusSpy).to.have.been.calledWithExactly(200);
           expect('clip-1' in recordMap).to.be.true;
           let record = recordMap['clip-1'];
           expect(record.stories.length).to.equal(1);
@@ -100,13 +100,13 @@ describe('Record Handler', function() {
         status: function(status: number): Response {
           return this;
         },
-        end: sinon.spy()
+        send: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s, (err: any) => {
         try {
           expect(err).to.not.exist;
-          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect(statusSpy).to.have.been.calledWithExactly(200);
           expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
           done();
         } catch (e) {
@@ -136,8 +136,7 @@ describe('Record Handler', function() {
         status: function(status: number): Response {
           return this;
         },
-        send: sinon.spy(),
-        end: sinon.spy()
+        send: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s, (err: any) => {
@@ -175,13 +174,13 @@ describe('Record Handler', function() {
         status: function(status: number): Response {
           return this;
         },
-        end: sinon.spy()
+        send: sinon.spy()
       };
       let statusSpy = sinon.spy(s, 'status');
       handler.save(q, s, (err: any) => {
         try {
           expect(err).to.not.exist;
-          expect(statusSpy).to.have.been.calledWithExactly(204);
+          expect(statusSpy).to.have.been.calledWithExactly(200);
           expect(Object.keys(recordMap)).to.deep.equal(['tape_1']);
           done();
         } catch (e) {
