@@ -87,9 +87,7 @@ export class RecordHandler extends RupertPlugin {
       let record = Record.fromObj(protoRecord);
       record.forceId(id);
       if ( replaceId !== record.id && record.id in this.database ) {
-        s.status(409);
-        s.send('The label is already used for a different record.');
-        s.end();
+        s.status(409).send('The label is already used for a different record.');
         return n();
       }
       if ( replaceId  && replaceId in this.database ) {
@@ -97,14 +95,16 @@ export class RecordHandler extends RupertPlugin {
         this.moveFiles(replaceId, record.id, (err: any) => {
           if (err !== null) { return n(err); }
           delete this.database[replaceId];
+          // Update all media links
+          record.updateMedia(replaceId);
           this.database[record.id] = record;
-          s.status(204).end();
+          s.status(200).send(record);
           n();
         });
         return;
       } else {
         this.database[record.id] = record;
-        s.status(204).end();
+        s.status(200).send(record);
       }
     } else {
       s.status(400).end();

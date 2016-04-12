@@ -44,8 +44,8 @@ export class Record implements IRecord {
   private _first: Date;
   private _last: Date;
   private _stories: Story[] = [];
-  private _images: Image[] = [];
-  private _videos: Video[] = [];
+  public images: Image[] = [];
+  public videos: Video[] = [];
   public baseId: string = '';
 
   constructor(
@@ -85,8 +85,6 @@ export class Record implements IRecord {
   set last(date: Date) { this.setLast(date); }
   get combinedDate(): string { return this.first + ' ' + this.last; }
   get stories(): Story[] { return this._stories; }
-  get images(): Image[] { return this._images; }
-  get videos(): Video[] { return this._videos; }
   get modified(): boolean { return this.id !== this.baseId; }
 
   forceId(id: string): void {
@@ -139,7 +137,7 @@ export class Record implements IRecord {
   }
 
   addImages(images: Image[]): Record {
-    this._images = this._images.concat(images).reduce(
+    this.images = this.images.concat(images).reduce(
         (p: Image[], c: Image) => {
           for (let i = 0; i < p.length; i++) {
             if (p[i].path === c.path) {
@@ -155,17 +153,17 @@ export class Record implements IRecord {
   }
 
   removeImage(image: Image): Record {
-    const i = this._images.indexOf(image);
+    const i = this.images.indexOf(image);
     if (i > -1) {
-      const head = this._images.slice(0, i);
-      const tail = this._images.slice(i + 1);
-      this._images = head.concat(tail);
+      const head = this.images.slice(0, i);
+      const tail = this.images.slice(i + 1);
+      this.images = head.concat(tail);
     }
     return this;
   }
 
   addVideos(videos: Video[]): Record {
-    this._videos = this._videos.concat(videos).reduce(
+    this.videos = this.videos.concat(videos).reduce(
         (p: Video[], c: Video) => {
           for (let i = 0; i < p.length; i++) {
             if (p[i].path === c.path) {
@@ -180,6 +178,15 @@ export class Record implements IRecord {
     return this;
   }
 
+  updateMedia(oldId: string) {
+    this.videos.forEach((_: Video) => {
+      _.path = _.path.replace(oldId, this.id);
+    });
+    this.images.forEach((_: Image) => {
+      _.path = _.path.replace(oldId, this.id);
+    });
+  }
+
   /**
    * Merges the contents of the specified Record into current Record.
    *
@@ -188,7 +195,7 @@ export class Record implements IRecord {
    * the corresponding fields in the current record. Stories are replaced,
    * unless they are not present in `other`. Record date ranges are expanded.
    */
-  merge(other: Record): Record {
+  merge(other: Record, replaceMedia = false): Record {
     this.label = other.label || this.label;
     this.family = other.family || this.family;
     this.medium = other.medium || this.medium;
@@ -198,8 +205,13 @@ export class Record implements IRecord {
     // Stories can be edited, so merging would duplicate them. Instead, copy the
     // new stories, and trust that the user calls this correctly.
     this._stories = other.stories.length > 0 ? other.stories : this.stories;
-    this.addImages(other.images || []);
-    this.addVideos(other.videos || []);
+    if (replaceMedia) {
+      this.images = other.images || [];
+      this.videos = other.videos || [];
+    } else {
+      this.addImages(other.images || []);
+      this.addVideos(other.videos || []);
+    }
     return this;
   }
 

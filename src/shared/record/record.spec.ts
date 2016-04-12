@@ -3,8 +3,10 @@ import {
 } from 'chai';
 
 import {
+  Image,
   Record,
-  Story
+  Story,
+  Video
 } from './record';
 
 describe('Record', function() {
@@ -129,6 +131,18 @@ describe('Record', function() {
         .to.equal(new Date('10/14/2015').toString());
       expect(record1.stories.length).to.equal(2);
     });
+    it('can replace media', function() {
+      let record1 = new Record('Tape 1', 'Test', '3/4"');
+      record1.addImages([new Image('image.jpg')]);
+      record1.addVideos([new Video('video.mp4')]);
+      let record2 = new Record('Tape 1', 'Test', '3/4"');
+      record2.addImages([new Image('other.jpg')]);
+      record2.addVideos([new Video('other.mp4')]);
+      record1.merge(record2);
+      expect(record1.images.length).to.equal(2);
+      record1.merge(record2, true);
+      expect(record1.images.length).to.equal(1);
+    });
   });
 
   describe('Other functionality', function() {
@@ -145,6 +159,27 @@ describe('Record', function() {
         new Story('Story 1', new Date('10/15/2015'), 'VO', '8:30')
       ]);
       expect(record.stories.length).to.equal(2);
+    });
+
+    it('can rename all media', function() {
+      let record = new Record('Renamed Tape', 'Test', '3/4"');
+      record.addImages([
+        new Image('tape_1/tape_1_1234.jpeg'),
+        new Image('tape_1/tape_1_5678.jpeg'),
+      ]);
+      record.addVideos([
+        new Video('tape_1/tape_1_1234.mov'),
+        new Video('tape_1/foo.mov'),
+      ]);
+      record.updateMedia('tape_1');
+      expect(record.images.map((_) => _.path)).to.deep.equal([
+        'renamed_tape/tape_1_1234.jpeg',
+        'renamed_tape/tape_1_5678.jpeg',
+      ]);
+      expect(record.videos.map((_) => _.path)).to.deep.equal([
+        'renamed_tape/tape_1_1234.mov',
+        'renamed_tape/foo.mov'
+      ]);
     });
 
     it('sorts records first by family, then by date', function() {
