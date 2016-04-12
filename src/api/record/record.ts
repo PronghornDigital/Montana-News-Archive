@@ -162,7 +162,6 @@ export class RecordHandler extends RupertPlugin {
   remove(q: Request, s: Response, n: Function): void {
     let path = q.body['path'];
     unlink(join(this.dataPath, path), (err: any) => {
-      if (err) { return  n(err); }
       s.status(204).end();
       n();
     });
