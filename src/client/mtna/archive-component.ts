@@ -149,6 +149,11 @@ export class Archive {
     this._location.current = null;
   }
 
+  deleted(): void {
+    this.Toaster.toast('Tape successfully deleted.');
+    this.select(null);
+  }
+
   static directive(): angular.IDirective {
     return {
       controller : Archive,

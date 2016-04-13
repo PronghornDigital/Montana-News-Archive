@@ -84,8 +84,13 @@ export class RecordViewer {
   delete (): void {
     this.$dialog
         .show(this.$dialog.confirm()
-                  .textContent(
-                      'Are you sure you want to delete this tape, permanently?')
+                  .htmlContent(
+                      `<p>Are you sure you want to delete this tape, permanently?</p>
+                      <p>This will remove ${this.record.images.length}
+                      image${this.record.images.length === 1 ? '' : 's'}, and
+                      move ${this.record.videos.length}
+                      video${this.record.videos.length === 1 ? '' : 's'} to
+                      incoming.</p>`)
                   .ok('Yes')
                   .cancel('No'))
         .then(() => {
@@ -152,9 +157,11 @@ export class RecordViewer {
     FileInput.module.name,
     Associate.module.name,
     SetFocus.module.name,
-    ToastService.module.name
+    ToastService.module.name,
+    'ngSanitize'
   ];
   static module: angular.IModule =
       angular.module('mtna.recordViewer', RecordViewer.$depends)
           .directive('recordViewer', [ '$timeout', RecordViewer.directive ]);
 }
+
