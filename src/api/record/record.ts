@@ -1,4 +1,4 @@
-import { writeFile, readFile, stat, Stats, rename, unlink } from 'fs';
+import { writeFile, readFile, stat, Stats, rename, rmdir, unlink } from 'fs';
 import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
@@ -254,6 +254,13 @@ export class RecordHandler extends RupertPlugin {
       this.returnToIncoming(record.videos || []),
       this.removeImages(record.images || [])
     ]).then(() => {
+      return new Promise<void>((r, j) => {
+        rmdir(join(this.dataPath, id), (err: any) => {
+          if (err !== null) { return j(err); }
+          r();
+        });
+      });
+    }).then(() => {
       this.database[record.id] = null;
       delete this.database[record.id];
       s.status(204).end();
