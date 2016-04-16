@@ -151,6 +151,7 @@ export class Archive {
 
   deleted(): void {
     this.Toaster.toast('Tape successfully deleted.');
+    this.records.splice(this.records.indexOf(this.current), 1);
     this.select(null);
   }
 
