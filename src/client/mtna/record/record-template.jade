@@ -72,7 +72,11 @@ div(layout="column")
             source(ng-src="{{ state.safeVideoUrl(video) }}" type="video/mp4")
             | Can't play video: {{ video | json }}
         //- md-input-container
-        div(flex-md=50)
+        div(flex-md=50 ng-if="!state.editing")
+          md-input-container(style = "width: 15em;")
+            h4.md-subheader Notes
+            p {{state.record.notes}}
+        div(flex-md=50 ng-if="state.editing")
           md-input-container(style = "width: 15em;")
             label Notes
             textarea(ng-model="state.record.notes" placeholder="Notes")
@@ -113,12 +117,12 @@ div(layout="column")
                   input(ng-model="story.runtime")
               td(ng-if="state.isEditing(story)")
                 md-button(ng-if="story.slug != ''" ng-click="state.toggleEditing(story)")
-                  md-icon save 
+                  md-icon save
                 md-button.md-warn(ng-if="story.slug == ''" ng-click="state.removeStory(story)")
-                  md-icon delete 
+                  md-icon delete
               td(ng-if="!state.isEditing(story)")
                 md-button(ng-click="state.toggleEditing(story)")
-                  md-icon edit 
+                  md-icon edit
             tfoot
               td(colspan="4")
               td
