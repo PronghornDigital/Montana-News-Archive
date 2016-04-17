@@ -256,7 +256,7 @@ export class RecordHandler extends RupertPlugin {
     ]).then(() => {
       return new Promise<void>((r, j) => {
         rmdir(join(this.dataPath, id), (err: any) => {
-          if (err !== null) { return j(err); }
+          if (err !== null && err.code !== 'ENOENT') { return j(err); }
           r();
         });
       });
