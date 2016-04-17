@@ -14,6 +14,7 @@ export class RecordViewer {
   private editingStory: Story = null;
   public selected: boolean;
   public doneEditing: any;
+  public removeRecord: any;
   public savedLast: boolean;
 
   public newStory: Story = null;
@@ -80,6 +81,25 @@ export class RecordViewer {
         });
   }
 
+  delete (): void {
+    this.$dialog
+        .show(this.$dialog.confirm()
+                  .htmlContent(
+                      `<p>Are you sure you want to delete this tape, permanently?</p>
+                      <p>This will remove ${this.record.images.length}
+                      image${this.record.images.length === 1 ? '' : 's'}, and
+                      move ${this.record.videos.length}
+                      video${this.record.videos.length === 1 ? '' : 's'} to
+                      incoming.</p>`)
+                  .ok('Yes')
+                  .cancel('No'))
+        .then(() => {
+          this._http.delete(`/api/records/${this.record.id}`)
+              .then(() => { this.removeRecord(); })
+              .catch((err: any) => { this.Toaster.toast(err); });
+        });
+  }
+
   removeImage(image: Image): void {
     this.$dialog.show(this.$dialog.confirm()
                           .textContent(
@@ -104,7 +124,12 @@ export class RecordViewer {
       controller : RecordViewer,
       controllerAs : 'state',
       bindToController : true,
-      scope : {record : '=', selected : '=', doneEditing : '&'},
+      scope : {
+        record : '=',
+        selected : '=',
+        doneEditing : '&',
+        removeRecord : '&',
+      },
       templateUrl : '/mtna/record/record-template.html',
       link : {
         post : function($scope: ng.IScope, $element: JQuery) {
@@ -132,9 +157,11 @@ export class RecordViewer {
     FileInput.module.name,
     Associate.module.name,
     SetFocus.module.name,
-    ToastService.module.name
+    ToastService.module.name,
+    'ngSanitize'
   ];
   static module: angular.IModule =
       angular.module('mtna.recordViewer', RecordViewer.$depends)
           .directive('recordViewer', [ '$timeout', RecordViewer.directive ]);
 }
+

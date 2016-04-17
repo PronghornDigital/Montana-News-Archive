@@ -1,11 +1,12 @@
-import { writeFile, readFile, stat, Stats, rename, unlink } from 'fs';
+import { writeFile, readFile, stat, Stats, rename, rmdir, unlink } from 'fs';
 import { join } from 'path';
 import * as mkdirp from 'mkdirp';
 
 import {
-  Video,
+  Image,
   Record,
-  RecordDatabase
+  RecordDatabase,
+  Video
 } from '../../shared/record/record';
 
 import {
@@ -247,14 +248,53 @@ export class RecordHandler extends RupertPlugin {
   @Route('/:id', {methods: [Methods.DELETE]})
   delete(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
-    if (id in this.database) {
-      let record = this.database[id];
-      record.deleted = true;
-      this.database[record.id] = record;
+    let record = this.database[id];
+    Promise.all([
+      this.returnToIncoming(record.videos || []),
+      this.removeImages(record.images || [])
+    ]).then(() => {
+      return new Promise<void>((r, j) => {
+        rmdir(join(this.dataPath, id), (err: any) => {
+          if (err !== null && err.code !== 'ENOENT') { return j(err); }
+          r();
+        });
+      });
+    }).then(() => {
+      this.database[record.id] = null;
+      delete this.database[record.id];
       s.status(204).end();
-    } else {
-      s.status(404).send(`Record not found: ${id}`);
-    }
-    n();
+    }).catch((e) => {
+      s.status(500).send(e);
+    });
+  }
+
+  private getParts(path: string): {name: string, ext: string} {
+    let file = path.split('/')[1];
+    let [name, ext] = file.split('.');
+    return {name, ext};
+  }
+
+  private returnToIncoming(videos: Video[]): Promise<void[]> {
+    const timestamp = new Date().toISOString();
+    const moveVideo = (video: Video) => new Promise<void>((s, j) => {
+      let currentPath = join(this.dataPath, video.path);
+      let {name, ext} = this.getParts(video.path);
+      let incomingPath = join(this.incomingPath, `${name}_recovered_${timestamp}.${ext}`);
+      rename(currentPath, incomingPath, (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+    return Promise.all(videos.map(moveVideo));
+  }
+
+  private removeImages(images: Image[]): Promise<void[]> {
+    const deleteImage = (image: Image) => new Promise<void>((s, j) => {
+      unlink(join(this.dataPath, image.path), (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+    return Promise.all(images.map(deleteImage));
   }
 }

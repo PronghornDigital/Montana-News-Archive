@@ -150,6 +150,12 @@ export class Archive {
     this._location.current = null;
   }
 
+  deleted(): void {
+    this.Toaster.toast('Tape successfully deleted.');
+    this.records.splice(this.records.indexOf(this.current), 1);
+    this.select(null);
+  }
+
   static directive(): angular.IDirective {
     return {
       controller : Archive,

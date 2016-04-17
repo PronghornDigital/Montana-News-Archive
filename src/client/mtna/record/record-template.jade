@@ -40,15 +40,16 @@ div(layout="column")
             md-option(value="1\" Tape") 1" Tape
             md-option(value="3/4\" Tape") 3/4" Tape
             md-option(value="Film") Film
-        md-input-container(flex="20")
+        md-input-container(flex="15")
           label Start Date
           input(type="date" ng-model="state.record.first")
-        md-input-container(flex="20")
+        md-input-container(flex="15")
           label End
           input(type="date" ng-model="state.record.last")
         div(flex)
         md-input-container
-          md-button(ng-click="state.done()") Done
+          md-button(ng-click="state.done() ; recordEditor.$setPristine()") Done
+          md-button.md-warn(ng-disabled="!recordEditor.$pristine" ng-click="state.delete()") Delete
       div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
         div(flex="30")
           sup.md-subheader
