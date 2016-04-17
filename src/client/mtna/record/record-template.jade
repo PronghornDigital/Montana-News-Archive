@@ -48,8 +48,8 @@ div(layout="column")
           input(type="date" ng-model="state.record.last")
         div(flex)
         md-input-container
-          md-button(ng-click="state.done()") Done
-          md-button.md-warn(ng-click="state.delete()") Delete 
+          md-button(ng-click="state.done() ; recordEditor.$setPristine()") Done
+          md-button.md-warn(ng-disabled="!recordEditor.$pristine" ng-click="state.delete()") Delete
       div(layout="row" layout-xs="column" layout-align="space-between start" ng-if="!state.editing")
         div(flex="30")
           sup.md-subheader
