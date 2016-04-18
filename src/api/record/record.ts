@@ -99,12 +99,22 @@ export class RecordHandler extends RupertPlugin {
           // Update all media links
           record.updateMedia(replaceId);
           this.database[record.id] = record;
+          writeFile(
+            this.getRecordDBPath(record),
+            JSON.stringify(record.toJSON())
+          );
           s.status(200).send(record);
           n();
         });
         return;
       } else {
         this.database[record.id] = record;
+        mkdirp(join(this.dataPath, record.id), () => {
+          writeFile(
+            this.getRecordDBPath(record),
+            JSON.stringify(record.toJSON())
+          );
+        });
         s.status(200).send(record);
       }
     } else {
@@ -249,9 +259,10 @@ export class RecordHandler extends RupertPlugin {
   delete(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     let record = this.database[id];
-    Promise.all([
+    Promise.all<void|void[]>([
       this.returnToIncoming(record.videos || []),
-      this.removeImages(record.images || [])
+      this.removeImages(record.images || []),
+      this.removeData(record),
     ]).then(() => {
       return new Promise<void>((r, j) => {
         rmdir(join(this.dataPath, id), (err: any) => {
@@ -296,5 +307,18 @@ export class RecordHandler extends RupertPlugin {
       });
     });
     return Promise.all(images.map(deleteImage));
+  }
+
+  private removeData(record: Record): Promise<void> {
+    return new Promise<void>((s, j) => {
+      unlink(this.getRecordDBPath(record), (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+  }
+
+  private getRecordDBPath(record: Record): string {
+    return join(this.dataPath, record.id, 'db.json');
   }
 }
