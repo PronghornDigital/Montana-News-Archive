@@ -101,7 +101,7 @@ export class RecordHandler extends RupertPlugin {
           this.database[record.id] = record;
           writeFile(
             this.getRecordDBPath(record),
-            JSON.stringify(record.toJSON())
+            JSON.stringify(record.toJSON(), null, 2)
           );
           s.status(200).send(record);
           n();
@@ -137,8 +137,15 @@ export class RecordHandler extends RupertPlugin {
       // Move from oldId to newId
       let newPath = join(this.dataPath, newId);
       rename(oldPath, newPath, (renameErr: any) => {
-        // Return CB
-        cb(renameErr);
+        // Rename the db file
+        rename(
+          this.getRecordDBPath(<Record>{id: oldId}),
+          this.getRecordDBPath(<Record>{id: newId}),
+          (dbErr: any) => {
+            // Return CB
+            cb(renameErr || dbErr);
+          }
+        );
       });
     });
   }
@@ -319,6 +326,6 @@ export class RecordHandler extends RupertPlugin {
   }
 
   private getRecordDBPath(record: Record): string {
-    return join(this.dataPath, record.id, 'db.json');
+    return join(this.dataPath, record.id, `${record.id}.json`);
   }
 }
