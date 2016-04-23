@@ -112,7 +112,7 @@ export class RecordHandler extends RupertPlugin {
         mkdirp(join(this.dataPath, record.id), () => {
           writeFile(
             this.getRecordDBPath(record),
-            JSON.stringify(record.toJSON())
+            JSON.stringify(record.toJSON(), null, 2)
           );
         });
         s.status(200).send(record);
@@ -192,12 +192,17 @@ export class RecordHandler extends RupertPlugin {
       s.status(404).send(`Record ${id} not in database.`);
       n();
     } else {
+      const record = this.database[id];
       this.moveIncoming(q.body, id).then(() => {
-        this.database[id].addVideos(
+        record.addVideos(
           q.body.map((_: string) => join(id, _))
               .map((_: string) => Video.fromObj({path: _}))
         );
-        s.status(200).send(this.database[id]);
+        writeFile(
+          this.getRecordDBPath(record),
+          JSON.stringify(record.toJSON(), null, 2)
+        );
+        s.status(200).send(record);
         n();
       }).catch((err: any) => n(err));
     }
