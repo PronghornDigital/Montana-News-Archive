@@ -1,0 +1,14 @@
+# Site settings
+
+
+title: Montana News Archive
+email: stanparker@gmail.com
+description: >
+  This site is the documentation website for Montana News Archive,
+  a software project designed to give legacy broadcasters a pathway
+  to digitize and catalogue their historical archive materials.
+url: "http://mtnewsarchive.net"
+github_organization: PronghornDigital
+
+#Build settings
+markdown: kramdown
