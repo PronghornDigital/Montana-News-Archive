@@ -1,10 +1,11 @@
 ---
-title: This will be used as the title-tag of the page head
+title: Documentation
+layout: default
+level: 1
 ---
 
-# This is a H1
+![Tape Stacks](/images/tape-row.jpg)
 
-[the clickable text](http://xlson.com/)
+# Documentation
 
-* Bullet lists are also easy to create
-* One more
+Documentation is coming soon.
