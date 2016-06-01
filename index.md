@@ -6,7 +6,7 @@ layout: default
 
 # Welcome to Montana News Archive
 
-This project is about saving our state's broadcast history for generations to come. This is a test change to the home page.
+This project is about saving our state's broadcast history for generations to come.
 
 ## What is it?
 
