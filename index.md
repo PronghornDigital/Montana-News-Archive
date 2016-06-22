@@ -18,7 +18,7 @@ Sure, there are other systems out there. But none specifically tailored to givin
 
 * **Step-by-step approach:** This system was designed with steps in place so that broadcasters can eat the proverbial elephant one bite at a time. Each step in the process provides a benefit, even if the system is not implemented to completion. No wasted time here.
 * **Open-source code:** The code for the system is free to use and open-source.
-* **Future-proof:** No system is future-proof, but all through the design process, we've been thinking about how to keep these broadcast materials--and the relevant metadatan that's just as important--safe and accessible for years to come.
+* **Future-proof:** No system is future-proof, but all through the design process, we've been thinking about how to keep these broadcast materials -- and the relevant metadata that's just as important -- safe and accessible for years to come.
 
 ## Partners
 
