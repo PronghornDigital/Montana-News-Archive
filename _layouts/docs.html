@@ -1,0 +1,34 @@
+---
+layout: docs
+permalink: /docs/
+---
+
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="wrapper">
+
+
+        <div class='sidebar-wrapper'>
+            <div class='panel-heading'><h3>Documentation</h3></div>
+            {% include docs_contents.html %}
+        </div>
+
+        {{ content }}
+
+      </div>
+    </div>
+
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

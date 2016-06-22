@@ -1,11 +1,11 @@
 ---
 title: Documentation
-layout: default
-level: 1
+layout: docs
+permalink: /docs/
 ---
 
 ![Tape Stacks](/images/tape-row.jpg)
 
-# Documentation
+# Documentation Home
 
 Documentation is coming soon.

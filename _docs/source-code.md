@@ -1,7 +1,7 @@
 ---
 title: Software
 layout: docs
-parent: installation-home
+permalink: /docs/source-install/
 ---
 
 # Source Code Installation

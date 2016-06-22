@@ -1,0 +1,28 @@
+
+- title: Welcome
+  docs:
+  - welcome
+  - getting-started
+
+- title: Preparation
+  docs:
+  - preplibrary
+  - hardware-requirements
+
+- title: Installation
+  docs:
+  - nas-setup
+  - server-setup
+  - installation
+- title: Data Entry
+  docs:
+  - initial-images
+  - adding-video
+  - detailed-data
+  -
+- title: Searching & Retrieving
+  docs:
+    - search-by-date
+    - search-by-keyword
+    - retrieve-video
+    - adding-data-as-you-go

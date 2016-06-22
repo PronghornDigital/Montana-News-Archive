@@ -194,7 +194,29 @@
     font-size: 24px;
 }
 
+/**
+* Sidebar
+*/
 
+.sidebar-wrapper {
+
+  width:25%;
+  float:right;
+  padding: 10px;
+  margin-left:15px;
+
+  @include media-query($on-palm) {
+    width: 100%;
+  }
+}
+
+.sidebar-wrapper ul {
+  margin-top:0px;
+}
+
+.sidebar-wrapper h2 {
+  margin-bottom:0px;
+}
 
 /**
  * Posts

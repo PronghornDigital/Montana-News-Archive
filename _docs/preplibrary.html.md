@@ -1,7 +1,7 @@
 ---
-title: Preparing Your Library
 layout: docs
-categories: ["Features"]
+title: Prepping Your Library
+permalink: /docs/preplibrary/
 ---
 
 # Preparing Your Library

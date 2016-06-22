@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Installation
+permalink: /docs/installation-home/
 ---
 
 ![Tape Stacks](/images/tape-row.jpg)

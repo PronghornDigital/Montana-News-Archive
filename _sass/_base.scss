@@ -151,7 +151,32 @@ pre {
     }
 }
 
+/**
+* Docs sidebar
+*/
 
+.sidebar-wrapper {
+  background-color:$brand-color;
+  border-radius:5px;
+}
+
+.sidebar-wrapper ul {
+  margin-left:auto;
+  padding-left:auto;
+}
+
+.sidebar-wrapper ul li {
+  margin-left:0px;
+  padding-left:0px;
+}
+
+.sidebar-wrapper ul li a {
+  color: $background-color;
+}
+
+.sidebar-wrapper ul li a:hover {
+  color: darken($background-color, 80%);
+}
 
 /**
  * Wrapper
