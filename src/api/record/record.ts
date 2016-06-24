@@ -139,7 +139,7 @@ export class RecordHandler extends RupertPlugin {
       rename(oldPath, newPath, (renameErr: any) => {
         // Rename the db file
         rename(
-          this.getRecordDBPath(<Record>{id: oldId}),
+          this.getRecordDBPath(<Record>{id: oldId}, newId),
           this.getRecordDBPath(<Record>{id: newId}),
           (dbErr: any) => {
             // Return CB
@@ -330,7 +330,7 @@ export class RecordHandler extends RupertPlugin {
     });
   }
 
-  private getRecordDBPath(record: Record): string {
-    return join(this.dataPath, record.id, `${record.id}.json`);
+  private getRecordDBPath(record: Record, oldId = record.id): string {
+    return join(this.dataPath, oldId, `${record.id}.json`);
   }
 }
