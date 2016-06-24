@@ -1,6 +1,6 @@
 {
   "name": "mtna",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Montana / KTVQ2 Video Archive Management.",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "test:browser": "karma start ./karma.config.js --single-run",
     "test:mocha": "mocha dist/{api,shared}/**/*.spec.js",
     "lint:sass": "echo 'Linting Sass... ' ; sass-lint --verbose --no-exit $(node ./src/scripts/glob './src/**/*.scss')",
-    "clean": "rm -rf dist/"
+    "clean": "rm -rf dist/ ; rm -rf node_modules/"
   },
   "dependencies": {
     "busboy": "^0.2.11",
