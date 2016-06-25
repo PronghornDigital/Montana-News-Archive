@@ -1,4 +1,4 @@
-# Montana News Archive
+# Montana News Archive [![Build Status](https://travis-ci.org/PronghornDigital/Montana-News-Archive.svg?branch=master)](https://travis-ci.org/PronghornDigital/Montana-News-Archive)
 
 ## Development
 

@@ -36,4 +36,7 @@ fpm -s dir -t rpm \
     --description "${description}" \
     --prefix "$install_prefix" \
     dist/ \
+    node_modules/ \
+    package.json \
+    gulpfile.js \
     README.md
