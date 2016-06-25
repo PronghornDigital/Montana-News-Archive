@@ -14,7 +14,7 @@ MTNA a system designed for small and medium broadcasters to index and catalogue 
 
 Specifically, it's an open-source web application, and this website provides instructions to stations on how to download and install the system for their own stations to use.
 
-Sure, there are other systems out there. But none specifically tailored to giving local broadcasters the tools they need to organize their historical materials with the following philosophy:
+The application is specifically tailored to giving local broadcasters the tools they need to organize their historical materials with the following philosophy:
 
 * **Step-by-step approach:** This system was designed with steps in place so that broadcasters can eat the proverbial elephant one bite at a time. Each step in the process provides a benefit, even if the system is not implemented to completion. No wasted time here.
 * **Open-source code:** The code for the system is free to use and open-source.
