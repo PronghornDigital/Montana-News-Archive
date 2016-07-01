@@ -99,12 +99,22 @@ export class RecordHandler extends RupertPlugin {
           // Update all media links
           record.updateMedia(replaceId);
           this.database[record.id] = record;
+          writeFile(
+            this.getRecordDBPath(record),
+            JSON.stringify(record.toJSON(), null, 2)
+          );
           s.status(200).send(record);
           n();
         });
         return;
       } else {
         this.database[record.id] = record;
+        mkdirp(join(this.dataPath, record.id), () => {
+          writeFile(
+            this.getRecordDBPath(record),
+            JSON.stringify(record.toJSON(), null, 2)
+          );
+        });
         s.status(200).send(record);
       }
     } else {
@@ -127,8 +137,15 @@ export class RecordHandler extends RupertPlugin {
       // Move from oldId to newId
       let newPath = join(this.dataPath, newId);
       rename(oldPath, newPath, (renameErr: any) => {
-        // Return CB
-        cb(renameErr);
+        // Rename the db file
+        rename(
+          this.getRecordDBPath(<Record>{id: oldId}, newId),
+          this.getRecordDBPath(<Record>{id: newId}),
+          (dbErr: any) => {
+            // Return CB
+            cb(renameErr || dbErr);
+          }
+        );
       });
     });
   }
@@ -175,12 +192,17 @@ export class RecordHandler extends RupertPlugin {
       s.status(404).send(`Record ${id} not in database.`);
       n();
     } else {
+      const record = this.database[id];
       this.moveIncoming(q.body, id).then(() => {
-        this.database[id].addVideos(
+        record.addVideos(
           q.body.map((_: string) => join(id, _))
               .map((_: string) => Video.fromObj({path: _}))
         );
-        s.status(200).send(this.database[id]);
+        writeFile(
+          this.getRecordDBPath(record),
+          JSON.stringify(record.toJSON(), null, 2)
+        );
+        s.status(200).send(record);
         n();
       }).catch((err: any) => n(err));
     }
@@ -249,9 +271,10 @@ export class RecordHandler extends RupertPlugin {
   delete(q: Request, s: Response, n: Function): void {
     let id: string = q.params['id'];
     let record = this.database[id];
-    Promise.all([
+    Promise.all<void|void[]>([
       this.returnToIncoming(record.videos || []),
-      this.removeImages(record.images || [])
+      this.removeImages(record.images || []),
+      this.removeData(record),
     ]).then(() => {
       return new Promise<void>((r, j) => {
         rmdir(join(this.dataPath, id), (err: any) => {
@@ -296,5 +319,18 @@ export class RecordHandler extends RupertPlugin {
       });
     });
     return Promise.all(images.map(deleteImage));
+  }
+
+  private removeData(record: Record): Promise<void> {
+    return new Promise<void>((s, j) => {
+      unlink(this.getRecordDBPath(record), (err: any) => {
+        if (err !== null) { return j(err); }
+        s();
+      });
+    });
+  }
+
+  private getRecordDBPath(record: Record, oldId = record.id): string {
+    return join(this.dataPath, oldId, `${record.id}.json`);
   }
 }
