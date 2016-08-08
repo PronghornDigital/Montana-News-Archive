@@ -2,7 +2,8 @@
 layout: default
 ---
 
-![Site Banner](/images/site-banner.jpg)
+
+<iframe width="740" height="416" src="https://www.youtube.com/embed/nLmFXP6EdYI?rel=0" frameborder="0" allowfullscreen></iframe>
 
 # Welcome to Montana News Archive
 
