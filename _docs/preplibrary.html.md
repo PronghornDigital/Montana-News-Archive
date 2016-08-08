@@ -6,9 +6,11 @@ permalink: /docs/preplibrary/
 
 # Preparing Your Library
 
-Before we even get started putting things into the system, it's critical to get the physical media organized. When we take things off the shelves to digitize, we need to know where to put the items back, and how to find them again. Two things are critical here
+Before investing in the time to and expense to install the hardware, it's critical to get the physical media organized. This means getting things out of boxes and onto shelves, finding every recording a permanent home on a shelf somewhere.
 
-* A **unique label**
+There are two main things to keep in mind that every recording needs:
+
+* A **unique label**.
 * and **a permanent home**.
 
 ## Labels
@@ -21,6 +23,6 @@ Group your media in a place where it makes sense that you'll find it again. This
 
 * When we start putting the media into the system, we'll call this a **family**.
 
-### Rows, not stacks
+## Rows, not stacks
 
-Place your media in rows, not stacks. This is critical because it's so much easier when you grab media off and put it back, it's easier to be tempted to just place things back on top and get everything out of order.
+Place your media in rows, not stacks. This is critical because it's so much easier to keep tapes in order when it's in a row. Stacks are easily jumbled because it's so temping to place things on top, rather than the appropriate place.

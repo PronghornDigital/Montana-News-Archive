@@ -1,8 +1,8 @@
 
 - title: Welcome
   docs:
-  - welcome
-  - getting-started
+  - index
+  - overview
 
 - title: Preparation
   docs:
@@ -11,18 +11,20 @@
 
 - title: Installation
   docs:
+  - hardware 
   - nas-setup
   - server-setup
   - installation
+
 - title: Data Entry
   docs:
-  - initial-images
-  - adding-video
+  - images
+  - initial-entry
+  - add-video
   - detailed-data
-  -
-- title: Searching & Retrieving
+- title: Search & Retrieval
   docs:
     - search-by-date
-    - search-by-keyword
+    - search-by-text
     - retrieve-video
     - adding-data-as-you-go
