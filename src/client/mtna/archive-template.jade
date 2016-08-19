@@ -18,6 +18,8 @@ div.relative(role="main"
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )
     // main content
 
+    span.lead(ng-if="1==1") You've returned <strong>{{ state.records.length }}</strong> record(s) searching for <strong>{{ state._location._queryString | date:'medium' }}</strong> from <strong>{{ state._location._startDate }}</strong> to <strong>{{ state._location._endDate }}.</strong>
+
     md-card.firefox-tweak(
       ng-if="state.pre.length > 0"
       flex-gt-sm="90" flex-gt-md="80"
