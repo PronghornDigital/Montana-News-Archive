@@ -18,7 +18,9 @@ div.relative(role="main"
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )
     // main content
 
-    p.lead(ng-if="1==1") You've returned <strong>{{ state.records.length }}</strong> record(s) searching for <strong>{{ state._location._queryString | date:'medium' }}</strong> from <strong>{{ state._location._startDate }}</strong> to <strong>{{ state._location._endDate }}.</strong>
+    p.lead(ng-if="state._location._queryString == '' && state._location._startDate == '' && state._location._endDate == '' ") Welcome to the archives! <br /> <br /> To get started, click the blue bar to start a search, or click the "+" icon below to add a record. <br / <br /> <br /> <br /> <small>Hint! You can save your searches by bookmarking the page.</small>
+    p.lead(ng-if="state._location._queryString != '' || state._location._startDate != '' || state._location._endDate != '' ") You've found <strong>{{ state.records.length }}</strong> record(s) searching for <strong>{{ state._location._queryString == "" ? "all records" : state._location._queryString  }}</strong> from <strong>{{ state._location._startDate == "" ? "the beginning of history" : state._location._startDate | date:'MMM d, y' }}</strong> to <strong>{{ state._location._endDate == "" ? "the end of time" : state._location._endDate | date:'MMM d, y'  }}.</strong>
+
 
     md-card.firefox-tweak(
       ng-if="state.pre.length > 0"
