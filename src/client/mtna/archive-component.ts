@@ -24,6 +24,8 @@ export class Archive {
   public currentIndex: number = -1;
   public post: Record[] = [];
 
+  get hasSearch(): boolean { return this._location.hasSearch || this.records.length; }
+
   public error: any = null;
   constructor(private $scope: ng.IScope, private $q: ng.IQService,
               private $anchorScroll: ng.IAnchorScrollService,
