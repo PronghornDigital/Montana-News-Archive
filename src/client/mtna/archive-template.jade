@@ -18,14 +18,23 @@ div.relative(role="main"
   md-content.md-default-theme( flex md-scroll-y elem-click="state.collapse()" )
     // main content
 
-    div.welcome(ng-if="!state._location.hasSearch && state.records.length == 0")
+    div.welcome(ng-if="!state.hasSearch && state.records.length == 0")
       p.lead Welcome to the archives!
       p.lead To get started, click the blue bar to start a search, or click the "+" icon below to add a record.
       p.lead
         small Hint! You can save your searches by bookmarking the page.
 
-    div.welcome(ng-if="state.records.length != 0 || state._location.hasSearch")
-      p.lead You've found <strong>{{ state.records.length }}</strong> record{{ state.records.length == 1 ? '' : 's'}} searching for <strong>{{ state._location._queryString == "" ? "all records" : state._location._queryString  }}</strong> from <strong>{{ state._location._startDate == "" ? "the beginning of history" : state._location._startDate | date:'MMM d, y' }}</strong> to <strong>{{ state._location._endDate == "" ? "the end of time" : state._location._endDate | date:'MMM d, y'  }}.</strong>
+    div.welcome(ng-if="state.records.length != 0 || state.hasSearch")
+      p.lead
+        | You've found
+        strong  {{ state.records.length }}
+        |  record{{ state.records.length == 1 ? '' : 's'}} searching for
+        strong  {{ state._location._queryString == "" ? "all records" : state._location._queryString  }}
+        |  from
+        strong  {{ state._location._startDate == "" ? "the beginning of history" : state._location._startDate | date:'MMM d, y' }}
+        |  to
+        strong  {{ state._location._endDate == "" ? "the end of time" : state._location._endDate | date:'MMM d, y'  }}.
+
       p.lead(ng-if="state.records.length > 350")
         small (That's a lot! Opening records could be a tag sluggish.)
 
