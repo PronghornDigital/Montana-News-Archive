@@ -24,7 +24,7 @@ div.relative(role="main"
       p.lead
         small Hint! You can save your searches by bookmarking the page.
 
-    div.welcome(ng-if="state.records.length != 0 || state.hasSearch")
+    div.welcome(ng-if="state.hasSearch || state.records.length != 0")
       p.lead
         | You've found
         strong  {{ state.records.length }}
