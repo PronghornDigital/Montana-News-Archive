@@ -15,9 +15,9 @@ md-toolbar.md-hue-2(ng-show="state.searching")
         input.search(ng-model="state.searchString")
       md-input-container
         label After
-        input(ng-model="state.after" type="date")
+        input(ng-model="state.after" type="date" ng-keypress="($event.which === 13)?state.search():0")
       md-input-container
         label Before
-        input(ng-model="state.before" type="date")
+        input(ng-model="state.before" type="date" ng-keypress="($event.which === 13)?state.search():0")
       md-button(aria-label="search" ng-click="state.search()")
         md-icon search
