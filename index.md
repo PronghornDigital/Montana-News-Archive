@@ -27,4 +27,4 @@ This project is made possible through a partnership among the Greater Montana Fo
 
 ## Availability
 
-This program is available on (Github)[https://github.com/PronghornDigital/Montana-News-Archive], and implementation instructions are currently in progress on this website. For questions not yet addressed in these materials, please contact stanparker@gmail.com
+This program is available on [Github](https://github.com/PronghornDigital/Montana-News-Archive), and implementation instructions are currently in progress on this website. For questions not yet addressed in these materials, please contact stanparker@gmail.com
