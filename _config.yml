@@ -7,7 +7,7 @@ description: >
   This site is the documentation website for Montana News Archive,
   a software project designed to give legacy broadcasters a pathway
   to digitize and catalogue their historical archive materials.
-url: "http://localhost:4000"
+url: "http://mtnewsarchive.net"
 github_organization: PronghornDigital
 github_link: https://github.com/PronghornDigital/Montana-News-Archive
 #Build settings
