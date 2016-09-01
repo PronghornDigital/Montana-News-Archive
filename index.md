@@ -23,8 +23,8 @@ The application is specifically tailored to giving local broadcasters the tools 
 
 ## Partners
 
-This project is made possible through a partnership among the Greater Montana Foundation, the Montana Broadcaster's Association, KTVQ Billings, Third Cat LLC, and Pronghorn Digital.
+This project is made possible through a partnership among the Greater Montana Foundation, the Montana Broadcaster's Association, KTVQ Billings, the Montana History Foundation, Third Cat LLC, and Pronghorn Digital.
 
 ## Availability
 
-This program is expected to be available starting August 2016.
+This program is available on (Github)[https://github.com/PronghornDigital/Montana-News-Archive], and implementation instructions are currently in progress on this website. For questions not yet addressed in these materials, please contact stanparker@gmail.com
