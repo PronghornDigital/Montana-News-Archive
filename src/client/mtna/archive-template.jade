@@ -36,7 +36,7 @@ div.relative(role="main"
         strong  {{ state._location._endDate == "" ? "the end of time" : state._location._endDate | date:'MMM d, y'  }}.
 
       p.lead(ng-if="state.records.length > 350")
-        small (That's a lot! Opening records could be a tag sluggish.)
+        small (That's a lot! Opening records could be a tad sluggish.)
 
     md-card.firefox-tweak(
       ng-if="state.pre.length > 0"
