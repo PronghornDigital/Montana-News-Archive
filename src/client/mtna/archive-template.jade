@@ -24,17 +24,6 @@ div.relative(role="main"
       p.lead
         small Hint! You can save your searches by bookmarking the page.
 
-    div.welcome(ng-if="state.hasSearch || state.records.length != 0")
-      p.lead
-        | You've found
-        strong  {{ state.records.length }}
-        |  record{{ state.records.length == 1 ? '' : 's'}} searching for
-        strong  {{ state._location._queryString == "" ? "all records" : state._location._queryString  }}
-        |  from
-        strong  {{ state._location._startDate == "" ? "the beginning of history" : state._location._startDate | date:'MMM d, y' }}
-        |  to
-        strong  {{ state._location._endDate == "" ? "the end of time" : state._location._endDate | date:'MMM d, y'  }}.
-
       p.lead(ng-if="state.records.length > 350")
         small (That's a lot! Opening records could be a tag sluggish.)
 
