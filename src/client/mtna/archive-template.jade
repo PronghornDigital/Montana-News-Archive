@@ -22,10 +22,17 @@ div.relative(role="main"
       p.lead Welcome to the archives!
       p.lead To get started, click the blue bar to start a search, or click the "+" icon below to add a record.
       p.lead
+        | Documentation is available at
+        a(href="http://mtnewsarchive.net" target="blank")  mtnewsarchive.net
+        
+      p.lead
         small Hint! You can save your searches by bookmarking the page.
 
       p.lead(ng-if="state.records.length > 350")
         small (That's a lot! Opening records could be a tag sluggish.)
+    
+    div.welcome(ng-if="state.hasSearch && state.records.length == 0")
+      p.lead No records found.
 
     md-card.firefox-tweak(
       ng-if="state.pre.length > 0"
