@@ -2,6 +2,8 @@ md-toolbar(ng-show="!state.searching" ng-click="state.searching = !state.searchi
   .md-toolbar-tools
     h1 MT News Archive
     span(flex)
+    a(href="http://mtnewsarchive.net/docs/" target="blank") 
+      md-icon help
     md-button(aria-label="search")
       md-icon search
 md-toolbar.md-hue-2(ng-show="state.searching")
