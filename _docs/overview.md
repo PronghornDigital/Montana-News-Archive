@@ -29,3 +29,5 @@ News staff can then upload the pictures to the database, specifying dates for wh
 ## Details & Digitization
 
 From this point on, stations will now have a digital home for their archives. The system allows for stations to attach digital video files and detailed story data. This can be done by stations on an as-needed basis, or they also may wish to systemize the digitization process.
+
+**Next:** [Preparing Your Library](/docs/preplibrary/)
