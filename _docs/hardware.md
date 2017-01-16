@@ -20,7 +20,7 @@ The technical requirements for the server are pretty minimal. Stations might wan
 
 ![NAS](/images/qnap.jpg)
 
-The data will be stored on a Network-Attached-storage Device, or NAS. We recommend getting one with multiple hard drives in a RAID configuration that will maintain the data will be safe in the event of a hard drive failure.
+The data will be stored on a Network-Attached-storage Device, or NAS. We recommend getting one with multiple hard drives in a RAID configuration that will keep the data safe in the event of a hard drive failure.
 
 ## Flatbed Scannner
 
