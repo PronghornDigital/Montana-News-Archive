@@ -10,7 +10,7 @@ permalink: /docs/installation/
 
 During this demonstration, we're going to be using the following settings. These settings will most likely be different for your own installation, so be sure to swap them out for your own whenever you see them.
 
-* **Server IP:** 172.16.10.45
+* **Server IP:** 172.16.10.49
 * **NAS Device IP:** 172.16.10.13
 * **Root password:** toor
 
@@ -18,7 +18,7 @@ During this demonstration, we're going to be using the following settings. These
 
 From any other computer on the same network, connect to the web server using ssh. If you're on a Windows machine, you can do this [in Putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html). If you're using Mac or Linux, you can do this using the terminal.
 
-On Putty, you'll type in the IP address and log in as root. If you're using terminal, you'll enter in the following command: `ssh root@172.16.10.13` (remember to swap out that IP address for the IP address of the web server you're using).
+On Putty, you'll type in the IP address and log in as root. If you're using terminal, you'll enter in the following command: `ssh root@172.16.10.49` (remember to swap out that IP address for the IP address of the web server you're using).
 
 It will ask you for the root password. Enter it.
 
