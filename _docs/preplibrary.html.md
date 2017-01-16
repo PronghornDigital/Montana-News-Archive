@@ -19,7 +19,7 @@ There are two main things to keep in mind that every piece of media needs:
 
 ## Labels
 
-Every pieces of media should have a unique label, outward facing and on the spine.
+Every piece of media should have a unique label, outward facing and on the spine.
 
 ## A sensible grouping
 
