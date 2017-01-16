@@ -88,4 +88,4 @@ Now, the last step in the magic:
 ./autochef.sh
 ```
 
-Now check to see if the archive is up and running by opening up a web browser and going to your server's IP address at Port 8080. For our example, this is `http://192.168.0.2:8080`
+Now check to see if the archive is up and running by opening up a web browser and going to your server's IP address at Port 8080. For our example, this is `http://172.16.10.49:8080`
