@@ -12,4 +12,4 @@ permalink: /pilot/
 
 A pilot program of the system is currently being implemented at KTVQ in Billings.
 
-More information on this program will be available soon.
+More information on this program will be available soon. Contact mtnewsarchive@gmail.com for more information about this pilot program.
