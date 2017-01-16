@@ -4,6 +4,8 @@ title: Overview
 permalink: /docs/overview/
 ---
 
+![At Work](/images/at-work.jpg)
+
 ## Overview
 
 This archive system is designed so that stations can implement it in incremental steps, with each step a manageable task that shows stations immediate benefit.
