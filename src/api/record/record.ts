@@ -43,7 +43,7 @@ export class RecordHandler extends RupertPlugin {
     super();
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
       if ( err ) {
-        switch (err.code){
+        switch (err.code) {
           case 'EACCESS':
             this.logger.warn(
                 `Invalid permissions to open database at ${this.dbPath}`
