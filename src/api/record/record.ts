@@ -43,10 +43,21 @@ export class RecordHandler extends RupertPlugin {
     super();
     readFile(this.dbPath, 'utf-8', (err: any, persisted: string) => {
       if ( err ) {
-        this.logger.info(
-            `No database found, creating a new one at ${this.dbPath}`
-        );
-        persisted = '{}';
+        switch (err.code) {
+          case 'EACCESS':
+            this.logger.warn(
+                `Invalid permissions to open database at ${this.dbPath}`
+            );
+            break;
+          case 'ENOENT':
+            this.logger.info(
+                `No database found, creating a new one at ${this.dbPath}`
+            );
+            persisted = '{}';
+            break;
+          default:
+            this.logger.error(`Failed to load database due to ${err.code}!`, err);
+        }
       }
       let db = JSON.parse(persisted);
       Object.keys(db).forEach((k: any) => {
