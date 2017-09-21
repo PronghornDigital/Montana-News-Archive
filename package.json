@@ -18,6 +18,7 @@
     "start": "node dist/api/app.js",
     "pretest": "gulp",
     "test": "npm run test:mocha; npm run test:browser",
+    "test:ci": "npm run test:mocha",
     "test:browser": "karma start ./karma.config.js --single-run",
     "test:mocha": "mocha dist/{api,shared}/**/*.spec.js",
     "lint:sass": "echo 'Linting Sass... ' ; sass-lint --verbose --no-exit $(node ./src/scripts/glob './src/**/*.scss')",

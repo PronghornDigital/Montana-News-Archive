@@ -29,7 +29,7 @@ In order to cut a new release, you must bump the version in `package.json`. Any 
 To make installation easier an install script is available to bootstrap your system. The script will add the [mtna package cloud repository][repo_url] to your RPM configuration and then install the mtna package.
 
 ```
-curl https://raw.githubusercontent.com/PronghornDigital/mtna/master/install.sh | bash
+curl https://raw.githubusercontent.com/PronghornDigital/mtna-server-cookbook/master/install.sh | bash
 ```
 
 [repo_url]: https://packagecloud.io/PronghornDigital/mtna
