@@ -16,7 +16,9 @@ script:
 - gulp
 - npm run test:ci
 
-before_deploy: "./package.sh"
+before_deploy:
+- gem install package_cloud fpm
+- "./package.sh"
 
 deploy:
   provider: script
