@@ -4,3 +4,5 @@ npm-debug.log
 .db.json
 data
 incoming/
+.env
+*rpm
