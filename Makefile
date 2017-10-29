@@ -1,6 +1,6 @@
 IMAGE='jonathanporta/montana-news-archive:latest'
 RELEASE_TAG=$(shell cat ./package.json | jq -r .version)
-OWNER="JonathanPorta"
+OWNER="PronghornDigital"
 REPO="Montana-News-Archive"
 
 install:
