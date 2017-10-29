@@ -1,6 +1,6 @@
 {
   "name": "mtna",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Montana / KTVQ2 Video Archive Management.",
   "repository": {
     "type": "git",
@@ -15,18 +15,21 @@
   ],
   "license": "ISC",
   "scripts": {
+    "prestart":"mkdir -p ./data ./incoming ; gulp",
     "start": "node dist/api/app.js",
     "pretest": "gulp",
     "test": "npm run test:mocha; npm run test:browser",
     "test:ci": "npm run test:mocha",
     "test:browser": "karma start ./karma.config.js --single-run",
     "test:mocha": "mocha dist/{api,shared}/**/*.spec.js",
-    "lint:sass": "echo 'Linting Sass... ' ; sass-lint --verbose --no-exit $(node ./src/scripts/glob './src/**/*.scss')",
+    "lint:sass": "echo 'Linting Sass... ' ; ./node_modules/.bin/sass-lint --verbose --no-exit 'src/**/*.scss'",
+    "lint:ts": "echo 'Linting TypeScript...' ; ./node_modules/.bin/tslint src/**/*.ts",
     "clean": "rm -rf dist/ ; rm -rf node_modules/"
   },
   "dependencies": {
     "busboy": "^0.2.11",
     "mkdirp": "^0.5.1",
+    "sass-lint": "^1.12.1",
     "ts-rupert": "^0.4.1-beta6"
   },
   "devDependencies": {
@@ -50,7 +53,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3",
-    "mock-fs": "^3.9.0",
+    "mock-fs": "^4.4.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "source-map-loader": "^0.1.5",

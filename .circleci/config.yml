@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: jonathanporta/docker-fedora-node-build-image:latest
+
+    steps:
+      - checkout
+      - run: make test
+      - run: make package release
