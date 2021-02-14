@@ -70,7 +70,7 @@ export class Archive {
         .catch(() => { this.inFlight = false; });
   }
 
-  select(record: Record): void {
+  select(record: Record, updateLocation = true): void {
     this.currentIndex = this.records.indexOf(record);
     if (this.currentIndex === -1) {
       // Unsetting the current element
@@ -90,7 +90,9 @@ export class Archive {
         this.$anchorScroll(`record-${this.current.id}`);
       });
     }
-    this._location.current = this.current;
+    if (updateLocation) {
+      this._location.current = this.current;
+    }
   }
 
   save(record: Record): Promise<any> {
@@ -142,7 +144,7 @@ export class Archive {
       record.medium = this.lastRecordSaved.medium;
     }
     this.records.push(record);
-    this.select(record);
+    this.select(record, false);
   }
 
   collapse(): void {
