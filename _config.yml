@@ -18,3 +18,7 @@ collections:
     output: true
     permalink: /docs/
     title: Documentation
+
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-tactile
